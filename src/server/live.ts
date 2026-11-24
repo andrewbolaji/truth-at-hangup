@@ -14,7 +14,7 @@ export function liveRouter(store: Store, llm: Llm = new RecordedLlm(p('data', 'l
     if (calls.size >= MAX_LIVE) return void res.status(429).json({ error: 'Too many open calls. Hang up one first.' });
     let prompt: string; try { prompt = readText('agents', `${b.data.version}.md`); } catch { return void res.status(400).json({ error: 'No such agent version.' }); }
     const id = randomUUID(); const runId = `human-${b.data.version}`; const repeat = [...store.traces.values()].filter((t) => t.runId === runId && t.scenarioId === s.id).length + 1;
-    calls.set(id, { s: new CallSession(s, { llm, model, agentPrompt: prompt, protocol: readText('agents', 'protocol.md'), callerPrompt: '', agentVersion: b.data.version, runId, repeat }, id), t0: Date.now(), busy: false, ended: null, version: b.data.version, repeat, used: Date.now() });
+    calls.set(id, { s: new CallSession(s, { llm, model, agentPrompt: prompt, protocol: readText('agents', 'protocol.md'), callerPrompt: '', callerVersion: 'human', agentVersion: b.data.version, runId, repeat }, id), t0: Date.now(), busy: false, ended: null, version: b.data.version, repeat, used: Date.now() });
     res.json({ id, ended: null, lines: [] });
   });
   r.post('/:id/say', async (q, res) => {
@@ -33,7 +33,7 @@ export function liveRouter(store: Store, llm: Llm = new RecordedLlm(p('data', 'l
     if (c.busy) return void res.status(409).json({ error: 'Wait for the agent to finish.' });
     calls.delete(q.params.id); if (!c.s.events.some((e) => e.kind === 'agent')) return void res.json({ traceId: null });
     const t = { ...c.s.trace((c.ended as 'agent' | null) ?? 'caller', c.t0, Date.now()), human: b.data };
-    store.addHumanCall(t, { id: t.runId, agentVersion: c.version, agentPromptSha: sha(readText('agents', `${c.version}.md`) + readText('agents', 'protocol.md')), model, repeats: 1, createdAt: new Date().toISOString(), note: 'Played by a person', scenarioSetSha: sha(JSON.stringify(store.scenarios)) });
+    store.addHumanCall(t, { id: t.runId, agentVersion: c.version, agentPromptSha: sha(readText('agents', `${c.version}.md`) + readText('agents', 'protocol.md')), model, repeats: 1, createdAt: new Date().toISOString(), note: 'Played by a person', scenarioSetSha: sha(JSON.stringify(store.scenarios)), callerVersion: 'human', callerPromptSha: '' });
     res.json({ traceId: t.id });
   });
   return r;

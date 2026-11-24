@@ -19,20 +19,20 @@ async function pool<T, R>(xs: T[], n: number, f: (x: T) => Promise<R>): Promise<
   await Promise.all(Array.from({ length: n }, async () => { while (i < xs.length) { const k = i++; out[k] = await f(xs[k]!); } }));
   return out;
 }
-async function makeRun(version: string, model: string, repeats: number, id: string, replay: boolean, only: string, note: string): Promise<{ file: RunFile; failed: string[] }> {
-  const agentPrompt = readText('agents', `${version}.md`); const protocol = readText('agents', 'protocol.md'); const callerPrompt = readText('agents', 'caller.md');
+async function makeRun(version: string, model: string, repeats: number, id: string, replay: boolean, only: string, note: string, callerVersion: string): Promise<{ file: RunFile; failed: string[] }> {
+  const agentPrompt = readText('agents', `${version}.md`); const protocol = readText('agents', 'protocol.md'); const callerPrompt = readText('agents', `caller-${callerVersion}.md`);
   const L = llm(replay); const failed: string[] = [];
   const jobs = scenarios.filter((s) => !only || s.id.includes(only)).flatMap((s) => Array.from({ length: repeats }, (_, i) => ({ s, i: i + 1 })));
   const traces = await pool(jobs, replay ? 1 : Number(opt('parallel', '3')), async ({ s, i }) => {
-    try { const t = await runScenario(s, { llm: L, model, agentPrompt, protocol, callerPrompt, agentVersion: version, runId: id, repeat: i }); if (!replay) console.log(id, s.id, i, t.ended, t.events.length); return t; }
+    try { const t = await runScenario(s, { llm: L, model, agentPrompt, protocol, callerPrompt, callerVersion, agentVersion: version, runId: id, repeat: i }); if (!replay) console.log(id, s.id, i, t.ended, t.events.length); return t; }
     catch (e) { failed.push(`${s.id}#${i}: ${(e as Error).message}`); return null; }
   });
-  const meta: RunMeta = { id, agentVersion: version, agentPromptSha: sha(agentPrompt + protocol), model, repeats, createdAt: new Date().toISOString(), note, scenarioSetSha: sha(JSON.stringify(scenarios)) };
+  const meta: RunMeta = { id, agentVersion: version, agentPromptSha: sha(agentPrompt + protocol), model, repeats, createdAt: new Date().toISOString(), note, scenarioSetSha: sha(JSON.stringify(scenarios)), callerVersion, callerPromptSha: sha(callerPrompt) };
   return { file: { meta, traces: traces.filter((t): t is Trace => !!t) }, failed };
 }
 if (cmd === 'run') {
   const version = opt('agent', 'baseline'); const id = opt('id', version);
-  const { file, failed } = await makeRun(version, opt('model', 'claude-haiku-5-5'), Number(opt('repeats', '2')), id, flag('replay'), opt('only'), opt('note'));
+  const { file, failed } = await makeRun(version, opt('model', 'claude-haiku-5-5'), Number(opt('repeats', '2')), id, flag('replay'), opt('only'), opt('note'), opt('caller', 'v2'));
   fs.writeFileSync(runFile(id), JSON.stringify(file, null, 1));
   console.log(`${file.traces.length} traces saved, ${failed.length} failed to run`); failed.forEach((f) => console.log('  ', f));
   process.exitCode = failed.length ? 1 : 0;
@@ -54,10 +54,12 @@ if (cmd === 'run') {
   let bad = 0;
   for (const f of fs.readdirSync(p('data', 'runs')).filter((x) => x.endsWith('.json'))) {
     const r = JSON.parse(fs.readFileSync(path.join(p('data', 'runs'), f), 'utf8')) as RunFile;
-    const { file, failed } = await makeRun(r.meta.agentVersion, r.meta.model, r.meta.repeats, r.meta.id, true, '', '');
-    const strip = (t: Trace) => JSON.stringify([t.scenarioId, t.repeat, t.events, t.final, t.ended]);
-    const saved = new Map(r.traces.map((t) => [t.id, strip(t)])); let same = 0;
-    for (const t of file.traces) if (saved.get(t.id) === strip(t)) same++;
+    if (r.traces.some((x) => x.human)) { console.log(`${r.meta.id}: played by a person, not replayed`); continue; }
+    const L = llm(true); const strip = (t: Trace) => JSON.stringify([t.scenarioId, t.repeat, t.events, t.final, t.ended]); let same = 0; const failed: string[] = [];
+    for (const t of r.traces) {
+      const s = scenarios.find((x) => x.id === t.scenarioId)!;
+      try { const again = await runScenario(s, { llm: L, model: r.meta.model, agentPrompt: readText('agents', `${r.meta.agentVersion}.md`), protocol: readText('agents', 'protocol.md'), callerPrompt: readText('agents', `caller-${r.meta.callerVersion}.md`), callerVersion: r.meta.callerVersion, agentVersion: r.meta.agentVersion, runId: r.meta.id, repeat: t.repeat }); if (strip(again) === strip(t)) same++; } catch { failed.push(t.id); }
+    }
     console.log(`${r.meta.id}: ${same} of ${r.traces.length} replay exactly${failed.length ? `, ${failed.length} without a recording` : ''}`);
     if (same !== r.traces.length) bad++;
   }

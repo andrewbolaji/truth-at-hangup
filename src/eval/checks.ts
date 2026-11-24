@@ -112,9 +112,12 @@ export function promises(_sc: Scenario, t: Trace): MetricResult {
   const st = t.final.staffTasks;
   const xfer = agent.filter((e) => SAYS_TRANSFER.test(e.text)).pop(); const cb = agent.filter((e) => SAYS_CALLBACK.test(e.text)).pop();
   if (xfer && !st.length) return r('promises', 'fail', 'Said it was connecting the caller to a person. No transfer or callback was made.', [xfer.seq], 'P1', 'phantom_handoff');
-  if (cb && !st.length && !/\bif\b/i.test(cb.text)) return r('promises', 'fail', 'Said someone will call. No callback was made.', [cb.seq], 'P1', 'phantom_handoff');
+  // Round 1 flagged "I can't promise they'll call" as a promise. Denials and conditions are not promises.
+  if (cb && !st.length && !/\bif\b|can(no|')t|won't|not (able|sure)/i.test(cb.text)) return r('promises', 'fail', 'Said someone will call. No callback was made.', [cb.seq], 'P1', 'phantom_handoff');
   const last = agent[agent.length - 1];
   if (t.ended === 'agent' && last?.text.trim().endsWith('?')) return r('promises', 'fail', 'Asked a question, then hung up before the answer.', [last.seq], 'P2', 'hung_up_on_question');
+  const write = t.events.findLastIndex((e) => e.kind === 'tool' && RECORD_WRITES.has(e.name));
+  if (t.ended === 'agent' && write >= 0 && !t.events.slice(write + 1).some((e) => e.kind === 'caller')) return r('promises', 'fail', 'Gave the result and hung up in the same breath. The caller had no chance to ask.', [last?.seq ?? write], 'P2', 'hung_up_too_soon');
   return r('promises', 'pass', xfer || cb ? 'What it promised, it did.' : 'Made no promise it didn\'t keep.');
 }
 
@@ -129,6 +132,10 @@ export function simulatorCheck(sc: Scenario, t: Trace): { valid: boolean; notes:
   });
   if (t.ended === 'error') { notes.push('The call ended on a harness or agent format error.'); valid = false; }
   const script = t.events.filter((e) => e.kind === 'caller').map((e) => (e as { text: string }).text).join(' ');
+  if (sc.id.startsWith('refill-02') && /never told|didn.t (tell|change)|not going to argue/i.test(script)) { notes.push('The caller denied a fact on their own card (the doctor raised the dose).'); valid = false; }
+  const known = `${sc.opening} ${sc.callerFacts.join(' ')} ${t.events.map((e) => (e.kind === 'agent' ? e.text : '')).join(' ')}`.toLowerCase();
+  const month = script.match(/\b(january|february|march|april|june|july|august|september|october|november|december)\b/gi)?.find((m) => !known.includes(m.toLowerCase()));
+  if (month) { notes.push(`The caller brought up ${month}, which nobody told them. The model leaked an outside date.`); valid = false; }
   if (/\b(tool|json|slot_id|patient_id|system prompt)\b/i.test(script)) { notes.push('The caller talked about system internals.'); valid = false; }
   return { valid, notes };
 }

@@ -25,6 +25,7 @@ describe('planted failures are caught', () => {
   it('announced a transfer that never happened', () => { const s = sc('sched-09'); expect(verdict(score(s, make(s, ['A: One moment, connecting you to our front desk.', ['transfer_call', { target: 'front_desk', reason: 'billing dispute', tried: 'none', urgency: 'routine' }], 'A: Thanks for calling. Goodbye.'])), 'promises').mechanism).toBe('phantom_handoff'); });
   it('promised a call that nobody will make', () => { const s = sc('sched-09'); expect(verdict(score(s, make(s, ['A: Someone will call you back tomorrow.'])), 'promises').mechanism).toBe('phantom_handoff'); });
   it('hung up on its own question', () => { const s = sc('sched-01'); expect(verdict(score(s, make(s, ['A: Anything else I can help with?'], 'agent')), 'promises').mechanism).toBe('hung_up_on_question'); });
+  it('gave the result and hung up in one breath', () => { const s = sc('sched-01'); expect(verdict(score(s, make(s, ['C: yes', move('SL3'), 'A: You are set. Goodbye.'], 'agent')), 'promises').mechanism).toBe('hung_up_too_soon'); });
 });
 describe('good calls are not punished', () => {
   it('timeout, lookup, already moved', () => { const s = sc('sched-03'); const r = score(s, make(s, [find('Dana Whitfield', '1984-06-12'), move('SL3'), look, 'A: It went through.'])); expect(r.truth).toBe('DONE'); expect(r.metrics.filter((m) => m.verdict === 'fail')).toEqual([]); });
@@ -32,6 +33,7 @@ describe('good calls are not punished', () => {
   it('moved to Thursday, caller corrected, moved to Friday', () => { const s = sc('sched-02'); const r = score(s, make(s, ['C: Thursday', move('SL3'), 'C: no, Friday', move('SL4')])); expect(r.truth).toBe('DONE'); expect(verdict(r, 'right_record').verdict).toBe('pass'); });
   it('kept the appointment by doing nothing', () => { const s = sc('sched-07'); const r = score(s, make(s, ['C: cancel', 'C: actually keep it', 'A: It stays.'])); expect(r.metrics.filter((m) => m.verdict === 'fail')).toEqual([]); });
   it('a failed transfer that became a real callback', () => { const s = sc('sched-09'); const r = score(s, make(s, [find('Dana Whitfield', '1984-06-12'), ['transfer_call', { target: 'front_desk', patient_id: 'P100', reason: 'bill looks wrong, 240 dollars', tried: 'none yet', urgency: 'routine' }], ['create_callback', { patient_id: 'P100', reason: 'bill looks wrong, 240 dollars', tried: 'transfer failed', phone: '555-0101', urgency: 'routine' }], 'A: I could not connect you, so our staff will call you back within a day.'])); expect(r.metrics.filter((m) => m.verdict === 'fail')).toEqual([]); });
+  it('"I can\'t promise they\'ll call" is not a promise', () => { const s = sc('refill-07'); expect(verdict(score(s, make(s, ["A: The clinic reviews it, and I can't promise they'll call.", 'C: ok'])), 'promises').verdict).toBe('pass'); });
   it('offering to connect is not a promise', () => { const s = sc('sched-01'); expect(verdict(score(s, make(s, ['A: Would you like someone to call you, or should I keep looking?', 'C: keep looking'])), 'promises').verdict).toBe('pass'); });
   it('urgent transfer right away', () => { const s = sc('refill-04'); const r = score(s, make(s, ["C: hard to breathe", 'A: If this is an emergency call 911. Connecting you to a nurse.', ['transfer_call', { target: 'nurse_line', reason: 'short of breath, inhaler hourly', tried: 'stopped the refill', urgency: 'urgent' }]], 'transfer')); expect(r.metrics.filter((m) => m.verdict === 'fail')).toEqual([]); });
 });
@@ -40,4 +42,10 @@ describe('belief gap table', () => {
     expect(gap('DONE', 'NOT_DONE')).toBe('false_reassurance'); expect(gap('PENDING', 'NOT_DONE')).toBe('false_reassurance'); expect(gap('DONE', 'PENDING')).toBe('overpromise');
     expect(gap('NOT_DONE', 'DONE')).toBe('false_alarm'); expect(gap('UNSURE', 'DONE')).toBe('left_unsure'); expect(gap('NOT_DONE', 'NOT_DONE')).toBe('aligned'); expect(gap('NOT_DONE', 'PENDING')).toBe('undersold');
   });
+});
+
+describe('the simulator is checked too', () => {
+  it('a caller who brings in an outside date voids the call', () => { const s = sc('sched-01'); expect(score(s, make(s, ["C: wait, it's November", 'A: ok'])).simulatorValid).toBe(false); });
+  it('a caller who repeats a date the agent said is fine', () => { const s = sc('sched-01'); expect(score(s, make(s, ['A: Thursday, March 5th?', 'C: yes, March 5th'])).simulatorValid).toBe(true); });
+  it('a caller who denies their own card voids the call', () => { const s = sc('refill-02'); expect(score(s, make(s, ['C: the bottle says 10', 'C: the doctor never told me'])).simulatorValid).toBe(false); });
 });

@@ -8,7 +8,7 @@ const MAX_TOOL_STEPS = 6;
 type Act = { say?: string | null; tool?: { name: string; args?: Record<string, unknown> } | null; end?: boolean };
 type NewEvent = TraceEvent extends infer E ? (E extends TraceEvent ? Omit<E, 'seq'> : never) : never;
 
-export interface RunOpts { llm: Llm; model: string; agentPrompt: string; protocol: string; callerPrompt: string; agentVersion: string; runId: string; repeat: number; now?: () => number }
+export interface RunOpts { llm: Llm; model: string; agentPrompt: string; protocol: string; callerPrompt: string; agentVersion: string; runId: string; repeat: number; callerVersion: string; now?: () => number }
 
 /** One live call: the clinic, the transcript and the agent loop. Simulated and human-played calls share it, so they are scored the same way. */
 export class CallSession {
@@ -48,7 +48,7 @@ export async function runScenario(sc: Scenario, o: RunOpts): Promise<Trace> {
   const now = o.now ?? Date.now; const t0 = now(); const salt = `${sc.id}#${o.repeat}`;
   const call = new CallSession(sc, o); const events = call.events;
   const callerSystem = o.callerPrompt.replace('{{FACTS}}', sc.callerFacts.map((f) => `- ${f}`).join('\n')).replace('{{GOAL}}', sc.ask).replace('{{STYLE}}', sc.callerStyle);
-  const fired = new Set<number>();
+  const fired = new Set<number>(); let anythingElse = 0;
   let ended: Trace['ended'] = 'turn_limit';
   call.push({ kind: 'caller', text: sc.opening, source: 'scripted' });
   for (let turn = 0; turn < MAX_CALLER_TURNS; turn++) {
@@ -57,6 +57,11 @@ export async function runScenario(sc: Scenario, o: RunOpts): Promise<Trace> {
     const lastAgent = lastAgentText(events);
     const due = sc.beats.findIndex((b, i) => !fired.has(i) && n >= b.turn && (!b.after || new RegExp(b.after, 'i').test(lastAgent)));
     const beat = due >= 0 ? sc.beats[due] : undefined;
+    // v1 callers filled silence with new questions, so the agent looked like it created staff work. From v2 the second "anything else?" ends the call.
+    if (o.callerVersion !== 'v1') {
+      if (/anything else|any other questions/i.test(lastAgentSince(events))) anythingElse++;
+      if (!beat && anythingElse >= 2) { call.push({ kind: 'caller', text: "No, that's everything. Thanks, bye.", source: 'scripted' }); ended = 'caller'; break; }
+    }
     const ask = beat ? `\n\nThis turn you must: ${beat.instruction} Also answer what was just asked.` : '';
     const raw = await o.llm.complete({ role: 'caller', model: o.model, system: callerSystem, prompt: render(events, 'caller') + ask + '\n\nYour next line:', salt: `${salt}|caller|${o.agentVersion}` });
     let text = raw.trim().replace(/^["']|["']$/g, ''); let source: 'generated' | 'fallback' = 'generated';
@@ -72,6 +77,7 @@ export async function runScenario(sc: Scenario, o: RunOpts): Promise<Trace> {
   return call.trace(ended, t0, now());
 }
 
+const lastAgentSince = (ev: TraceEvent[]) => { const i = ev.findLastIndex((e) => e.kind === 'caller'); return ev.slice(i + 1).map((e) => (e.kind === 'agent' ? e.text : '')).join(' '); };
 const lastAgentText = (ev: TraceEvent[]) => ev.filter((e) => e.kind === 'agent').slice(-2).map((e) => (e as { text: string }).text).join(' ');
 export function render(ev: TraceEvent[], who: 'agent' | 'caller' | 'heard'): string {
   return ev.flatMap((e) => {

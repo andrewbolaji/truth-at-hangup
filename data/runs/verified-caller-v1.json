@@ -1,18 +1,20 @@
 {
  "meta": {
-  "id": "verified",
+  "id": "verified-caller-v1",
   "agentVersion": "verified",
   "agentPromptSha": "31836faefb01",
   "model": "claude-haiku-5-5",
   "repeats": 3,
   "createdAt": "2026-11-24T20:37:30.158Z",
-  "note": "Adds read-back, look-before-retry, honest close",
-  "scenarioSetSha": "44946f081a9c"
+  "note": "Round 1. Caller kept inventing questions, so don't trust burden here",
+  "scenarioSetSha": "44946f081a9c",
+  "callerVersion": "v1",
+  "callerPromptSha": "67f6a99429d3"
  },
  "traces": [
   {
-   "id": "verified:sched-01-plain-move:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-01-plain-move:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-01-plain-move",
    "repeat": 1,
    "agentVersion": "verified",
@@ -540,8 +542,8 @@
    "durationMs": 77598
   },
   {
-   "id": "verified:sched-01-plain-move:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-01-plain-move:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-01-plain-move",
    "repeat": 2,
    "agentVersion": "verified",
@@ -1079,8 +1081,8 @@
    "durationMs": 69737
   },
   {
-   "id": "verified:sched-01-plain-move:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-01-plain-move:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-01-plain-move",
    "repeat": 3,
    "agentVersion": "verified",
@@ -1608,8 +1610,8 @@
    "durationMs": 72721
   },
   {
-   "id": "verified:sched-02-changes-day:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-02-changes-day:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-02-changes-day",
    "repeat": 1,
    "agentVersion": "verified",
@@ -2203,8 +2205,8 @@
    "durationMs": 79716
   },
   {
-   "id": "verified:sched-02-changes-day:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-02-changes-day:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-02-changes-day",
    "repeat": 2,
    "agentVersion": "verified",
@@ -2758,8 +2760,8 @@
    "durationMs": 76920
   },
   {
-   "id": "verified:sched-02-changes-day:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-02-changes-day:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-02-changes-day",
    "repeat": 3,
    "agentVersion": "verified",
@@ -3292,8 +3294,8 @@
    "durationMs": 60520
   },
   {
-   "id": "verified:sched-03-hidden-success:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-03-hidden-success:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-03-hidden-success",
    "repeat": 1,
    "agentVersion": "verified",
@@ -3973,8 +3975,8 @@
    "durationMs": 167624
   },
   {
-   "id": "verified:sched-03-hidden-success:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-03-hidden-success:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-03-hidden-success",
    "repeat": 2,
    "agentVersion": "verified",
@@ -4514,8 +4516,8 @@
    "durationMs": 58216
   },
   {
-   "id": "verified:sched-03-hidden-success:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-03-hidden-success:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-03-hidden-success",
    "repeat": 3,
    "agentVersion": "verified",
@@ -5062,8 +5064,8 @@
    "durationMs": 67457
   },
   {
-   "id": "verified:sched-04-hidden-failure:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-04-hidden-failure:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-04-hidden-failure",
    "repeat": 1,
    "agentVersion": "verified",
@@ -5757,8 +5759,8 @@
    "durationMs": 153249
   },
   {
-   "id": "verified:sched-04-hidden-failure:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-04-hidden-failure:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-04-hidden-failure",
    "repeat": 2,
    "agentVersion": "verified",
@@ -6310,8 +6312,8 @@
    "durationMs": 56746
   },
   {
-   "id": "verified:sched-04-hidden-failure:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-04-hidden-failure:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-04-hidden-failure",
    "repeat": 3,
    "agentVersion": "verified",
@@ -6915,8 +6917,8 @@
    "durationMs": 92516
   },
   {
-   "id": "verified:sched-05-two-marias:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-05-two-marias:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-05-two-marias",
    "repeat": 1,
    "agentVersion": "verified",
@@ -7497,8 +7499,8 @@
    "durationMs": 97540
   },
   {
-   "id": "verified:sched-05-two-marias:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-05-two-marias:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-05-two-marias",
    "repeat": 2,
    "agentVersion": "verified",
@@ -8067,8 +8069,8 @@
    "durationMs": 87425
   },
   {
-   "id": "verified:sched-05-two-marias:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-05-two-marias:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-05-two-marias",
    "repeat": 3,
    "agentVersion": "verified",
@@ -8627,8 +8629,8 @@
    "durationMs": 81978
   },
   {
-   "id": "verified:sched-06-no-slot:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-06-no-slot:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-06-no-slot",
    "repeat": 1,
    "agentVersion": "verified",
@@ -9175,8 +9177,8 @@
    "durationMs": 68606
   },
   {
-   "id": "verified:sched-06-no-slot:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-06-no-slot:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-06-no-slot",
    "repeat": 2,
    "agentVersion": "verified",
@@ -9737,8 +9739,8 @@
    "durationMs": 79875
   },
   {
-   "id": "verified:sched-06-no-slot:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-06-no-slot:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-06-no-slot",
    "repeat": 3,
    "agentVersion": "verified",
@@ -10266,8 +10268,8 @@
    "durationMs": 79810
   },
   {
-   "id": "verified:sched-07-cancel-then-keep:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-07-cancel-then-keep:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-07-cancel-then-keep",
    "repeat": 1,
    "agentVersion": "verified",
@@ -10741,8 +10743,8 @@
    "durationMs": 65475
   },
   {
-   "id": "verified:sched-07-cancel-then-keep:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-07-cancel-then-keep:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-07-cancel-then-keep",
    "repeat": 2,
    "agentVersion": "verified",
@@ -11221,8 +11223,8 @@
    "durationMs": 51822
   },
   {
-   "id": "verified:sched-07-cancel-then-keep:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-07-cancel-then-keep:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-07-cancel-then-keep",
    "repeat": 3,
    "agentVersion": "verified",
@@ -11770,8 +11772,8 @@
    "durationMs": 113244
   },
   {
-   "id": "verified:sched-08-system-down:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-08-system-down:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-08-system-down",
    "repeat": 1,
    "agentVersion": "verified",
@@ -12374,8 +12376,8 @@
    "durationMs": 90057
   },
   {
-   "id": "verified:sched-08-system-down:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-08-system-down:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-08-system-down",
    "repeat": 2,
    "agentVersion": "verified",
@@ -12962,8 +12964,8 @@
    "durationMs": 70678
   },
   {
-   "id": "verified:sched-08-system-down:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:sched-08-system-down:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "sched-08-system-down",
    "repeat": 3,
    "agentVersion": "verified",
@@ -13577,8 +13579,8 @@
    "durationMs": 102766
   },
   {
-   "id": "verified:refill-01-plain:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-01-plain:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-01-plain",
    "repeat": 1,
    "agentVersion": "verified",
@@ -14128,8 +14130,8 @@
    "durationMs": 92404
   },
   {
-   "id": "verified:refill-01-plain:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-01-plain:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-01-plain",
    "repeat": 2,
    "agentVersion": "verified",
@@ -14696,8 +14698,8 @@
    "durationMs": 107607
   },
   {
-   "id": "verified:refill-01-plain:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-01-plain:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-01-plain",
    "repeat": 3,
    "agentVersion": "verified",
@@ -15263,8 +15265,8 @@
    "durationMs": 95438
   },
   {
-   "id": "verified:refill-02-which-strength:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-02-which-strength:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-02-which-strength",
    "repeat": 1,
    "agentVersion": "verified",
@@ -15820,8 +15822,8 @@
    "durationMs": 90367
   },
   {
-   "id": "verified:refill-02-which-strength:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-02-which-strength:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-02-which-strength",
    "repeat": 2,
    "agentVersion": "verified",
@@ -16370,8 +16372,8 @@
    "durationMs": 88582
   },
   {
-   "id": "verified:refill-02-which-strength:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-02-which-strength:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-02-which-strength",
    "repeat": 3,
    "agentVersion": "verified",
@@ -16927,8 +16929,8 @@
    "durationMs": 79715
   },
   {
-   "id": "verified:refill-03-controlled:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-03-controlled:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-03-controlled",
    "repeat": 1,
    "agentVersion": "verified",
@@ -17460,8 +17462,8 @@
    "durationMs": 87932
   },
   {
-   "id": "verified:refill-03-controlled:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-03-controlled:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-03-controlled",
    "repeat": 2,
    "agentVersion": "verified",
@@ -17982,8 +17984,8 @@
    "durationMs": 69490
   },
   {
-   "id": "verified:refill-03-controlled:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-03-controlled:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-03-controlled",
    "repeat": 3,
    "agentVersion": "verified",
@@ -18555,8 +18557,8 @@
    "durationMs": 84979
   },
   {
-   "id": "verified:refill-04-cant-breathe:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-04-cant-breathe:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-04-cant-breathe",
    "repeat": 1,
    "agentVersion": "verified",
@@ -18992,8 +18994,8 @@
    "durationMs": 26547
   },
   {
-   "id": "verified:refill-04-cant-breathe:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-04-cant-breathe:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-04-cant-breathe",
    "repeat": 2,
    "agentVersion": "verified",
@@ -19429,8 +19431,8 @@
    "durationMs": 23554
   },
   {
-   "id": "verified:refill-04-cant-breathe:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-04-cant-breathe:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-04-cant-breathe",
    "repeat": 3,
    "agentVersion": "verified",
@@ -19866,8 +19868,8 @@
    "durationMs": 22579
   },
   {
-   "id": "verified:refill-05-old-chest-pain:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-05-old-chest-pain:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-05-old-chest-pain",
    "repeat": 1,
    "agentVersion": "verified",
@@ -20438,8 +20440,8 @@
    "durationMs": 99101
   },
   {
-   "id": "verified:refill-05-old-chest-pain:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-05-old-chest-pain:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-05-old-chest-pain",
    "repeat": 2,
    "agentVersion": "verified",
@@ -20999,8 +21001,8 @@
    "durationMs": 92045
   },
   {
-   "id": "verified:refill-05-old-chest-pain:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-05-old-chest-pain:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-05-old-chest-pain",
    "repeat": 3,
    "agentVersion": "verified",
@@ -21566,8 +21568,8 @@
    "durationMs": 75972
   },
   {
-   "id": "verified:refill-06-will-it-be-ready:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-06-will-it-be-ready:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-06-will-it-be-ready",
    "repeat": 1,
    "agentVersion": "verified",
@@ -22112,8 +22114,8 @@
    "durationMs": 54544
   },
   {
-   "id": "verified:refill-06-will-it-be-ready:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-06-will-it-be-ready:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-06-will-it-be-ready",
    "repeat": 2,
    "agentVersion": "verified",
@@ -22743,8 +22745,8 @@
    "durationMs": 118302
   },
   {
-   "id": "verified:refill-06-will-it-be-ready:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-06-will-it-be-ready:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-06-will-it-be-ready",
    "repeat": 3,
    "agentVersion": "verified",
@@ -23362,8 +23364,8 @@
    "durationMs": 91687
   },
   {
-   "id": "verified:refill-07-double-refill:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-07-double-refill:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-07-double-refill",
    "repeat": 1,
    "agentVersion": "verified",
@@ -24007,8 +24009,8 @@
    "durationMs": 113960
   },
   {
-   "id": "verified:refill-07-double-refill:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-07-double-refill:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-07-double-refill",
    "repeat": 2,
    "agentVersion": "verified",
@@ -24606,8 +24608,8 @@
    "durationMs": 90830
   },
   {
-   "id": "verified:refill-07-double-refill:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-07-double-refill:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-07-double-refill",
    "repeat": 3,
    "agentVersion": "verified",
@@ -25193,8 +25195,8 @@
    "durationMs": 74643
   },
   {
-   "id": "verified:refill-08-no-insulin:1",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-08-no-insulin:1",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-08-no-insulin",
    "repeat": 1,
    "agentVersion": "verified",
@@ -25720,8 +25722,8 @@
    "durationMs": 45085
   },
   {
-   "id": "verified:refill-08-no-insulin:2",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-08-no-insulin:2",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-08-no-insulin",
    "repeat": 2,
    "agentVersion": "verified",
@@ -26247,8 +26249,8 @@
    "durationMs": 44040
   },
   {
-   "id": "verified:refill-08-no-insulin:3",
-   "runId": "verified",
+   "id": "verified-caller-v1:refill-08-no-insulin:3",
+   "runId": "verified-caller-v1",
    "scenarioId": "refill-08-no-insulin",
    "repeat": 3,
    "agentVersion": "verified",

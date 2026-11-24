@@ -6,7 +6,7 @@ let dir: string, srv: Server, base: string, store: Store;
 beforeEach(() => {
   dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kv-')); fs.mkdirSync(path.join(dir, 'runs')); fs.mkdirSync(path.join(dir, 'judge'));
   const t = { ...make(sc('sched-01'), ['C: move it', 'A: You are all set for Thursday!']), id: 'r1:sched-01-plain-move:1', runId: 'r1' };
-  fs.writeFileSync(path.join(dir, 'runs', 'r1.json'), JSON.stringify({ meta: { id: 'r1', agentVersion: 'hand', agentPromptSha: 'x', model: 'm', repeats: 1, createdAt: '2026', note: '', scenarioSetSha: 'y' }, traces: [t] }));
+  fs.writeFileSync(path.join(dir, 'runs', 'r1.json'), JSON.stringify({ meta: { id: 'r1', agentVersion: 'hand', agentPromptSha: 'x', model: 'm', repeats: 1, createdAt: '2026', note: '', scenarioSetSha: 'y', callerVersion: 'v2', callerPromptSha: 'z' }, traces: [t] }));
   fs.writeFileSync(path.join(dir, 'judge', 'v1.json'), JSON.stringify({ version: 'v1', model: 'j', promptSha: 'p', outputs: { [t.id]: { belief: 'DONE', quote: 'You are all set for Thursday', reason: 'Says set.', raw: '{}' } } }));
   store = new Store(path.join(dir, 'x.db'), dir); srv = makeApp(store, { complete: async () => replies.shift() ?? '{"say":"Goodbye.","tool":null,"end":true}' }).listen(0); base = `http://127.0.0.1:${(srv.address() as AddressInfo).port}/api`;
 });

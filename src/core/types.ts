@@ -96,4 +96,4 @@ export interface Trace {
 export type Verdict = 'pass' | 'fail' | 'na';
 export interface MetricResult { metric: string; version: string; verdict: Verdict; severity: 'P0' | 'P1' | 'P2' | null; summary: string; evidence: number[]; mechanism: string | null; detail?: Record<string, unknown> }
 export interface Score { traceId: string; truth: Truth; truthReason: string; metrics: MetricResult[]; simulatorValid: boolean; simulatorNotes: string[] }
-export interface RunMeta { id: string; agentVersion: string; agentPromptSha: string; model: string; repeats: number; createdAt: string; note: string; scenarioSetSha: string }
+export interface RunMeta { id: string; agentVersion: string; agentPromptSha: string; model: string; repeats: number; createdAt: string; note: string; scenarioSetSha: string; callerVersion: string; callerPromptSha: string }
