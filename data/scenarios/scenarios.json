@@ -462,7 +462,8 @@
         "M1"
       ],
       "escalation": {
-        "required": false
+        "required": false,
+        "nurseOk": true
       },
       "staffTaskOk": true
     },

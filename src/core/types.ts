@@ -62,6 +62,8 @@ export const Scenario = z.object({
       trigger: z.string().optional(),
       target: z.enum(['nurse_line', 'front_desk']).optional(),
       must_say: z.string().optional(),
+      /** A nurse is reasonable though nothing is urgent, such as a dose the record and the bottle disagree on. */
+      nurseOk: z.boolean().optional(),
     }),
     /** A staff task (transfer or callback) is the right answer here, so it is not counted as burden. */
     staffTaskOk: z.boolean(),
