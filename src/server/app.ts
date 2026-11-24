@@ -1,12 +1,10 @@
 import express from 'express'; import { z } from 'zod'; import { createHash } from 'node:crypto';
-import { Belief } from '../core/types.js'; import { gap } from '../eval/belief.js'; import { render } from '../harness/conversation.js'; import type { Store } from './store.js'; import type { Llm } from '../harness/llm.js'; import { liveRouter } from './live.js'; import { readText, sha } from '../core/load.js';
+import { Belief, type Trace } from '../core/types.js'; import { gap } from '../eval/belief.js'; import { render } from '../harness/conversation.js'; import type { Store } from './store.js'; import type { Llm } from '../harness/llm.js'; import { liveRouter } from './live.js'; import { readText, sha } from '../core/load.js';
 
 const LabelIn = z.object({ key: z.string(), belief: Belief, note: z.string().max(400).default(''), rater: z.string().min(1).max(40), seconds: z.number().min(0).max(3600) });
 const ReviewIn = z.object({ traceId: z.string(), metric: z.string(), verdict: z.enum(['pass', 'fail', 'na']), reason: z.string().trim().min(5, 'Say why in a few words.').max(400), reviewer: z.string().trim().min(1).max(40) });
 /** The rater gets a meaningless key, so the run name (and the agent version in it) stays hidden. */
 export const blindKey = (id: string) => createHash('sha256').update(`blind:${id}`).digest('hex').slice(0, 16);
-export const LABEL_TARGET = 24;
-
 export function summarize(store: Store, runId: string) {
   const ts = [...store.traces.values()].filter((t) => t.runId === runId); const by: Record<string, { pass: number; fail: number; na: number }> = {}; let clean = 0, valid = 0, p0 = 0, p1 = 0, turns = 0, staff = 0;
   for (const t of ts) {
@@ -17,18 +15,17 @@ export function summarize(store: Store, runId: string) {
   }
   return { total: ts.length, valid, clean, p0, p1, by, turns: valid ? turns / valid : 0, staff };
 }
-/** Fixed, blind queue from the current caller version: each scenario once, six calls from a known-bad agent so the dangerous cases exist at all, then calls where a fixed check failed. The rater sees no version, tool or score. */
-export function labelQueue(store: Store) {
-  const h = (s: string) => createHash('sha256').update(`queue:${s}`).digest('hex'); const current = new Set(store.runs.filter((r) => r.callerVersion === 'v2').map((r) => r.id));
-  const ok = [...store.traces.values()].filter((t) => current.has(t.runId) && store.scores.get(t.id)!.simulatorValid).sort((a, b) => h(a.id).localeCompare(h(b.id)));
-  const all = ok.filter((t) => t.agentVersion !== 'reckless'); const bad = ok.filter((t) => t.agentVersion === 'reckless').slice(0, 6);
-  const seen = new Set<string>(); const first = all.filter((t) => !seen.has(t.scenarioId) && seen.add(t.scenarioId));
-  const hard = all.filter((t) => !first.includes(t) && store.scores.get(t.id)!.metrics.some((m) => m.verdict === 'fail' && m.severity !== 'P2'));
-  return [...first, ...bad, ...hard].slice(0, LABEL_TARGET).sort((a, b) => h(a.id).localeCompare(h(b.id)));
+/** The sample is frozen in a file before anyone labels, so a later run can't change it. 18 calls, one per scenario, plus 6 mutants so dangerous cases exist. */
+export function labelQueue(store: Store): Trace[] { return store.queueIds.flatMap((id) => store.traces.get(id) ?? []); }
+/** How the frozen sample was drawn: hash order, one call per scenario from the two candidate agents, plus every mutant. */
+export function drawQueue(store: Store): string[] {
+  const h = (s: string) => createHash('sha256').update(`queue:${s}`).digest('hex'); const seen = new Set<string>();
+  const first = [...store.traces.values()].filter((t) => ['baseline', 'verified'].includes(t.runId) && store.scores.get(t.id)!.simulatorValid).sort((x, y) => h(x.id).localeCompare(h(y.id))).filter((t) => !seen.has(t.scenarioId) && seen.add(t.scenarioId));
+  return [...first, ...[...store.traces.values()].filter((t) => t.runId === 'mutants')].map((t) => t.id).sort((x, y) => h(x).localeCompare(h(y)));
 }
 export function calibration(store: Store) {
   const labels = store.labels(); const sc = (id: string) => store.scenarios.find((s) => s.id === id)!;
-  return { labels: labels.length, target: LABEL_TARGET, versions: store.judges.map((j) => {
+  return { labels: labels.length, target: store.queueIds.length, versions: store.judges.map((j) => {
     const rows = labels.flatMap((l) => { const o = j.outputs[l.traceId]; const t = store.traces.get(l.traceId); if (!o || !t) return []; const truth = store.scores.get(l.traceId)!.truth; return [{ traceId: l.traceId, title: sc(t.scenarioId).title, human: l.belief, note: l.note, judge: o.belief, quote: o.quote, reason: o.reason, truth, humanGap: gap(l.belief, truth), judgeGap: gap(o.belief, truth) }]; });
     const agree = rows.filter((r) => r.human === r.judge).length; const counts: Record<string, number> = {}; for (const r of rows) counts[r.human] = (counts[r.human] ?? 0) + 1;
     const top = Math.max(0, ...Object.values(counts)); const bad = (g: string) => g === 'false_reassurance' || g === 'overpromise';

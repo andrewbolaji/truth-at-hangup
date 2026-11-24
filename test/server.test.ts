@@ -8,6 +8,7 @@ beforeEach(() => {
   const t = { ...make(sc('sched-01'), ['C: move it', 'A: You are all set for Thursday!']), id: 'r1:sched-01-plain-move:1', runId: 'r1' };
   fs.writeFileSync(path.join(dir, 'runs', 'r1.json'), JSON.stringify({ meta: { id: 'r1', agentVersion: 'hand', agentPromptSha: 'x', model: 'm', repeats: 1, createdAt: '2026', note: '', scenarioSetSha: 'y', callerVersion: 'v2', callerPromptSha: 'z' }, traces: [t] }));
   fs.writeFileSync(path.join(dir, 'judge', 'v1.json'), JSON.stringify({ version: 'v1', model: 'j', promptSha: 'p', outputs: { [t.id]: { belief: 'DONE', quote: 'You are all set for Thursday', reason: 'Says set.', raw: '{}' } } }));
+  fs.mkdirSync(path.join(dir, 'labels')); fs.writeFileSync(path.join(dir, 'labels', 'queue.json'), JSON.stringify([t.id]));
   store = new Store(path.join(dir, 'x.db'), dir); srv = makeApp(store, { complete: async () => replies.shift() ?? '{"say":"Goodbye.","tool":null,"end":true}' }).listen(0); base = `http://127.0.0.1:${(srv.address() as AddressInfo).port}/api`;
 });
 afterEach(() => { srv.close(); store.db.close(); });
@@ -20,7 +21,8 @@ describe('api', () => {
     expect((await P('/reviews', { traceId: 'r1:sched-01-plain-move:1', metric: 'outcome', verdict: 'pass', reason: 'planted for the test', reviewer: 'A' })).status).toBe(200);
     expect((await J(`/traces/${id}`)).metrics.find((m: { metric: string }) => m.metric === 'outcome')).toMatchObject({ verdict: 'pass', override: { reviewer: 'A' } });
   });
-  it('the label queue leaves out calls from the broken caller', async () => { store.runs[0]!.callerVersion = 'v1'; expect((await J('/queue?rater=A')).total).toBe(0); });
+  it('only the frozen sample can be labeled', async () => { store.queueIds = []; expect((await J('/queue?rater=A')).total).toBe(0); expect((await P('/labels', { key: KEY, belief: 'DONE', rater: 'A', seconds: 1 })).status).toBe(400); });
+  it('a run summary counts the failures', async () => { expect((await J('/runs'))[0].summary).toMatchObject({ total: 1, valid: 1, clean: 0 }); expect((await J('/runs/r1')).traces).toHaveLength(1); });
   it('the label queue is blind', async () => { const q = JSON.stringify(await J('/queue?rater=A')); expect(q).not.toMatch(/hand|r1:|sched-01|NOT_DONE|"truth"|false_reassurance|v1/); });
   it('a label survives a lost database, because it is written to a file', async () => {
     await P('/labels', { key: KEY, belief: 'DONE', note: '', rater: 'A', seconds: 5 });

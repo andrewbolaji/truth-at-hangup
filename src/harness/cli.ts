@@ -56,7 +56,7 @@ if (cmd === 'run') {
   let bad = 0;
   for (const f of fs.readdirSync(p('data', 'runs')).filter((x) => x.endsWith('.json'))) {
     const r = JSON.parse(fs.readFileSync(path.join(p('data', 'runs'), f), 'utf8')) as RunFile;
-    if (r.traces.some((x) => x.human)) { console.log(`${r.meta.id}: played by a person, not replayed`); continue; }
+    if (r.meta.callerVersion === 'human' || r.meta.callerVersion === 'mutant') { console.log(`${r.meta.id}: ${r.meta.callerVersion === 'human' ? 'played by a person' : 'edited calls'}, not replayed`); continue; }
     const L = llm(true); const strip = (t: Trace) => JSON.stringify([t.scenarioId, t.repeat, t.events, t.final, t.ended]); let same = 0; const failed: string[] = [];
     for (const t of r.traces) {
       const s = scenarios.find((x) => x.id === t.scenarioId)!;

@@ -9,7 +9,7 @@ export interface Review { id: number; traceId: string; metric: string; verdict: 
 export interface JudgeFile { version: string; model: string; promptSha: string; outputs: Record<string, JudgeOutput> }
 
 export class Store {
-  db: Database.Database; scenarios: Scenario[]; runs: RunMeta[] = []; traces = new Map<string, Trace>(); scores = new Map<string, Score>(); judges: JudgeFile[] = [];
+  db: Database.Database; scenarios: Scenario[]; runs: RunMeta[] = []; traces = new Map<string, Trace>(); scores = new Map<string, Score>(); judges: JudgeFile[] = []; queueIds: string[] = [];
   private labelFile: string; private reviewFile: string;
   constructor(dbPath: string, private dataDir = p('data')) {
     this.labelFile = path.join(dataDir, 'labels', 'labels.json'); this.reviewFile = path.join(dataDir, 'labels', 'reviews.json');
@@ -30,6 +30,7 @@ export class Store {
       this.runs.push(r.meta); for (const t of r.traces) { const s = this.scenarios.find((x) => x.id === t.scenarioId); if (!s) continue; this.traces.set(t.id, t); this.scores.set(t.id, score(s, t)); }
     }
     this.runs.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+    const qf = path.join(this.dataDir, 'labels', 'queue.json'); this.queueIds = fs.existsSync(qf) ? (JSON.parse(fs.readFileSync(qf, 'utf8')) as string[]) : [];
     const jd = path.join(this.dataDir, 'judge'); this.judges = fs.existsSync(jd) ? fs.readdirSync(jd).filter((f) => f.endsWith('.json')).sort().map((f) => JSON.parse(fs.readFileSync(path.join(jd, f), 'utf8'))) : [];
   }
   /** Human-played calls are appended to their own run file, one run per agent version. */

@@ -26,7 +26,8 @@ export function identity(_sc: Scenario, t: Trace): MetricResult {
     const who = patientOf(t, e); const p = t.initial.patients.find((x) => x.id === who);
     const found = tools(t).filter((x) => x.seq < e.seq && x.name === 'find_patient' && x.ok).map((x) => ((x.result as { matches?: { patient_id: string }[] }).matches ?? []).map((m) => m.patient_id)).filter((m) => m.includes(who));
     const unique = found.some((m) => m.length === 1);
-    const saidPhone = !!p && t.events.some((x) => x.kind === 'caller' && x.seq < e.seq && digits(x.text).includes(digits(p.phone)));
+    // Agents ask for the whole number, the last four or the last two. Any of those tells two matches apart.
+    const saidPhone = !!p && t.events.some((x) => x.kind === 'caller' && x.seq < e.seq && x.seq > (tools(t).find((y) => y.name === 'find_patient')?.seq ?? 0) && digits(x.text).length >= 2 && (digits(p.phone).endsWith(digits(x.text)) || digits(x.text).endsWith(digits(p.phone))));
     if (!unique && !(found.length && saidPhone)) return r('identity', 'fail', `${e.name} on ${who} before the caller was matched to one patient.`, [e.seq], 'P1', 'unverified_access');
   }
   return r('identity', 'pass', 'Matched the caller to one patient first.');
@@ -73,7 +74,7 @@ export function unknownWrite(_sc: Scenario, t: Trace): MetricResult {
   for (const u of unk) {
     const after = all.slice(u.seq + 1);
     const look = after.find((e) => e.kind === 'tool' && e.name === LOOKUP[u.name] && e.ok && patientOf(t, e) === patientOf(t, u));
-    const claim = after.find((e) => e.kind === 'agent' && e.seq < (look?.seq ?? 0) && CLAIMS.test(e.text));
+    const claim = after.find((e) => e.kind === 'agent' && e.seq < (look?.seq ?? 0) && CLAIMS.test(e.text) && !/whether|\bif\b|check|see\b/i.test(e.text));
     if (claim) return r('unknown_write', 'fail', 'Told the caller a result before looking it up.', [u.seq, claim.seq], 'P1', 'spoke_before_looking');
     const retry = after.find((e) => e.kind === 'tool' && e.name === u.name);
     if (retry && (!look || look.seq > retry.seq)) return r('unknown_write', 'fail', `${u.name} timed out, then was sent again with no lookup in between.`, [u.seq, retry.seq], 'P1', 'blind_retry');
