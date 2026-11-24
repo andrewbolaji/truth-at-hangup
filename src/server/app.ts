@@ -6,15 +6,15 @@ const ReviewIn = z.object({ traceId: z.string(), metric: z.string(), verdict: z.
 /** The rater gets a meaningless key, so the run name (and the agent version in it) stays hidden. */
 export const blindKey = (id: string) => createHash('sha256').update(`blind:${id}`).digest('hex').slice(0, 16);
 export function summarize(store: Store, runId: string) {
-  const ts = [...store.traces.values()].filter((t) => t.runId === runId); const by: Record<string, { pass: number; fail: number; na: number }> = {}; let clean = 0, valid = 0, p0 = 0, p1 = 0, turns = 0, staff = 0; const words: number[] = [];
+  const ts = [...store.traces.values()].filter((t) => t.runId === runId); const by: Record<string, { pass: number; fail: number; na: number }> = {}; let clean = 0, valid = 0, p0 = 0, p1 = 0, turns = 0, staff = 0; const seenSc = new Map<string, boolean[]>(); const words: number[] = [];
   for (const t of ts) {
     const f = store.full(t.id)!; if (!f.score.simulatorValid) continue; valid++;
-    const fails = f.metrics.filter((m) => m.verdict === 'fail' && m.metric !== 'belief_gap'); if (!fails.length) clean++; if (fails.some((m) => m.severity === 'P0')) p0++; if (fails.some((m) => m.severity === 'P1')) p1++;
+    const fails = f.metrics.filter((m) => m.verdict === 'fail' && m.metric !== 'belief_gap'); seenSc.set(t.scenarioId, [...(seenSc.get(t.scenarioId) ?? []), !fails.length]); if (!fails.length) clean++; if (fails.some((m) => m.severity === 'P0')) p0++; if (fails.some((m) => m.severity === 'P1')) p1++;
     for (const m of f.metrics) { const x = (by[m.metric] ??= { pass: 0, fail: 0, na: 0 }); x[m.verdict]++; }
     let w = 0; for (const e of t.events) { if (e.kind === 'agent') w += e.text.split(/\s+/).length; else if (e.kind === 'caller') { if (w) words.push(w); w = 0; } } if (w) words.push(w);
     turns += t.events.filter((e) => e.kind === 'caller').length; staff += t.final.staffTasks.length;
   }
-  return { total: ts.length, valid, clean, p0, p1, by, turns: valid ? turns / valid : 0, staff, wordsP95: words.sort((a, b) => a - b)[Math.floor(words.length * 0.95)] ?? 0 };
+  return { total: ts.length, valid, clean, p0, p1, by, turns: valid ? turns / valid : 0, staff, passAll: [...seenSc.values()].filter((x) => x.every(Boolean)).length, passAny: [...seenSc.values()].filter((x) => x.some(Boolean)).length, scenarios: seenSc.size, wordsP95: words.sort((a, b) => a - b)[Math.floor(words.length * 0.95)] ?? 0 };
 }
 /** The sample is frozen in a file before anyone labels, so a later run can't change it. 18 calls, one per scenario, plus 6 mutants so dangerous cases exist. */
 export function labelQueue(store: Store): Trace[] { return store.queueIds.flatMap((id) => store.traces.get(id) ?? []); }

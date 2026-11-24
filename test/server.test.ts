@@ -22,7 +22,7 @@ describe('api', () => {
     expect((await J(`/traces/${id}`)).metrics.find((m: { metric: string }) => m.metric === 'outcome')).toMatchObject({ verdict: 'pass', override: { reviewer: 'A' } });
   });
   it('only the frozen sample can be labeled', async () => { store.queueIds = []; expect((await J('/queue?rater=A')).total).toBe(0); expect((await P('/labels', { key: KEY, belief: 'DONE', rater: 'A', seconds: 1 })).status).toBe(400); });
-  it('a run summary counts the failures', async () => { expect((await J('/runs'))[0].summary).toMatchObject({ total: 1, valid: 1, clean: 0 }); expect((await J('/runs/r1')).traces).toHaveLength(1); });
+  it('a run summary counts the failures', async () => { expect((await J('/runs'))[0].summary).toMatchObject({ total: 1, valid: 1, clean: 0, passAll: 0, passAny: 0, scenarios: 1 }); expect((await J('/runs/r1')).traces).toHaveLength(1); });
   it('a broken request gets plain words, no stack trace or path', async () => { const r = await fetch(`${base}/labels`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{bad' }); expect(r.status).toBe(400); expect(await r.text()).not.toMatch(/node_modules|at JSON|Users/); });
   it('the label queue is blind', async () => { const q = JSON.stringify(await J('/queue?rater=A')); expect(q).not.toMatch(/hand|r1:|sched-01|NOT_DONE|"truth"|false_reassurance|v1/); });
   it('a label survives a lost database, because it is written to a file', async () => {

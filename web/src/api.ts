@@ -2,7 +2,7 @@ import type { Belief, MetricResult, RunMeta, Scenario, Score, Trace, Truth, Verd
 import type { JudgeOutput } from '../../src/eval/belief';
 export type Review = { id: number; metric: string; verdict: Verdict; reason: string; reviewer: string; at: string };
 export type Metric = MetricResult & { override?: Review };
-export interface Summary { total: number; valid: number; clean: number; p0: number; p1: number; by: Record<string, { pass: number; fail: number; na: number }>; turns: number; staff: number; wordsP95: number }
+export interface Summary { total: number; valid: number; clean: number; p0: number; p1: number; by: Record<string, { pass: number; fail: number; na: number }>; turns: number; staff: number; wordsP95: number; passAll: number; passAny: number; scenarios: number }
 export interface Row { id: string; scenarioId: string; title: string; kind: string; workflow: string; repeat: number; runId: string; agentVersion: string; truth: Truth; valid: boolean; notes: string[]; ended: string; metrics: Metric[] }
 export interface Finding { id: string; severity: string; title: string; of: string; mechanisms: string[]; happened: string; example: string; matters: string; fix: string; verify: string; guardrail: string; counts: Record<string, { calls: number; hit: string[] }> }
 export interface Run { prompt: string[] | null; meta: RunMeta; summary: Summary; traces: Row[] }
