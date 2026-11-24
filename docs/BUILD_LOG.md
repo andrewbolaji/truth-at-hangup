@@ -27,3 +27,10 @@ Kept while working, so the order of decisions is real.
   5. **The agent really fails at timeouts.** Baseline told callers "your request wasn't sent" (`refill-07 #1`) and "I couldn't move your visit" (`sched-03 #2`). Both had gone through.
   6. **I missed a failure.** Baseline often gives the result and hangs up in one breath. That's Porter defect 5. Added `hung_up_too_soon`.
 - 2:39 Caller v2: knows the date, can't add asks, can't contradict its card, and is closed after the second "anything else?". Two new void rules. Round 1 is kept as `*-caller-v1` so the effect of the fix can be seen. Predicted: baseline still fails timeouts, "unneeded staff task" drops for both, `verified` still over-asks a little.
+- 2:58 Round 2 done (108 calls, caller v2, 0 void, all replay). Against my predictions:
+  - **Wrong:** I said both agents would handle timeouts because the pilot did. Baseline looked after a timeout in 0 of 9 calls here. One pilot call fooled me.
+  - **Wrong:** I said `verified` would over-escalate old chest pain. 0 of 3 did.
+  - **Wrong:** I said baseline would announce a transfer and leave. When the transfer failed it made a real callback.
+  - **Right:** "unneeded staff task" fell once the caller stopped inventing questions: baseline 8 to 5, `verified` 4 to 1. What's left is real: timeouts and the garbled name.
+  - `verified` still hung up in the same breath as the result in 6 of 54 calls. Its prompt never said not to.
+- 3:00 Made `verified-2`: one added rule, never give a result and hang up in the same turn. Predicted: hung-up-too-soon goes to 0 or 1, caller turns go up by less than 1, nothing else moves.
