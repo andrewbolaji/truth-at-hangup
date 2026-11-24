@@ -44,7 +44,7 @@ It sounds careful. It even arranges a callback, so a check on the ending passes.
 
 ## Why I built it this way
 
-I run Porter, a voice agent I built on a real phone number. Its replay tests were green. Then I placed 20 calls by hand and logged 10 kinds of problems the tests missed, including a transfer that was announced and never happened. So this platform:
+I run Porter, a voice agent I built on a real phone number. Its replay tests were green. Then I placed 20 calls by hand and logged 10 kinds of problems the tests missed, including a transfer that was announced and never happened. Today I ran this project's promise check on those 20 calls: it flagged 8 where the agent promised something nothing backed up, the phantom transfer among them. The old tests had passed. So this platform:
 
 1. keeps **what is true** (the clinic's records) apart from **what the caller was left believing** (the words they heard), and scores the gap;
 2. **plants failures** first, so a check that can't see a failure never scores a real call;
