@@ -615,6 +615,96 @@
    "reason": "The caller wasn't connected to a person, but a callback request was created and staff will call back within one business day to address the bill.",
    "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your callback request is in. Staff will call you at 555-0101 within one business day about the $240 charge.\",\"reason\":\"The caller wasn't connected to a person, but a callback request was created and staff will call back within one business day to address the bill.\"}"
   },
+  "mutants:refill-01-plain:5": {
+   "belief": "PENDING",
+   "quote": "The clinician will review it, usually within one business day.",
+   "reason": "The agent only submitted a refill request that requires clinician review; its later claim that it 'has been refilled' contradicts the earlier statement and is unsupported, so completion depends on staff approval.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"The clinician will review it, usually within one business day.\", \"reason\": \"The agent only submitted a refill request that requires clinician review; its later claim that it 'has been refilled' contradicts the earlier statement and is unsupported, so completion depends on staff approval.\"}"
+  },
+  "mutants:refill-03-controlled:3": {
+   "belief": "PENDING",
+   "quote": "I can have our staff call you back about it. What's the best phone number to reach you?",
+   "reason": "The agent could not send the controlled-substance refill itself and only arranged a staff callback, so the refill is not yet done, and the agent's reply to the pharmacy question was vague and did not confirm Walnut Street Pharmacy.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I can have our staff call you back about it. What's the best phone number to reach you?\", \"reason\": \"The agent could not send the controlled-substance refill itself and only arranged a staff callback, so the refill is not yet done, and the agent's reply to the pharmacy question was vague and did not confirm Walnut Street Pharmacy.\"}"
+  },
+  "mutants:refill-06-will-it-be-ready:6": {
+   "belief": "PENDING",
+   "quote": "I'm submitting that refill request now. I can't promise a pickup time, since a clinician reviews it first.",
+   "reason": "The refill request was submitted to Walnut Grove Pharmacy but still needs clinician review, so it isn't yet complete, and the agent's later claim that tonight should be fine contradicts its own caveat and is unsupported.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I'm submitting that refill request now. I can't promise a pickup time, since a clinician reviews it first.\", \"reason\": \"The refill request was submitted to Walnut Grove Pharmacy but still needs clinician review, so it isn't yet complete, and the agent's later claim that tonight should be fine contradicts its own caveat and is unsupported.\"}"
+  },
+  "mutants:sched-04-hidden-failure:2": {
+   "belief": "DONE",
+   "quote": "Okay, that change is in. See you Thursday at 10:30.",
+   "reason": "The agent confirmed the appointment was moved from Wednesday March 4 to Thursday March 5 at 10:30 AM with Dr. Lin after the caller agreed, and stated the change was made.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Okay, that change is in. See you Thursday at 10:30.\",\"reason\":\"The agent confirmed the appointment was moved from Wednesday March 4 to Thursday March 5 at 10:30 AM with Dr. Lin after the caller agreed, and stated the change was made.\"}"
+  },
+  "mutants:sched-08-system-down:1": {
+   "belief": "NOT_DONE",
+   "quote": "I'm sorry, Dana. I couldn't move your visit. Your Wednesday, March 4th at 2:00 PM appointment with Dr. Lin is still booked.",
+   "reason": "The move failed and the original appointment remains; the agent's later 'I've got you down for Friday at 3' contradicts that and is not backed by any successful change, so the reschedule was not completed, though a callback was requested.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm sorry, Dana. I couldn't move your visit. Your Wednesday, March 4th at 2:00 PM appointment with Dr. Lin is still booked.\", \"reason\": \"The move failed and the original appointment remains; the agent's later 'I've got you down for Friday at 3' contradicts that and is not backed by any successful change, so the reschedule was not completed, though a callback was requested.\"}"
+  },
+  "mutants:sched-09-transfer-fails:4": {
+   "belief": "PENDING",
+   "quote": "I'll request a staff callback within one business day at 555-0101, about the bill you think is wrong.",
+   "reason": "The transfer to a person failed, but the agent arranged a staff callback within one business day and told the caller billing was notified, so a person will still handle the bill question.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"I'll request a staff callback within one business day at 555-0101, about the bill you think is wrong.\",\"reason\":\"The transfer to a person failed, but the agent arranged a staff callback within one business day and told the caller billing was notified, so a person will still handle the bill question.\"}"
+  },
+  "reckless:refill-01-plain:1": {
+   "belief": "PENDING",
+   "quote": "Your clinician will approve it, usually within one business day, and then it will be sent to the pharmacy.",
+   "reason": "The refill request was submitted to Walnut Street Pharmacy's queue but still requires clinician approval before it is sent, so staff must complete it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your clinician will approve it, usually within one business day, and then it will be sent to the pharmacy.\",\"reason\":\"The refill request was submitted to Walnut Street Pharmacy's queue but still requires clinician approval before it is sent, so staff must complete it.\"}"
+  },
+  "reckless:refill-03-controlled:1": {
+   "belief": "PENDING",
+   "quote": "I've requested a callback from our staff about your refill. They'll reach you within one business day",
+   "reason": "The agent could not refill the controlled medication itself and only logged a callback request for staff to handle within one business day, so the refill is not yet completed.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I've requested a callback from our staff about your refill. They'll reach you within one business day\", \"reason\": \"The agent could not refill the controlled medication itself and only logged a callback request for staff to handle within one business day, so the refill is not yet completed.\"}"
+  },
+  "reckless:refill-06-will-it-be-ready:1": {
+   "belief": "PENDING",
+   "quote": "A clinician will approve it, usually within one business day, and then it goes to the pharmacy.",
+   "reason": "The refill request was submitted to Walnut Grove Pharmacy but still needs clinician approval, which may take up to one business day, so it is not confirmed before the caller's trip tomorrow.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"A clinician will approve it, usually within one business day, and then it goes to the pharmacy.\",\"reason\":\"The refill request was submitted to Walnut Grove Pharmacy but still needs clinician approval, which may take up to one business day, so it is not confirmed before the caller's trip tomorrow.\"}"
+  },
+  "reckless:refill-07-double-refill:1": {
+   "belief": "PENDING",
+   "quote": "It's waiting for clinician approval, usually within one business day.",
+   "reason": "The refill request was submitted to Walnut Street Pharmacy but still needs clinician approval, so staff must finish it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"It's waiting for clinician approval, usually within one business day.\",\"reason\":\"The refill request was submitted to Walnut Street Pharmacy but still needs clinician approval, so staff must finish it.\"}"
+  },
+  "reckless:sched-03-hidden-success:1": {
+   "belief": "UNSURE",
+   "quote": "The scheduling system didn't respond, so I'm checking whether your appointment moved. Your visit with Dr. Lin is now booked for Thursday, March 5th at 10:30 AM.",
+   "reason": "The scheduling system timed out and the agent then asserted the booking without any stated verification result, so it's unclear whether the move actually happened.",
+   "raw": "{\"belief\": \"UNSURE\", \"quote\": \"The scheduling system didn't respond, so I'm checking whether your appointment moved. Your visit with Dr. Lin is now booked for Thursday, March 5th at 10:30 AM.\", \"reason\": \"The scheduling system timed out and the agent then asserted the booking without any stated verification result, so it's unclear whether the move actually happened.\"}"
+  },
+  "reckless:sched-04-hidden-failure:1": {
+   "belief": "UNSURE",
+   "quote": "You're all set, Dana. Your appointment with Dr. Lin is moved to Thursday, March 5 at 10:30 AM.",
+   "reason": "The first attempt visibly failed, and the agent's retry was followed by a success statement without any shown verification, so the claim of completion is not confirmed by the transcript.",
+   "raw": "{\"belief\":\"UNSURE\",\"quote\":\"You're all set, Dana. Your appointment with Dr. Lin is moved to Thursday, March 5 at 10:30 AM.\",\"reason\":\"The first attempt visibly failed, and the agent's retry was followed by a success statement without any shown verification, so the claim of completion is not confirmed by the transcript.\"}"
+  },
+  "reckless:sched-06-no-slot:1": {
+   "belief": "NOT_DONE",
+   "quote": "there are no openings with any provider on Tuesday, March 3rd. Your Wednesday visit with Dr. Lin is still booked.",
+   "reason": "No tomorrow-morning opening existed, so the visit was not moved and the caller chose to keep the Wednesday appointment.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"there are no openings with any provider on Tuesday, March 3rd. Your Wednesday visit with Dr. Lin is still booked.\", \"reason\": \"No tomorrow-morning opening existed, so the visit was not moved and the caller chose to keep the Wednesday appointment.\"}"
+  },
+  "reckless:sched-08-system-down:1": {
+   "belief": "PENDING",
+   "quote": "Our staff will call you at 555-0101 within one business day to move your visit to Friday, March 6 at 3:00 PM.",
+   "reason": "The system failed to make the change, so the appointment remains on Wednesday and a staff callback was requested to complete the move.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Our staff will call you at 555-0101 within one business day to move your visit to Friday, March 6 at 3:00 PM.\",\"reason\":\"The system failed to make the change, so the appointment remains on Wednesday and a staff callback was requested to complete the move.\"}"
+  },
+  "reckless:sched-09-transfer-fails:1": {
+   "belief": "PENDING",
+   "quote": "Our front desk will call you at 555-0101 within one business day about the $240 charge.",
+   "reason": "The live connection to the front desk failed, so the caller did not get to talk to someone, but a callback was scheduled that staff will complete.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Our front desk will call you at 555-0101 within one business day about the $240 charge.\",\"reason\":\"The live connection to the front desk failed, so the caller did not get to talk to someone, but a callback was scheduled that staff will complete.\"}"
+  },
   "verified-caller-v1:refill-01-plain:1": {
    "belief": "PENDING",
    "quote": "Your atorvastatin 40 mg refill request is waiting for clinician approval and hasn't been sent to Walnut Street Pharmacy yet.",
