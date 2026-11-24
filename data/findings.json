@@ -1,1 +1,62 @@
-[]
+[
+ {
+  "id": "timeouts",
+  "severity": "P1",
+  "title": "After a timeout, the agent guessed and told callers the wrong thing",
+  "mechanisms": [
+   "never_looked_up",
+   "blind_retry",
+   "spoke_before_looking",
+   "said_wrong_details",
+   "duplicate_write"
+  ],
+  "example": "baseline:sched-03-hidden-success:3",
+  "happened": "The scheduling system didn't answer, but the move had gone through. The baseline agent told the caller, twice, that Wednesday was still booked and nothing had changed, and sent staff to move it again.",
+  "matters": "The patient shows up on the wrong day. Staff redo work that's done. With refills, a blind retry gives a clinician two requests to untangle. The transcript sounds careful, so nobody reviewing words alone would catch it.",
+  "fix": "Give write tools an idempotency key and make the agent read the record back after any unknown result before it retries or says anything. Put this in the tool layer, so it doesn't depend on a prompt. The prompt rule here is the stopgap.",
+  "verify": "The two timeout twins look the same to the agent and have opposite truths. Both must pass on every try before release.",
+  "guardrail": "Watch caller turns and call length. Looking things up costs time. Cap the lookup, then hand off with what was tried.",
+  "metric": "unknown_write",
+  "of": "calls with a timeout",
+  "scenarios": []
+ },
+ {
+  "id": "hangup",
+  "severity": "P2",
+  "title": "It gave the result and hung up before the caller could answer",
+  "mechanisms": [
+   "hung_up_too_soon",
+   "hung_up_early",
+   "hung_up_on_question"
+  ],
+  "example": "baseline:sched-02-changes-day:2",
+  "happened": "The agent said the result and ended the call in the same breath. If it got something wrong, the caller had no chance to say so. Andrew found the same thing by hand on Porter, the voice agent he built.",
+  "matters": "The last line is where a caller catches a wrong day or the wrong pharmacy. Cutting it off turns a fixable mistake into a second call.",
+  "fix": "Never end the call in the turn that gives a result. Ask, wait, then close. Enforce it in the call controller, so a prompt can't skip it.",
+  "verify": "The fixed check on every scenario, and the late-correction scenario most of all.",
+  "guardrail": "Don't replace it with an endless 'anything else?' loop. Round 1 of this platform showed how that inflates calls.",
+  "metric": "",
+  "of": "calls",
+  "scenarios": []
+ },
+ {
+  "id": "names",
+  "severity": "P2",
+  "title": "When the name came through garbled, it kept its own spelling",
+  "mechanisms": [
+   "gave_up_early",
+   "unneeded_staff_task"
+  ],
+  "example": "baseline:refill-09-garbled-name:1",
+  "happened": "The caller spelled out TERRENCE COLE. The agent searched for Terrance Cole, found nothing, and sent the refill to staff.",
+  "matters": "Every garbled name becomes a staff callback. This is the cheapest automation to win back.",
+  "fix": "When a caller spells something, treat the letters as the value. Offer phone-number lookup as the second try.",
+  "verify": "The garbled-name scenario, then the same test on real recordings. Text can't stand in for audio here.",
+  "guardrail": "Never loosen the match itself. A near match on a name is how the wrong chart gets opened.",
+  "metric": "",
+  "of": "garbled-name calls",
+  "scenarios": [
+   "refill-09"
+  ]
+ }
+]

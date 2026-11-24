@@ -4,7 +4,7 @@ export type Review = { id: number; metric: string; verdict: Verdict; reason: str
 export type Metric = MetricResult & { override?: Review };
 export interface Summary { total: number; valid: number; clean: number; p0: number; p1: number; by: Record<string, { pass: number; fail: number; na: number }>; turns: number; staff: number }
 export interface Row { id: string; scenarioId: string; title: string; kind: string; workflow: string; repeat: number; runId: string; agentVersion: string; truth: Truth; valid: boolean; notes: string[]; ended: string; metrics: Metric[] }
-export interface Finding { id: string; severity: string; title: string; mechanisms: string[]; happened: string; example: string; matters: string; fix: string; verify: string; guardrail: string; counts: Record<string, { calls: number; hit: string[] }> }
+export interface Finding { id: string; severity: string; title: string; of: string; mechanisms: string[]; happened: string; example: string; matters: string; fix: string; verify: string; guardrail: string; counts: Record<string, { calls: number; hit: string[] }> }
 export interface Run { prompt: string[] | null; meta: RunMeta; summary: Summary; traces: Row[] }
 export interface Call { trace: Trace; scenario: Scenario; score: Score; metrics: Metric[]; judge: { version: string; out: JudgeOutput }[]; label?: { belief: Belief; note: string; rater: string }; reviews: Review[] }
 export interface CalRow { traceId: string; title: string; held: boolean; grounded: boolean; human: Belief; note: string; judge: Belief; quote: string; reason: string; truth: Truth; humanGap: string; judgeGap: string }

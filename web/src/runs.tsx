@@ -7,7 +7,7 @@ function Table({ rows, title, sub }: { rows: RunItem[]; title: string; sub: stri
 export function Runs() {
   const s = useGet<RunItem[]>('/runs'); const f = useGet<Finding[]>('/findings'); const c = s.data?.filter((r) => CAND.includes(r.id)).sort((x, y) => CAND.indexOf(x.id) - CAND.indexOf(y.id)) ?? []; const rest = s.data?.filter((r) => !CAND.includes(r.id)) ?? [];
   return <Load s={s}><section className="hero"><h1>Does the caller hang up believing the truth?</h1><p>A call can sound finished and not be. Every call here is checked against the clinic’s records, then against what the caller was left believing.</p></section>
-    {f.data && <section className="lead">{f.data.slice(0, 3).map((x, i) => <a key={x.id} className="leadcard" href="#/findings"><span className={`chip fail ${x.severity}`}>{x.severity}</span><b>{i + 1}. {x.title}</b><Counts f={x} /></a>)}</section>}
+    {f.data && <section className="lead">{f.data.slice(0, 3).map((x, i) => <a key={x.id} className="leadcard" href="#/findings"><span className={`chip fail ${x.severity}`}>{x.severity}</span><b>{i + 1}. {x.title}</b><Counts f={x} /><span className="mut">Out of {x.of}</span></a>)}</section>}
     <Table rows={c} title="Agent versions" sub="Same 18 scenarios, three tries each." /><Table rows={rest} title="Checks on the platform itself" sub="Earlier rounds, controls and calls played by a person. These test the simulator and the judge." />
     {s.data?.length === 0 && <p className="note">No runs yet. Use <code>npm run run:eval -- --agent baseline</code>.</p>}<p className="mut">Synthetic calls only. Percentages describe this sample, never real traffic.</p></Load>;
 }
