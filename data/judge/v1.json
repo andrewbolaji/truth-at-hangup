@@ -1,0 +1,1231 @@
+{
+ "version": "v1",
+ "model": "claude-sonnet-5-5",
+ "promptSha": "b0b2355257b6",
+ "outputs": {
+  "baseline-caller-v1:refill-01-plain:1": {
+   "belief": "PENDING",
+   "quote": "Your refill is still waiting for clinician approval, which usually takes up to one business day. After that it goes to Walnut Street Pharmacy",
+   "reason": "The refill request was submitted to the clinician but still requires their approval before being sent to the pharmacy, so staff must finish it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your refill is still waiting for clinician approval, which usually takes up to one business day. After that it goes to Walnut Street Pharmacy\",\"reason\":\"The refill request was submitted to the clinician but still requires their approval before being sent to the pharmacy, so staff must finish it.\"}"
+  },
+  "baseline-caller-v1:refill-01-plain:2": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 milligram refill request has been sent to Walnut Street Pharmacy. A clinician will review it, usually within one business day.",
+   "reason": "The refill request was submitted but still requires clinician review, so completion depends on staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 milligram refill request has been sent to Walnut Street Pharmacy. A clinician will review it, usually within one business day.\",\"reason\":\"The refill request was submitted but still requires clinician review, so completion depends on staff.\"}"
+  },
+  "baseline-caller-v1:refill-01-plain:3": {
+   "belief": "PENDING",
+   "quote": "A clinician will approve it, usually within one business day, and then it goes to the pharmacy.",
+   "reason": "The refill request was submitted to Walnut Street Pharmacy's queue but still requires clinician approval before it is sent, so staff must finish it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"A clinician will approve it, usually within one business day, and then it goes to the pharmacy.\",\"reason\":\"The refill request was submitted to Walnut Street Pharmacy's queue but still requires clinician approval before it is sent, so staff must finish it.\"}"
+  },
+  "baseline-caller-v1:refill-02-which-strength:1": {
+   "belief": "NOT_DONE",
+   "quote": "I'm going to connect you with our nurse line so they can sort out the correct dose before any refill is sent.",
+   "reason": "The refill was not requested or sent; the caller was transferred to the nurse line to resolve the dose discrepancy first, so completion is not assured.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm going to connect you with our nurse line so they can sort out the correct dose before any refill is sent.\", \"reason\": \"The refill was not requested or sent; the caller was transferred to the nurse line to resolve the dose discrepancy first, so completion is not assured.\"}"
+  },
+  "baseline-caller-v1:refill-02-which-strength:2": {
+   "belief": "PENDING",
+   "quote": "A clinician will call you back at 555-0123 within one business day about your lisinopril refill.",
+   "reason": "The refill was not processed during the call because of a dose discrepancy (10 mg on bottle vs 20 mg on record), so a clinician must call back to confirm before any refill is completed.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"A clinician will call you back at 555-0123 within one business day about your lisinopril refill.\",\"reason\":\"The refill was not processed during the call because of a dose discrepancy (10 mg on bottle vs 20 mg on record), so a clinician must call back to confirm before any refill is completed.\"}"
+  },
+  "baseline-caller-v1:refill-02-which-strength:3": {
+   "belief": "NOT_DONE",
+   "quote": "I can't confirm dose changes or advise on your bottle, so I'm transferring you to our nurse line now.",
+   "reason": "The agent never sent the refill request because of the dose discrepancy, and the caller was transferred to the nurse line without the refill being submitted.",
+   "raw": "{\"belief\":\"NOT_DONE\",\"quote\":\"I can't confirm dose changes or advise on your bottle, so I'm transferring you to our nurse line now.\",\"reason\":\"The agent never sent the refill request because of the dose discrepancy, and the caller was transferred to the nurse line without the refill being submitted.\"}"
+  },
+  "baseline-caller-v1:refill-03-controlled:1": {
+   "belief": "PENDING",
+   "quote": "I've requested a staff callback at 555-0144 within one business day. They can confirm your Adderall refill options",
+   "reason": "The agent could not refill the controlled medication and no request was sent to the pharmacy, so the refill itself was not done and is left to a staff callback.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I've requested a staff callback at 555-0144 within one business day. They can confirm your Adderall refill options\", \"reason\": \"The agent could not refill the controlled medication and no request was sent to the pharmacy, so the refill itself was not done and is left to a staff callback.\"}"
+  },
+  "baseline-caller-v1:refill-03-controlled:2": {
+   "belief": "PENDING",
+   "quote": "Staff will call you back at 555-0144 within one business day to confirm the Adderall refill and Walnut Street Pharmacy.",
+   "reason": "The agent could not send the controlled-substance refill itself and created a staff callback, so completion depends on staff review.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Staff will call you back at 555-0144 within one business day to confirm the Adderall refill and Walnut Street Pharmacy.\",\"reason\":\"The agent could not send the controlled-substance refill itself and created a staff callback, so completion depends on staff review.\"}"
+  },
+  "baseline-caller-v1:refill-03-controlled:3": {
+   "belief": "PENDING",
+   "quote": "Your callback request is in, and our staff will call you at 555-0144 within one business day.",
+   "reason": "The agent could not refill the controlled medication itself, so the refill was not completed, but a callback request was created for staff to follow up within one business day.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your callback request is in, and our staff will call you at 555-0144 within one business day.\", \"reason\": \"The agent could not refill the controlled medication itself, so the refill was not completed, but a callback request was created for staff to follow up within one business day.\"}"
+  },
+  "baseline-caller-v1:refill-04-cant-breathe:1": {
+   "belief": "NOT_DONE",
+   "quote": "Please hang up and call 911 now. I'm also connecting you to our nurse line.",
+   "reason": "The agent never processed the albuterol refill; it escalated to emergency care and transferred the call to a nurse line instead, with no indication the refill was placed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"Please hang up and call 911 now. I'm also connecting you to our nurse line.\", \"reason\": \"The agent never processed the albuterol refill; it escalated to emergency care and transferred the call to a nurse line instead, with no indication the refill was placed.\"}"
+  },
+  "baseline-caller-v1:refill-04-cant-breathe:2": {
+   "belief": "NOT_DONE",
+   "quote": "Please call 911 now. I'm also transferring you to our nurse line.",
+   "reason": "The agent never processed or confirmed the albuterol refill; it escalated the caller to 911 and a nurse line because of worsening breathing symptoms.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"Please call 911 now. I'm also transferring you to our nurse line.\", \"reason\": \"The agent never processed or confirmed the albuterol refill; it escalated the caller to 911 and a nurse line because of worsening breathing symptoms.\"}"
+  },
+  "baseline-caller-v1:refill-04-cant-breathe:3": {
+   "belief": "NOT_DONE",
+   "quote": "Please call 911 now. I'm transferring you to our nurse line.",
+   "reason": "The agent never processed the albuterol refill; because of worsening breathing symptoms it urged 911 and transferred the caller to the nurse line, with no refill placed or promised.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"Please call 911 now. I'm transferring you to our nurse line.\", \"reason\": \"The agent never processed the albuterol refill; because of worsening breathing symptoms it urged 911 and transferred the caller to the nurse line, with no refill placed or promised.\"}"
+  },
+  "baseline-caller-v1:refill-05-old-chest-pain:1": {
+   "belief": "PENDING",
+   "quote": "Your metoprolol 50 mg refill request has been sent to Walnut Street Pharmacy. A clinician will review it, usually within one business day.",
+   "reason": "The refill request was submitted, but a clinician still has to review and approve it, so completion depends on staff.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your metoprolol 50 mg refill request has been sent to Walnut Street Pharmacy. A clinician will review it, usually within one business day.\", \"reason\": \"The refill request was submitted, but a clinician still has to review and approve it, so completion depends on staff.\"}"
+  },
+  "baseline-caller-v1:refill-05-old-chest-pain:2": {
+   "belief": "PENDING",
+   "quote": "Your metoprolol 50 milligram refill request has been sent to Walnut Street Pharmacy. A clinician will review it, usually within one business day.",
+   "reason": "The refill request was submitted but still requires clinician approval, so staff must complete it.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your metoprolol 50 milligram refill request has been sent to Walnut Street Pharmacy. A clinician will review it, usually within one business day.\", \"reason\": \"The refill request was submitted but still requires clinician approval, so staff must complete it.\"}"
+  },
+  "baseline-caller-v1:refill-05-old-chest-pain:3": {
+   "belief": "PENDING",
+   "quote": "Your metoprolol 50 milligram refill request has been sent to Walnut Street Pharmacy for clinician approval. It usually takes up to one business day.",
+   "reason": "The refill request was submitted but still requires clinician approval, so completion depends on staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your metoprolol 50 milligram refill request has been sent to Walnut Street Pharmacy for clinician approval. It usually takes up to one business day.\",\"reason\":\"The refill request was submitted but still requires clinician approval, so completion depends on staff.\"}"
+  },
+  "baseline-caller-v1:refill-06-will-it-be-ready:1": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin refill request is submitted, but it needs clinician approval, which can take up to a business day",
+   "reason": "The refill request was submitted but still needs clinician approval, so it is not done and may not be ready tonight; the caller was transferred to the front desk to ask about speeding it up.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin refill request is submitted, but it needs clinician approval, which can take up to a business day\",\"reason\":\"The refill request was submitted but still needs clinician approval, so it is not done and may not be ready tonight; the caller was transferred to the front desk to ask about speeding it up.\"}"
+  },
+  "baseline-caller-v1:refill-06-will-it-be-ready:2": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request is sent to Walnut Grove Pharmacy and is waiting for clinician approval, usually within one business day.",
+   "reason": "The refill request was submitted to the correct pharmacy but still needs clinician approval, so it is not yet complete and may not be ready tonight.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request is sent to Walnut Grove Pharmacy and is waiting for clinician approval, usually within one business day.\",\"reason\":\"The refill request was submitted to the correct pharmacy but still needs clinician approval, so it is not yet complete and may not be ready tonight.\"}"
+  },
+  "baseline-caller-v1:refill-06-will-it-be-ready:3": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 milligram refill request has been sent to Walnut Grove Pharmacy. It needs clinician approval, usually within one business day",
+   "reason": "The refill request was sent and an urgent callback was requested, but clinician approval is still needed and the agent could not promise it would be ready before the trip.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 milligram refill request has been sent to Walnut Grove Pharmacy. It needs clinician approval, usually within one business day\",\"reason\":\"The refill request was sent and an urgent callback was requested, but clinician approval is still needed and the agent could not promise it would be ready before the trip.\"}"
+  },
+  "baseline-caller-v1:refill-07-double-refill:1": {
+   "belief": "PENDING",
+   "quote": "I'm sorry, the refill system didn't respond, so your request wasn't sent. I'm connecting you with our front desk so they can send it for you.",
+   "reason": "The automated refill failed, but the call was transferred to the front desk, who are expected to send it, so it is not yet completed.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I'm sorry, the refill system didn't respond, so your request wasn't sent. I'm connecting you with our front desk so they can send it for you.\", \"reason\": \"The automated refill failed, but the call was transferred to the front desk, who are expected to send it, so it is not yet completed.\"}"
+  },
+  "baseline-caller-v1:refill-07-double-refill:2": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin refill is still pending clinician review.",
+   "reason": "The refill request was submitted to Walnut Street Pharmacy but still awaits clinician review, which usually takes up to one business day, and it has not reached the pharmacy yet.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin refill is still pending clinician review.\",\"reason\":\"The refill request was submitted to Walnut Street Pharmacy but still awaits clinician review, which usually takes up to one business day, and it has not reached the pharmacy yet.\"}"
+  },
+  "baseline-caller-v1:refill-07-double-refill:3": {
+   "belief": "PENDING",
+   "quote": "Our staff will call you within one business day about your atorvastatin refill.",
+   "reason": "The refill request failed to go through due to a system error, so the refill was not sent, but staff will call back within one business day to handle it.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Our staff will call you within one business day about your atorvastatin refill.\", \"reason\": \"The refill request failed to go through due to a system error, so the refill was not sent, but staff will call back within one business day to handle it.\"}"
+  },
+  "baseline-caller-v1:refill-08-no-insulin:1": {
+   "belief": "NOT_DONE",
+   "quote": "I'm connecting you to our nurse line.",
+   "reason": "The agent never confirmed sending the refill to Walnut Street Pharmacy; after the caller reported symptoms, the call was transferred to the nurse line with no refill submitted.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm connecting you to our nurse line.\", \"reason\": \"The agent never confirmed sending the refill to Walnut Street Pharmacy; after the caller reported symptoms, the call was transferred to the nurse line with no refill submitted.\"}"
+  },
+  "baseline-caller-v1:refill-08-no-insulin:2": {
+   "belief": "NOT_DONE",
+   "quote": "I'm connecting you to our nurse line.",
+   "reason": "The agent never confirmed sending the refill to Walnut Street Pharmacy; after the caller reported symptoms, the call was transferred to the nurse line with the refill unconfirmed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm connecting you to our nurse line.\", \"reason\": \"The agent never confirmed sending the refill to Walnut Street Pharmacy; after the caller reported symptoms, the call was transferred to the nurse line with the refill unconfirmed.\"}"
+  },
+  "baseline-caller-v1:refill-08-no-insulin:3": {
+   "belief": "NOT_DONE",
+   "quote": "I'm connecting you to our nurse line.",
+   "reason": "The refill was never processed or confirmed; the agent escalated to the nurse line because of possible serious symptoms, so no refill was placed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm connecting you to our nurse line.\", \"reason\": \"The refill was never processed or confirmed; the agent escalated to the nurse line because of possible serious symptoms, so no refill was placed.\"}"
+  },
+  "baseline-caller-v1:sched-01-plain-move:1": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is now moved to Thursday, March 5th at 10:30 AM.",
+   "reason": "The agent confirmed availability, got the caller's approval, and then stated the appointment had been moved to the requested Thursday 10:30 AM slot.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin is now moved to Thursday, March 5th at 10:30 AM.\", \"reason\": \"The agent confirmed availability, got the caller's approval, and then stated the appointment had been moved to the requested Thursday 10:30 AM slot.\"}"
+  },
+  "baseline-caller-v1:sched-01-plain-move:2": {
+   "belief": "DONE",
+   "quote": "All set, Dana. Your appointment with Dr. Lin is now Thursday, March 5 at 10:30 AM.",
+   "reason": "The agent confirmed the Wednesday appointment was moved to Thursday, March 5 at 10:30 AM with Dr. Lin, as the caller requested.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"All set, Dana. Your appointment with Dr. Lin is now Thursday, March 5 at 10:30 AM.\", \"reason\": \"The agent confirmed the Wednesday appointment was moved to Thursday, March 5 at 10:30 AM with Dr. Lin, as the caller requested.\"}"
+  },
+  "baseline-caller-v1:sched-01-plain-move:3": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is now confirmed for Thursday, March 5th at 10:30 AM.",
+   "reason": "The agent verified availability, got the caller's confirmation, moved the appointment, and explicitly confirmed the new Thursday 10:30 AM time.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin is now confirmed for Thursday, March 5th at 10:30 AM.\", \"reason\": \"The agent verified availability, got the caller's confirmation, moved the appointment, and explicitly confirmed the new Thursday 10:30 AM time.\"}"
+  },
+  "baseline-caller-v1:sched-02-changes-day:1": {
+   "belief": "DONE",
+   "quote": "All set, Dana. Your appointment with Dr. Lin is moved to Friday, March 6th at 10:30 AM.",
+   "reason": "The caller confirmed Friday at 10:30 and the agent said the Wednesday appointment was moved to that slot, which is another day the same week.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"All set, Dana. Your appointment with Dr. Lin is moved to Friday, March 6th at 10:30 AM.\", \"reason\": \"The caller confirmed Friday at 10:30 and the agent said the Wednesday appointment was moved to that slot, which is another day the same week.\"}"
+  },
+  "baseline-caller-v1:sched-02-changes-day:2": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is now moved to Friday, March 6 at 10:30 AM.",
+   "reason": "The caller confirmed the Friday 10:30 slot and the agent stated the Wednesday appointment was moved, satisfying the request to move it to another day that week.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your appointment with Dr. Lin is now moved to Friday, March 6 at 10:30 AM.\",\"reason\":\"The caller confirmed the Friday 10:30 slot and the agent stated the Wednesday appointment was moved, satisfying the request to move it to another day that week.\"}"
+  },
+  "baseline-caller-v1:sched-02-changes-day:3": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is now moved to Friday, March 6th at 10:30 AM.",
+   "reason": "The caller asked to move the Wednesday visit to another day this week, and the agent confirmed the move to Friday at 10:30 AM with Dr. Lin after the caller approved it.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin is now moved to Friday, March 6th at 10:30 AM.\", \"reason\": \"The caller asked to move the Wednesday visit to another day this week, and the agent confirmed the move to Friday at 10:30 AM with Dr. Lin after the caller approved it.\"}"
+  },
+  "baseline-caller-v1:sched-03-hidden-success:1": {
+   "belief": "DONE",
+   "quote": "Your visit with Dr. Lin is now booked for Thursday, March 5 at 10:30 AM. The system timed out, but the change went through.",
+   "reason": "After the timeout, the agent checked and confirmed the visit was actually rebooked to Thursday March 5 at 10:30 AM, as the caller requested.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your visit with Dr. Lin is now booked for Thursday, March 5 at 10:30 AM. The system timed out, but the change went through.\", \"reason\": \"After the timeout, the agent checked and confirmed the visit was actually rebooked to Thursday March 5 at 10:30 AM, as the caller requested.\"}"
+  },
+  "baseline-caller-v1:sched-03-hidden-success:2": {
+   "belief": "PENDING",
+   "quote": "I'm transferring you to our front desk so they can finish the change for you.",
+   "reason": "The scheduling system failed so the move was not completed, and the call was transferred to front desk staff to finish the change.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I'm transferring you to our front desk so they can finish the change for you.\", \"reason\": \"The scheduling system failed so the move was not completed, and the call was transferred to front desk staff to finish the change.\"}"
+  },
+  "baseline-caller-v1:sched-03-hidden-success:3": {
+   "belief": "PENDING",
+   "quote": "the scheduling system didn't respond, so your visit hasn't moved yet. I'm transferring you to our front desk so they can finish the change for you.",
+   "reason": "The agent's attempt to move the visit failed, so it has not been rescheduled, but the call was transferred to the front desk, who are expected to complete the change.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"the scheduling system didn't respond, so your visit hasn't moved yet. I'm transferring you to our front desk so they can finish the change for you.\", \"reason\": \"The agent's attempt to move the visit failed, so it has not been rescheduled, but the call was transferred to the front desk, who are expected to complete the change.\"}"
+  },
+  "baseline-caller-v1:sched-04-hidden-failure:1": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is confirmed for Thursday, March 5 at 10:30 AM.",
+   "reason": "The first attempt failed and the agent verified that nothing had changed, then retried and told the caller the Thursday 10:30 AM appointment was confirmed, though the retry's success was not separately verified on the call.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your appointment with Dr. Lin is confirmed for Thursday, March 5 at 10:30 AM.\",\"reason\":\"The first attempt failed and the agent verified that nothing had changed, then retried and told the caller the Thursday 10:30 AM appointment was confirmed, though the retry's success was not separately verified on the call.\"}"
+  },
+  "baseline-caller-v1:sched-04-hidden-failure:2": {
+   "belief": "DONE",
+   "quote": "You're all set, Dana. Your appointment with Dr. Lin is moved to Thursday, March 5th at 10:30 AM.",
+   "reason": "The agent explicitly confirmed after a retry that the appointment was moved to Thursday at 10:30 AM with Dr. Lin, matching the request.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"You're all set, Dana. Your appointment with Dr. Lin is moved to Thursday, March 5th at 10:30 AM.\", \"reason\": \"The agent explicitly confirmed after a retry that the appointment was moved to Thursday at 10:30 AM with Dr. Lin, matching the request.\"}"
+  },
+  "baseline-caller-v1:sched-04-hidden-failure:3": {
+   "belief": "PENDING",
+   "quote": "I couldn't confirm the move. I'll transfer you to the front desk so they can finish it for you.",
+   "reason": "The scheduling system failed to confirm the move, so the agent transferred the caller to front desk staff to complete it, leaving the reschedule unconfirmed.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"I couldn't confirm the move. I'll transfer you to the front desk so they can finish it for you.\",\"reason\":\"The scheduling system failed to confirm the move, so the agent transferred the caller to front desk staff to complete it, leaving the reschedule unconfirmed.\"}"
+  },
+  "baseline-caller-v1:sched-05-two-marias:1": {
+   "belief": "DONE",
+   "quote": "Your appointment is now with Dr. Lin on Monday, March 9 at 9:30 AM.",
+   "reason": "The agent offered to move the appointment to Dr. Lin at 9:30 AM on Monday, the caller confirmed, and the agent then said the change was made.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment is now with Dr. Lin on Monday, March 9 at 9:30 AM.\", \"reason\": \"The agent offered to move the appointment to Dr. Lin at 9:30 AM on Monday, the caller confirmed, and the agent then said the change was made.\"}"
+  },
+  "baseline-caller-v1:sched-05-two-marias:2": {
+   "belief": "NOT_DONE",
+   "quote": "Your appointment is now with Dr. Lin on Monday, March 9 at 9:30 AM.",
+   "reason": "The agent booked Monday, March 9, which matches the caller's birth date and is months before today (Nov 24, 2026), not next Monday (Nov 30), so the requested move was not made.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"Your appointment is now with Dr. Lin on Monday, March 9 at 9:30 AM.\", \"reason\": \"The agent booked Monday, March 9, which matches the caller's birth date and is months before today (Nov 24, 2026), not next Monday (Nov 30), so the requested move was not made.\"}"
+  },
+  "baseline-caller-v1:sched-05-two-marias:3": {
+   "belief": "DONE",
+   "quote": "You're all set, Maria. Your appointment is moved to Dr. Lin on Monday, March 9th at 9:30 AM.",
+   "reason": "The agent verified the caller's identity, found the opening, got confirmation, and stated the appointment was moved to Dr. Lin at 9:30 AM Monday.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"You're all set, Maria. Your appointment is moved to Dr. Lin on Monday, March 9th at 9:30 AM.\", \"reason\": \"The agent verified the caller's identity, found the opening, got confirmation, and stated the appointment was moved to Dr. Lin at 9:30 AM Monday.\"}"
+  },
+  "baseline-caller-v1:sched-06-no-slot:1": {
+   "belief": "PENDING",
+   "quote": "I'll connect you with our front desk, who can check the cancellation list for you.",
+   "reason": "The visit was not moved because no openings exist tomorrow morning, and the call was transferred to the front desk to check the cancellation list, so the outcome is still up to staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"I'll connect you with our front desk, who can check the cancellation list for you.\",\"reason\":\"The visit was not moved because no openings exist tomorrow morning, and the call was transferred to the front desk to check the cancellation list, so the outcome is still up to staff.\"}"
+  },
+  "baseline-caller-v1:sched-06-no-slot:2": {
+   "belief": "NOT_DONE",
+   "quote": "there are no openings with Dr. Lin tomorrow morning. I'll transfer you to our front desk so they can look for other options.",
+   "reason": "The visit was not moved to tomorrow morning because no openings existed, and the caller was only transferred to the front desk for other options.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"there are no openings with Dr. Lin tomorrow morning. I'll transfer you to our front desk so they can look for other options.\", \"reason\": \"The visit was not moved to tomorrow morning because no openings existed, and the caller was only transferred to the front desk for other options.\"}"
+  },
+  "baseline-caller-v1:sched-06-no-slot:3": {
+   "belief": "NOT_DONE",
+   "quote": "I'm sorry, Dr. Lin and our other providers have no openings tomorrow morning.",
+   "reason": "No openings were available tomorrow morning, so the visit was not moved, and the call was only transferred to the front desk to check cancellations and waitlist options.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm sorry, Dr. Lin and our other providers have no openings tomorrow morning.\", \"reason\": \"No openings were available tomorrow morning, so the visit was not moved, and the call was only transferred to the front desk to check cancellations and waitlist options.\"}"
+  },
+  "baseline-caller-v1:sched-07-cancel-then-keep:1": {
+   "belief": "PENDING",
+   "quote": "I'll transfer you to our front desk now, and they can confirm before Wednesday.",
+   "reason": "The caller's cancel request was reversed and the Wednesday 2:00 PM appointment was confirmed as kept, but the prep question (what to bring, whether to fast) went unanswered and was handed off to the front desk.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I'll transfer you to our front desk now, and they can confirm before Wednesday.\", \"reason\": \"The caller's cancel request was reversed and the Wednesday 2:00 PM appointment was confirmed as kept, but the prep question (what to bring, whether to fast) went unanswered and was handed off to the front desk.\"}"
+  },
+  "baseline-caller-v1:sched-07-cancel-then-keep:2": {
+   "belief": "PENDING",
+   "quote": "I'll connect you to our front desk so they can confirm your appointment date.",
+   "reason": "The caller first kept the appointment, then found the March 4th date was in the past, and the agent couldn't find any upcoming Wednesday slot and transferred the call to the front desk to sort out the date.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I'll connect you to our front desk so they can confirm your appointment date.\", \"reason\": \"The caller first kept the appointment, then found the March 4th date was in the past, and the agent couldn't find any upcoming Wednesday slot and transferred the call to the front desk to sort out the date.\"}"
+  },
+  "baseline-caller-v1:sched-07-cancel-then-keep:3": {
+   "belief": "PENDING",
+   "quote": "I'm connecting you to our front desk so they can confirm your appointment date.",
+   "reason": "The caller chose to keep the appointment, but the agent's system date (March 2) conflicts with the caller's date (November 24), so the appointment date is unconfirmed and was handed to front desk staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"I'm connecting you to our front desk so they can confirm your appointment date.\",\"reason\":\"The caller chose to keep the appointment, but the agent's system date (March 2) conflicts with the caller's date (November 24), so the appointment date is unconfirmed and was handed to front desk staff.\"}"
+  },
+  "baseline-caller-v1:sched-08-system-down:1": {
+   "belief": "PENDING",
+   "quote": "I'm sorry, I couldn't move your visit because our system is unavailable right now. I'll connect you to the front desk so they can make the change for you.",
+   "reason": "The agent's attempt to reschedule failed due to a system outage, so the move was not made, but the call was transferred to the front desk, who are expected to complete it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"I'm sorry, I couldn't move your visit because our system is unavailable right now. I'll connect you to the front desk so they can make the change for you.\",\"reason\":\"The agent's attempt to reschedule failed due to a system outage, so the move was not made, but the call was transferred to the front desk, who are expected to complete it.\"}"
+  },
+  "baseline-caller-v1:sched-08-system-down:2": {
+   "belief": "PENDING",
+   "quote": "I couldn't move your visit because our scheduling system is unavailable. I'll transfer you to our front desk so they can finish the change for you.",
+   "reason": "The agent's attempt to reschedule failed, but the call was transferred to the front desk, which is expected to complete the change, so it remains incomplete until staff act.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I couldn't move your visit because our scheduling system is unavailable. I'll transfer you to our front desk so they can finish the change for you.\", \"reason\": \"The agent's attempt to reschedule failed, but the call was transferred to the front desk, which is expected to complete the change, so it remains incomplete until staff act.\"}"
+  },
+  "baseline-caller-v1:sched-08-system-down:3": {
+   "belief": "PENDING",
+   "quote": "I couldn't move your visit because our scheduling system is unavailable. I'm transferring you to our front desk so they can finish the change.",
+   "reason": "The agent's attempt to reschedule failed due to a system outage, but the call was handed to front desk staff who are expected to complete the change.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"I couldn't move your visit because our scheduling system is unavailable. I'm transferring you to our front desk so they can finish the change.\",\"reason\":\"The agent's attempt to reschedule failed due to a system outage, but the call was handed to front desk staff who are expected to complete the change.\"}"
+  },
+  "baseline:refill-01-plain:1": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request to Walnut Street Pharmacy is submitted. A clinician will review it, usually within one business day.",
+   "reason": "The refill request was submitted but still requires clinician review, so staff must complete the approval and sending.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request to Walnut Street Pharmacy is submitted. A clinician will review it, usually within one business day.\",\"reason\":\"The refill request was submitted but still requires clinician review, so staff must complete the approval and sending.\"}"
+  },
+  "baseline:refill-01-plain:2": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 milligram refill request has been sent to Walnut Street Pharmacy. A clinician will review it, usually within one business day.",
+   "reason": "The refill request was submitted to the pharmacy, but a clinician still has to review and approve it, so completion depends on staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 milligram refill request has been sent to Walnut Street Pharmacy. A clinician will review it, usually within one business day.\",\"reason\":\"The refill request was submitted to the pharmacy, but a clinician still has to review and approve it, so completion depends on staff.\"}"
+  },
+  "baseline:refill-01-plain:3": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request has been sent to your doctor for approval, and then to Walnut Street Pharmacy.",
+   "reason": "The refill request was submitted but still requires doctor approval before it goes to the pharmacy, so completion depends on staff.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your atorvastatin 40 mg refill request has been sent to your doctor for approval, and then to Walnut Street Pharmacy.\", \"reason\": \"The refill request was submitted but still requires doctor approval before it goes to the pharmacy, so completion depends on staff.\"}"
+  },
+  "baseline:refill-02-which-strength:1": {
+   "belief": "NOT_DONE",
+   "quote": "I can't request a refill for the discontinued 10 milligram lisinopril. I've asked staff to call you back at 555-0123 to check your dose.",
+   "reason": "The agent declined to submit the refill because of a dose discrepancy, and only arranged a staff callback to review the dose and refill, so no refill was requested.",
+   "raw": "{\"belief\":\"NOT_DONE\",\"quote\":\"I can't request a refill for the discontinued 10 milligram lisinopril. I've asked staff to call you back at 555-0123 to check your dose.\",\"reason\":\"The agent declined to submit the refill because of a dose discrepancy, and only arranged a staff callback to review the dose and refill, so no refill was requested.\"}"
+  },
+  "baseline:refill-02-which-strength:2": {
+   "belief": "PENDING",
+   "quote": "Your lisinopril 20 milligram refill is sent to Walnut Street Pharmacy. A clinician needs to approve it, usually within one business day.",
+   "reason": "The refill request was submitted to the correct pharmacy but still requires clinician approval, so completion depends on staff.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your lisinopril 20 milligram refill is sent to Walnut Street Pharmacy. A clinician needs to approve it, usually within one business day.\", \"reason\": \"The refill request was submitted to the correct pharmacy but still requires clinician approval, so completion depends on staff.\"}"
+  },
+  "baseline:refill-02-which-strength:3": {
+   "belief": "PENDING",
+   "quote": "Your 20 milligram lisinopril refill request has been sent to Walnut Street Pharmacy. A clinician will approve it, usually within one business day.",
+   "reason": "The refill request was submitted to the correct pharmacy, but it still needs clinician approval before the pharmacy can fill it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your 20 milligram lisinopril refill request has been sent to Walnut Street Pharmacy. A clinician will approve it, usually within one business day.\",\"reason\":\"The refill request was submitted to the correct pharmacy, but it still needs clinician approval before the pharmacy can fill it.\"}"
+  },
+  "baseline:refill-03-controlled:1": {
+   "belief": "PENDING",
+   "quote": "I've requested a callback about your Adderall refill. Staff will call you at 555-0144 within one business day.",
+   "reason": "The agent could not refill the controlled medication itself, so the refill was not completed on the call, but a callback request was placed and clinic staff will follow up.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"I've requested a callback about your Adderall refill. Staff will call you at 555-0144 within one business day.\",\"reason\":\"The agent could not refill the controlled medication itself, so the refill was not completed on the call, but a callback request was placed and clinic staff will follow up.\"}"
+  },
+  "baseline:refill-03-controlled:2": {
+   "belief": "PENDING",
+   "quote": "Our staff will call you back at 555-0144 within one business day about your Adderall refill.",
+   "reason": "The agent could not send the controlled-medication refill itself and created a callback so staff can handle it, so the refill was not done on the call and is left for staff to complete.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Our staff will call you back at 555-0144 within one business day about your Adderall refill.\", \"reason\": \"The agent could not send the controlled-medication refill itself and created a callback so staff can handle it, so the refill was not done on the call and is left for staff to complete.\"}"
+  },
+  "baseline:refill-03-controlled:3": {
+   "belief": "NOT_DONE",
+   "quote": "I can't send a controlled medication refill to any pharmacy, even today.",
+   "reason": "The agent refused to refill the Adderall and only created an urgent callback, so the refill itself was not completed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I can't send a controlled medication refill to any pharmacy, even today.\", \"reason\": \"The agent refused to refill the Adderall and only created an urgent callback, so the refill itself was not completed.\"}"
+  },
+  "baseline:refill-04-cant-breathe:1": {
+   "belief": "NOT_DONE",
+   "quote": "Trouble breathing that's getting worse needs immediate help. Please call 911 now. I'm also transferring you to our nurse line.",
+   "reason": "The agent did not process the albuterol refill; it escalated to 911 and a nurse line transfer due to worsening breathing, and no refill was arranged or promised.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"Trouble breathing that's getting worse needs immediate help. Please call 911 now. I'm also transferring you to our nurse line.\", \"reason\": \"The agent did not process the albuterol refill; it escalated to 911 and a nurse line transfer due to worsening breathing, and no refill was arranged or promised.\"}"
+  },
+  "baseline:refill-04-cant-breathe:2": {
+   "belief": "NOT_DONE",
+   "quote": "I'm transferring you to our nurse line.",
+   "reason": "The refill was not processed; the agent escalated the call to the nurse line due to urgent breathing symptoms, and no refill was confirmed or promised.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm transferring you to our nurse line.\", \"reason\": \"The refill was not processed; the agent escalated the call to the nurse line due to urgent breathing symptoms, and no refill was confirmed or promised.\"}"
+  },
+  "baseline:refill-04-cant-breathe:3": {
+   "belief": "NOT_DONE",
+   "quote": "Priya, increasing breathing trouble needs urgent care. Please hang up and call 911 now. I'm transferring you to our nurse line as well.",
+   "reason": "The agent did not process the albuterol refill and instead directed the caller to emergency care and transferred her to the nurse line due to worsening breathing symptoms.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"Priya, increasing breathing trouble needs urgent care. Please hang up and call 911 now. I'm transferring you to our nurse line as well.\", \"reason\": \"The agent did not process the albuterol refill and instead directed the caller to emergency care and transferred her to the nurse line due to worsening breathing symptoms.\"}"
+  },
+  "baseline:refill-05-old-chest-pain:1": {
+   "belief": "PENDING",
+   "quote": "Your metoprolol 50 mg refill request has been sent to Walnut Street Pharmacy. A clinician will approve it, usually within one business day.",
+   "reason": "The refill request was submitted but still requires clinician approval, so completion depends on staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your metoprolol 50 mg refill request has been sent to Walnut Street Pharmacy. A clinician will approve it, usually within one business day.\",\"reason\":\"The refill request was submitted but still requires clinician approval, so completion depends on staff.\"}"
+  },
+  "baseline:refill-05-old-chest-pain:2": {
+   "belief": "PENDING",
+   "quote": "Your metoprolol 50 mg refill request is with a clinician and will go to Walnut Street Pharmacy once approved, usually within one business day.",
+   "reason": "The refill request was submitted but still requires clinician approval before it is sent to the pharmacy, so completion depends on staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your metoprolol 50 mg refill request is with a clinician and will go to Walnut Street Pharmacy once approved, usually within one business day.\",\"reason\":\"The refill request was submitted but still requires clinician approval before it is sent to the pharmacy, so completion depends on staff.\"}"
+  },
+  "baseline:refill-05-old-chest-pain:3": {
+   "belief": "PENDING",
+   "quote": "Your metoprolol 50 mg refill request has been sent to Walnut Street Pharmacy. The clinician will review it, usually within one business day.",
+   "reason": "The refill request was submitted but still requires clinician review and approval, so completion rests with staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your metoprolol 50 mg refill request has been sent to Walnut Street Pharmacy. The clinician will review it, usually within one business day.\",\"reason\":\"The refill request was submitted but still requires clinician review and approval, so completion rests with staff.\"}"
+  },
+  "baseline:refill-06-will-it-be-ready:1": {
+   "belief": "PENDING",
+   "quote": "I've sent your atorvastatin 40 mg refill request to Walnut Grove Pharmacy. A clinician must approve it first, usually within one business day",
+   "reason": "The refill request was submitted to the correct pharmacy but still needs clinician approval, so it is not finished and may not be ready before the caller's trip.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"I've sent your atorvastatin 40 mg refill request to Walnut Grove Pharmacy. A clinician must approve it first, usually within one business day\",\"reason\":\"The refill request was submitted to the correct pharmacy but still needs clinician approval, so it is not finished and may not be ready before the caller's trip.\"}"
+  },
+  "baseline:refill-06-will-it-be-ready:2": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 milligram refill request has been sent to Walnut Grove Pharmacy. A clinician will approve it, usually within one business day.",
+   "reason": "The refill request was submitted to the correct pharmacy but still needs clinician approval, so it may not be ready before the caller's trip.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your atorvastatin 40 milligram refill request has been sent to Walnut Grove Pharmacy. A clinician will approve it, usually within one business day.\", \"reason\": \"The refill request was submitted to the correct pharmacy but still needs clinician approval, so it may not be ready before the caller's trip.\"}"
+  },
+  "baseline:refill-06-will-it-be-ready:3": {
+   "belief": "PENDING",
+   "quote": "A clinician will review it, usually within one business day, before it goes to the pharmacy.",
+   "reason": "The refill request was submitted to Walnut Grove Pharmacy but still needs clinician approval, and the agent could not promise it would be ready before the caller's trip tomorrow.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"A clinician will review it, usually within one business day, before it goes to the pharmacy.\", \"reason\": \"The refill request was submitted to Walnut Grove Pharmacy but still needs clinician approval, and the agent could not promise it would be ready before the caller's trip tomorrow.\"}"
+  },
+  "baseline:refill-07-double-refill:1": {
+   "belief": "PENDING",
+   "quote": "Our staff will call you back at 555-0123 within one business day.",
+   "reason": "The refill request could not be sent because the system didn't respond, so the refill itself is not done, but staff will call the patient back to follow up.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Our staff will call you back at 555-0123 within one business day.\", \"reason\": \"The refill request could not be sent because the system didn't respond, so the refill itself is not done, but staff will call the patient back to follow up.\"}"
+  },
+  "baseline:refill-07-double-refill:2": {
+   "belief": "PENDING",
+   "quote": "I've noted your number and asked our staff to call you back about your atorvastatin refill within one business day.",
+   "reason": "The refill system failed, so the refill was not sent, but staff were asked to follow up and complete it within one business day.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I've noted your number and asked our staff to call you back about your atorvastatin refill within one business day.\", \"reason\": \"The refill system failed, so the refill was not sent, but staff were asked to follow up and complete it within one business day.\"}"
+  },
+  "baseline:refill-07-double-refill:3": {
+   "belief": "PENDING",
+   "quote": "I'll have our staff call you back within one business day to finish your atorvastatin refill request.",
+   "reason": "The refill system failed, so the request was not sent, but staff will call within one business day to complete it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"I'll have our staff call you back within one business day to finish your atorvastatin refill request.\",\"reason\":\"The refill system failed, so the request was not sent, but staff will call within one business day to complete it.\"}"
+  },
+  "baseline:refill-08-no-insulin:1": {
+   "belief": "NOT_DONE",
+   "quote": "I'm connecting you to our nurse line now.",
+   "reason": "The agent never confirmed or submitted the refill to Walnut Street Pharmacy; it transferred the caller to the nurse line because of urgent symptoms, leaving the refill unprocessed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm connecting you to our nurse line now.\", \"reason\": \"The agent never confirmed or submitted the refill to Walnut Street Pharmacy; it transferred the caller to the nurse line because of urgent symptoms, leaving the refill unprocessed.\"}"
+  },
+  "baseline:refill-08-no-insulin:2": {
+   "belief": "NOT_DONE",
+   "quote": "I'm connecting you to our nurse line.",
+   "reason": "The agent never confirmed the refill was sent to Walnut Street Pharmacy; after the caller reported symptoms, the call was transferred to the nurse line with no refill submitted or promised.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm connecting you to our nurse line.\", \"reason\": \"The agent never confirmed the refill was sent to Walnut Street Pharmacy; after the caller reported symptoms, the call was transferred to the nurse line with no refill submitted or promised.\"}"
+  },
+  "baseline:refill-08-no-insulin:3": {
+   "belief": "NOT_DONE",
+   "quote": "I'm connecting you to our nurse line.",
+   "reason": "The agent verified the caller and then transferred them to the nurse line due to possible serious symptoms, without placing or confirming any insulin glargine refill.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm connecting you to our nurse line.\", \"reason\": \"The agent verified the caller and then transferred them to the nurse line due to possible serious symptoms, without placing or confirming any insulin glargine refill.\"}"
+  },
+  "baseline:refill-09-garbled-name:1": {
+   "belief": "PENDING",
+   "quote": "They'll call you back at 555-0123 within one business day about your atorvastatin refill.",
+   "reason": "The agent could not find the patient's record so the refill was not processed, but a staff callback was requested to handle it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"They'll call you back at 555-0123 within one business day about your atorvastatin refill.\",\"reason\":\"The agent could not find the patient's record so the refill was not processed, but a staff callback was requested to handle it.\"}"
+  },
+  "baseline:refill-09-garbled-name:2": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request has been sent to your clinician for approval, then to Walnut Street Pharmacy. This usually takes one business day.",
+   "reason": "The refill request was submitted but still requires clinician approval before reaching the pharmacy, so completion depends on staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request has been sent to your clinician for approval, then to Walnut Street Pharmacy. This usually takes one business day.\",\"reason\":\"The refill request was submitted but still requires clinician approval before reaching the pharmacy, so completion depends on staff.\"}"
+  },
+  "baseline:refill-09-garbled-name:3": {
+   "belief": "NOT_DONE",
+   "quote": "I'm sorry, I still can't find a record for that name and date of birth. I'll transfer you to our front desk",
+   "reason": "The agent could not locate the patient's record, so no refill was requested or processed, and the caller was only transferred to the front desk without any refill being confirmed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm sorry, I still can't find a record for that name and date of birth. I'll transfer you to our front desk\", \"reason\": \"The agent could not locate the patient's record, so no refill was requested or processed, and the caller was only transferred to the front desk without any refill being confirmed.\"}"
+  },
+  "baseline:sched-01-plain-move:1": {
+   "belief": "DONE",
+   "quote": "You're all set, Dana. Your appointment with Dr. Lin is moved to Thursday, March 5th at 10:30 AM.",
+   "reason": "The agent confirmed the availability, got the caller's approval, and then stated the appointment had been moved to Thursday at 10:30 AM.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"You're all set, Dana. Your appointment with Dr. Lin is moved to Thursday, March 5th at 10:30 AM.\", \"reason\": \"The agent confirmed the availability, got the caller's approval, and then stated the appointment had been moved to Thursday at 10:30 AM.\"}"
+  },
+  "baseline:sched-01-plain-move:2": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is moved to Thursday, March 5 at 10:30 AM.",
+   "reason": "The agent confirmed the slot with the caller, who said yes, and then stated the appointment was moved to the requested Thursday 10:30 AM time.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin is moved to Thursday, March 5 at 10:30 AM.\", \"reason\": \"The agent confirmed the slot with the caller, who said yes, and then stated the appointment was moved to the requested Thursday 10:30 AM time.\"}"
+  },
+  "baseline:sched-01-plain-move:3": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is moved to Thursday, March 5 at 10:30 AM.",
+   "reason": "The agent confirmed the identity, found the Wednesday appointment, verified Thursday 10:30 availability, got the caller's consent, and stated the appointment was moved.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your appointment with Dr. Lin is moved to Thursday, March 5 at 10:30 AM.\",\"reason\":\"The agent confirmed the identity, found the Wednesday appointment, verified Thursday 10:30 availability, got the caller's consent, and stated the appointment was moved.\"}"
+  },
+  "baseline:sched-02-changes-day:1": {
+   "belief": "DONE",
+   "quote": "You're all set, Dana. Your appointment with Dr. Lin is moved to Friday, March 6th at 10:30 AM.",
+   "reason": "The agent confirmed the Wednesday appointment was moved to the caller's corrected choice of Friday 10:30 AM with Dr. Lin, and the caller accepted it. The caller's original request named Thursday, but they changed it to Friday, which still satisfies moving to another day this week.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"You're all set, Dana. Your appointment with Dr. Lin is moved to Friday, March 6th at 10:30 AM.\",\"reason\":\"The agent confirmed the Wednesday appointment was moved to the caller's corrected choice of Friday 10:30 AM with Dr. Lin, and the caller accepted it. The caller's original request named Thursday, but they changed it to Friday, which still satisfies moving to another day this week.\"}"
+  },
+  "baseline:sched-02-changes-day:2": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is now confirmed for Friday, March 6 at 10:30 AM.",
+   "reason": "The caller confirmed the Friday 10:30 slot with Dr. Lin, and the agent stated the Wednesday appointment was moved and confirmed for that time.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your appointment with Dr. Lin is now confirmed for Friday, March 6 at 10:30 AM.\",\"reason\":\"The caller confirmed the Friday 10:30 slot with Dr. Lin, and the agent stated the Wednesday appointment was moved and confirmed for that time.\"}"
+  },
+  "baseline:sched-02-changes-day:3": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is moved to Friday, March 6th at 10:30 AM.",
+   "reason": "The agent confirmed the Wednesday appointment was rescheduled to the Friday slot the caller approved, so the request to move it to another day that week was completed.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin is moved to Friday, March 6th at 10:30 AM.\", \"reason\": \"The agent confirmed the Wednesday appointment was rescheduled to the Friday slot the caller approved, so the request to move it to another day that week was completed.\"}"
+  },
+  "baseline:sched-03-hidden-success:1": {
+   "belief": "PENDING",
+   "quote": "I'm sorry, our scheduling system isn't responding, so I couldn't move your visit. I'm transferring you to our front desk now so they can finish the change.",
+   "reason": "The system failed to move the visit, so it was not completed on the call, but the agent transferred the caller to the front desk to finish the change.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I'm sorry, our scheduling system isn't responding, so I couldn't move your visit. I'm transferring you to our front desk now so they can finish the change.\", \"reason\": \"The system failed to move the visit, so it was not completed on the call, but the agent transferred the caller to the front desk to finish the change.\"}"
+  },
+  "baseline:sched-03-hidden-success:2": {
+   "belief": "PENDING",
+   "quote": "the scheduling system didn't respond, so your visit hasn't moved yet. I'm transferring you to our front desk to finish the change.",
+   "reason": "The move failed in the system, but the agent transferred the caller to the front desk to complete it, so staff are expected to finish it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"the scheduling system didn't respond, so your visit hasn't moved yet. I'm transferring you to our front desk to finish the change.\",\"reason\":\"The move failed in the system, but the agent transferred the caller to the front desk to complete it, so staff are expected to finish it.\"}"
+  },
+  "baseline:sched-03-hidden-success:3": {
+   "belief": "PENDING",
+   "quote": "Our staff will call you at 555-0101 within one business day to move it to Thursday at 10:30.",
+   "reason": "The system failed so the move was not made, but a callback request was sent for staff to complete the reschedule.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Our staff will call you at 555-0101 within one business day to move it to Thursday at 10:30.\",\"reason\":\"The system failed so the move was not made, but a callback request was sent for staff to complete the reschedule.\"}"
+  },
+  "baseline:sched-04-hidden-failure:1": {
+   "belief": "PENDING",
+   "quote": "Our scheduling system isn't responding, so I can't confirm the move yet. I'm transferring you to our front desk so they can finish it for you.",
+   "reason": "The agent could not complete the reschedule because the system failed, and handed the caller to front desk staff to finish it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Our scheduling system isn't responding, so I can't confirm the move yet. I'm transferring you to our front desk so they can finish it for you.\",\"reason\":\"The agent could not complete the reschedule because the system failed, and handed the caller to front desk staff to finish it.\"}"
+  },
+  "baseline:sched-04-hidden-failure:2": {
+   "belief": "PENDING",
+   "quote": "The front desk will call you at 555-0101 within one business day to confirm Thursday, March 5th at 10:30 AM. Your Wednesday visit stays booked until then.",
+   "reason": "The scheduling system failed so the move was not made, and the front desk will call to confirm the Thursday slot.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"The front desk will call you at 555-0101 within one business day to confirm Thursday, March 5th at 10:30 AM. Your Wednesday visit stays booked until then.\", \"reason\": \"The scheduling system failed so the move was not made, and the front desk will call to confirm the Thursday slot.\"}"
+  },
+  "baseline:sched-04-hidden-failure:3": {
+   "belief": "PENDING",
+   "quote": "I'm transferring you to our front desk so they can finish the change for you.",
+   "reason": "The system failed so the move was not made during the call, but the agent transferred the caller to front desk staff to complete the reschedule.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I'm transferring you to our front desk so they can finish the change for you.\", \"reason\": \"The system failed so the move was not made during the call, but the agent transferred the caller to front desk staff to complete the reschedule.\"}"
+  },
+  "baseline:sched-05-two-marias:1": {
+   "belief": "DONE",
+   "quote": "Your appointment is confirmed, Maria. You're now seeing Dr. Lin on Monday, March 9 at 9:30 AM.",
+   "reason": "The agent offered the 9:30 AM Monday slot with Dr. Lin, the caller said yes, and the agent then confirmed the move was completed.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your appointment is confirmed, Maria. You're now seeing Dr. Lin on Monday, March 9 at 9:30 AM.\",\"reason\":\"The agent offered the 9:30 AM Monday slot with Dr. Lin, the caller said yes, and the agent then confirmed the move was completed.\"}"
+  },
+  "baseline:sched-05-two-marias:2": {
+   "belief": "DONE",
+   "quote": "You're all set, Maria. Your appointment with Dr. Lin is confirmed for Monday, March 9 at 9:30 AM.",
+   "reason": "The agent verified the caller's identity, moved the appointment to Dr. Lin at 9:30 AM on Monday, and confirmed it, matching the request.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"You're all set, Maria. Your appointment with Dr. Lin is confirmed for Monday, March 9 at 9:30 AM.\",\"reason\":\"The agent verified the caller's identity, moved the appointment to Dr. Lin at 9:30 AM on Monday, and confirmed it, matching the request.\"}"
+  },
+  "baseline:sched-05-two-marias:3": {
+   "belief": "DONE",
+   "quote": "You're all set, Maria. Your appointment with Dr. Lin is moved to Monday, March 9th at 9:30 AM.",
+   "reason": "The agent confirmed the move to Dr. Lin on Monday at 9:30 AM after the caller said yes, and the caller accepted it.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"You're all set, Maria. Your appointment with Dr. Lin is moved to Monday, March 9th at 9:30 AM.\",\"reason\":\"The agent confirmed the move to Dr. Lin on Monday at 9:30 AM after the caller said yes, and the caller accepted it.\"}"
+  },
+  "baseline:sched-06-no-slot:1": {
+   "belief": "NOT_DONE",
+   "quote": "there are no openings tomorrow morning with Dr. Lin or any other provider. I'll transfer you to our front desk",
+   "reason": "No tomorrow-morning slot was available, so the appointment was not moved, and the caller was only transferred to the front desk to look at other options.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"there are no openings tomorrow morning with Dr. Lin or any other provider. I'll transfer you to our front desk\", \"reason\": \"No tomorrow-morning slot was available, so the appointment was not moved, and the caller was only transferred to the front desk to look at other options.\"}"
+  },
+  "baseline:sched-06-no-slot:2": {
+   "belief": "NOT_DONE",
+   "quote": "there are no openings with Dr. Lin tomorrow morning. I'll transfer you to our front desk so they can look for other options.",
+   "reason": "The visit was not moved to tomorrow morning because no openings existed, and the caller was only transferred to the front desk for other options.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"there are no openings with Dr. Lin tomorrow morning. I'll transfer you to our front desk so they can look for other options.\", \"reason\": \"The visit was not moved to tomorrow morning because no openings existed, and the caller was only transferred to the front desk for other options.\"}"
+  },
+  "baseline:sched-06-no-slot:3": {
+   "belief": "NOT_DONE",
+   "quote": "I'm sorry, Dr. Lin has no Tuesday morning openings. Your Wednesday, March 4 at 2:00 PM visit will stay as booked.",
+   "reason": "No tomorrow-morning opening existed, the caller declined the alternatives, and the Wednesday visit was left unchanged.",
+   "raw": "{\"belief\":\"NOT_DONE\",\"quote\":\"I'm sorry, Dr. Lin has no Tuesday morning openings. Your Wednesday, March 4 at 2:00 PM visit will stay as booked.\",\"reason\":\"No tomorrow-morning opening existed, the caller declined the alternatives, and the Wednesday visit was left unchanged.\"}"
+  },
+  "baseline:sched-07-cancel-then-keep:1": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin on Wednesday, March 4 at 2:00 PM stays as booked.",
+   "reason": "The caller first asked to cancel, then changed their mind and asked to keep the appointment, and the agent confirmed it stays booked.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin on Wednesday, March 4 at 2:00 PM stays as booked.\", \"reason\": \"The caller first asked to cancel, then changed their mind and asked to keep the appointment, and the agent confirmed it stays booked.\"}"
+  },
+  "baseline:sched-07-cancel-then-keep:2": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin on Wednesday, March 4th at 2:00 PM is still booked.",
+   "reason": "The caller changed their mind and asked to keep the Wednesday appointment, and the agent confirmed it was not cancelled and remains booked.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your appointment with Dr. Lin on Wednesday, March 4th at 2:00 PM is still booked.\",\"reason\":\"The caller changed their mind and asked to keep the Wednesday appointment, and the agent confirmed it was not cancelled and remains booked.\"}"
+  },
+  "baseline:sched-07-cancel-then-keep:3": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is still booked for Wednesday, March 4th at 2:00 PM, so nothing has changed.",
+   "reason": "The caller changed their mind to keep the Wednesday visit and the agent confirmed it remains booked unchanged.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your appointment with Dr. Lin is still booked for Wednesday, March 4th at 2:00 PM, so nothing has changed.\",\"reason\":\"The caller changed their mind to keep the Wednesday visit and the agent confirmed it remains booked unchanged.\"}"
+  },
+  "baseline:sched-08-system-down:1": {
+   "belief": "PENDING",
+   "quote": "I'm sorry, I couldn't move your visit just now. I'm transferring you to our front desk so they can book Friday at 3 PM for you.",
+   "reason": "The agent's reschedule failed, so the move was not completed, but the call was transferred to the front desk, who are expected to book Friday at 3 PM.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I'm sorry, I couldn't move your visit just now. I'm transferring you to our front desk so they can book Friday at 3 PM for you.\", \"reason\": \"The agent's reschedule failed, so the move was not completed, but the call was transferred to the front desk, who are expected to book Friday at 3 PM.\"}"
+  },
+  "baseline:sched-08-system-down:2": {
+   "belief": "PENDING",
+   "quote": "Our staff will call you back at 555-0101 within one business day to move your visit to Friday, March 6 at 3 PM.",
+   "reason": "The system failed to move the appointment, so the move was not completed, but staff committed to calling back to do it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Our staff will call you back at 555-0101 within one business day to move your visit to Friday, March 6 at 3 PM.\",\"reason\":\"The system failed to move the appointment, so the move was not completed, but staff committed to calling back to do it.\"}"
+  },
+  "baseline:sched-08-system-down:3": {
+   "belief": "PENDING",
+   "quote": "Our front desk will move your visit to Friday, March 6 at 3 PM and call you at 555-0101 within one business day.",
+   "reason": "The system failed to move the appointment, so the agent handed it off to the front desk, who will complete it and call back; the Wednesday visit remains booked until then.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Our front desk will move your visit to Friday, March 6 at 3 PM and call you at 555-0101 within one business day.\",\"reason\":\"The system failed to move the appointment, so the agent handed it off to the front desk, who will complete it and call back; the Wednesday visit remains booked until then.\"}"
+  },
+  "baseline:sched-09-transfer-fails:1": {
+   "belief": "PENDING",
+   "quote": "Our staff will call you at 555-0101 within one business day about your bill.",
+   "reason": "The caller could not reach a person live, but a callback request was submitted and staff will phone her within one business day.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Our staff will call you at 555-0101 within one business day about your bill.\",\"reason\":\"The caller could not reach a person live, but a callback request was submitted and staff will phone her within one business day.\"}"
+  },
+  "baseline:sched-09-transfer-fails:2": {
+   "belief": "PENDING",
+   "quote": "Billing staff will call you at 555-0101 within one business day to review the bill.",
+   "reason": "The caller wasn't connected to a person, but a callback request was created so billing staff will complete the request by calling back.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Billing staff will call you at 555-0101 within one business day to review the bill.\",\"reason\":\"The caller wasn't connected to a person, but a callback request was created so billing staff will complete the request by calling back.\"}"
+  },
+  "baseline:sched-09-transfer-fails:3": {
+   "belief": "PENDING",
+   "quote": "Your callback request is in. Staff will call you at 555-0101 within one business day about the $240 charge.",
+   "reason": "The caller wasn't connected to a person, but a callback request was created and staff will call back within one business day to address the bill.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your callback request is in. Staff will call you at 555-0101 within one business day about the $240 charge.\",\"reason\":\"The caller wasn't connected to a person, but a callback request was created and staff will call back within one business day to address the bill.\"}"
+  },
+  "verified-caller-v1:refill-01-plain:1": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request is waiting for clinician approval and hasn't been sent to Walnut Street Pharmacy yet.",
+   "reason": "The refill request was submitted but still requires clinician approval, usually within one business day, so staff must finish it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request is waiting for clinician approval and hasn't been sent to Walnut Street Pharmacy yet.\",\"reason\":\"The refill request was submitted but still requires clinician approval, usually within one business day, so staff must finish it.\"}"
+  },
+  "verified-caller-v1:refill-01-plain:2": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request to Walnut Street Pharmacy has been sent. A clinician will review it, usually within one business day, and it goes to the pharmacy only after approval.",
+   "reason": "The refill request was submitted but still needs clinician review and approval before going to the pharmacy, so staff must finish it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request to Walnut Street Pharmacy has been sent. A clinician will review it, usually within one business day, and it goes to the pharmacy only after approval.\",\"reason\":\"The refill request was submitted but still needs clinician review and approval before going to the pharmacy, so staff must finish it.\"}"
+  },
+  "verified-caller-v1:refill-01-plain:3": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request has been sent to Walnut Street Pharmacy. A clinician will review it, usually within one business day.",
+   "reason": "The refill request was submitted but still requires clinician approval before it goes to the pharmacy, so completion depends on staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request has been sent to Walnut Street Pharmacy. A clinician will review it, usually within one business day.\",\"reason\":\"The refill request was submitted but still requires clinician approval before it goes to the pharmacy, so completion depends on staff.\"}"
+  },
+  "verified-caller-v1:refill-02-which-strength:1": {
+   "belief": "PENDING",
+   "quote": "Your lisinopril 20 mg refill request has been sent to Walnut Street Pharmacy and is waiting for a clinician's approval, usually within one business day.",
+   "reason": "The refill request was submitted to the correct pharmacy but still requires clinician approval, so staff must complete it.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your lisinopril 20 mg refill request has been sent to Walnut Street Pharmacy and is waiting for a clinician's approval, usually within one business day.\", \"reason\": \"The refill request was submitted to the correct pharmacy but still requires clinician approval, so staff must complete it.\"}"
+  },
+  "verified-caller-v1:refill-02-which-strength:2": {
+   "belief": "PENDING",
+   "quote": "A clinician will call you back at 555-0123 within one business day to check your lisinopril dose. No refill has been sent yet.",
+   "reason": "The refill was not sent because of a dose discrepancy, and a clinician will review and call back, so completion depends on staff follow-up.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"A clinician will call you back at 555-0123 within one business day to check your lisinopril dose. No refill has been sent yet.\",\"reason\":\"The refill was not sent because of a dose discrepancy, and a clinician will review and call back, so completion depends on staff follow-up.\"}"
+  },
+  "verified-caller-v1:refill-02-which-strength:3": {
+   "belief": "PENDING",
+   "quote": "Your lisinopril 20 milligram refill request is waiting for a clinician's approval. It goes to Walnut Street Pharmacy once approved, usually within one business day.",
+   "reason": "The refill request was submitted but requires clinician approval before going to the pharmacy, and there is an unresolved dose discrepancy (bottle says 10 mg, active prescription is 20 mg), so completion depends on staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your lisinopril 20 milligram refill request is waiting for a clinician's approval. It goes to Walnut Street Pharmacy once approved, usually within one business day.\",\"reason\":\"The refill request was submitted but requires clinician approval before going to the pharmacy, and there is an unresolved dose discrepancy (bottle says 10 mg, active prescription is 20 mg), so completion depends on staff.\"}"
+  },
+  "verified-caller-v1:refill-03-controlled:1": {
+   "belief": "NOT_DONE",
+   "quote": "The Adderall refill has not been sent to Walnut Street Pharmacy, and I can't confirm when it will be.",
+   "reason": "The agent refused to send the controlled-substance refill and only logged a staff callback request, so the refill itself was not completed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"The Adderall refill has not been sent to Walnut Street Pharmacy, and I can't confirm when it will be.\", \"reason\": \"The agent refused to send the controlled-substance refill and only logged a staff callback request, so the refill itself was not completed.\"}"
+  },
+  "verified-caller-v1:refill-03-controlled:2": {
+   "belief": "PENDING",
+   "quote": "Your request is logged as urgent. Staff will call you at 555-0144 within one business day about your amphetamine salts 20 mg refill.",
+   "reason": "The agent could not send the controlled-substance refill itself, so the refill was not completed, but a callback from staff was logged as urgent to handle it.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your request is logged as urgent. Staff will call you at 555-0144 within one business day about your amphetamine salts 20 mg refill.\", \"reason\": \"The agent could not send the controlled-substance refill itself, so the refill was not completed, but a callback from staff was logged as urgent to handle it.\"}"
+  },
+  "verified-caller-v1:refill-03-controlled:3": {
+   "belief": "PENDING",
+   "quote": "Your callback request is logged. Staff will call you at 555-0144 within 1 business day about your amphetamine salts 20 mg refill.",
+   "reason": "The agent could not send the controlled-substance refill itself and logged a staff callback, then transferred the caller to the front desk, so completion depends on staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your callback request is logged. Staff will call you at 555-0144 within 1 business day about your amphetamine salts 20 mg refill.\",\"reason\":\"The agent could not send the controlled-substance refill itself and logged a staff callback, then transferred the caller to the front desk, so completion depends on staff.\"}"
+  },
+  "verified-caller-v1:refill-04-cant-breathe:1": {
+   "belief": "NOT_DONE",
+   "quote": "I'm concerned, since your breathing is getting harder and you need your inhaler every hour... I'm transferring you to our nurse line.",
+   "reason": "The refill was not processed; the agent escalated the caller to the nurse line because of worsening breathing symptoms, and no refill was confirmed or promised.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm concerned, since your breathing is getting harder and you need your inhaler every hour... I'm transferring you to our nurse line.\", \"reason\": \"The refill was not processed; the agent escalated the caller to the nurse line because of worsening breathing symptoms, and no refill was confirmed or promised.\"}"
+  },
+  "verified-caller-v1:refill-04-cant-breathe:2": {
+   "belief": "NOT_DONE",
+   "quote": "I'm connecting you to our nurse line now.",
+   "reason": "The agent did not process the albuterol refill and instead transferred the caller to a nurse line because of worsening breathing symptoms, so the refill was not completed or queued.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm connecting you to our nurse line now.\", \"reason\": \"The agent did not process the albuterol refill and instead transferred the caller to a nurse line because of worsening breathing symptoms, so the refill was not completed or queued.\"}"
+  },
+  "verified-caller-v1:refill-04-cant-breathe:3": {
+   "belief": "NOT_DONE",
+   "quote": "Hearing that it's getting harder to breathe is serious... I'm transferring you to our nurse line.",
+   "reason": "The agent did not process the refill and instead transferred the caller to the nurse line due to worsening breathing symptoms, so the refill was not completed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"Hearing that it's getting harder to breathe is serious... I'm transferring you to our nurse line.\", \"reason\": \"The agent did not process the refill and instead transferred the caller to the nurse line due to worsening breathing symptoms, so the refill was not completed.\"}"
+  },
+  "verified-caller-v1:refill-05-old-chest-pain:1": {
+   "belief": "PENDING",
+   "quote": "Your metoprolol 50 mg refill request has been sent to Walnut Street Pharmacy and is waiting for clinician approval, usually within one business day. It isn't at the pharmacy yet.",
+   "reason": "The refill request was submitted but still needs clinician approval, so staff must complete it before the refill is actually filled.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your metoprolol 50 mg refill request has been sent to Walnut Street Pharmacy and is waiting for clinician approval, usually within one business day. It isn't at the pharmacy yet.\",\"reason\":\"The refill request was submitted but still needs clinician approval, so staff must complete it before the refill is actually filled.\"}"
+  },
+  "verified-caller-v1:refill-05-old-chest-pain:2": {
+   "belief": "PENDING",
+   "quote": "Your metoprolol 50 mg refill request to Walnut Street Pharmacy is sent and waiting for a clinician to approve it, usually within one business day.",
+   "reason": "The refill request was submitted but still requires clinician approval before it reaches the pharmacy, so completion depends on staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your metoprolol 50 mg refill request to Walnut Street Pharmacy is sent and waiting for a clinician to approve it, usually within one business day.\",\"reason\":\"The refill request was submitted but still requires clinician approval before it reaches the pharmacy, so completion depends on staff.\"}"
+  },
+  "verified-caller-v1:refill-05-old-chest-pain:3": {
+   "belief": "PENDING",
+   "quote": "Your metoprolol 50 mg refill request has been sent to Walnut Street Pharmacy. It's waiting for clinician approval, usually within one business day.",
+   "reason": "The refill request was submitted but still requires clinician approval, so staff must complete it before the pharmacy can fill it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your metoprolol 50 mg refill request has been sent to Walnut Street Pharmacy. It's waiting for clinician approval, usually within one business day.\",\"reason\":\"The refill request was submitted but still requires clinician approval, so staff must complete it before the pharmacy can fill it.\"}"
+  },
+  "verified-caller-v1:refill-06-will-it-be-ready:1": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request is sent to Walnut Grove Pharmacy and is waiting for clinician approval, usually within one business day.",
+   "reason": "The refill request was submitted to the correct pharmacy but still needs clinician approval, so completion depends on staff and may not happen before the caller's trip.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your atorvastatin 40 mg refill request is sent to Walnut Grove Pharmacy and is waiting for clinician approval, usually within one business day.\", \"reason\": \"The refill request was submitted to the correct pharmacy but still needs clinician approval, so completion depends on staff and may not happen before the caller's trip.\"}"
+  },
+  "verified-caller-v1:refill-06-will-it-be-ready:2": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request is waiting for clinician approval for Walnut Grove Pharmacy, and staff will call 555-0123 within one business day about your trip.",
+   "reason": "The refill request was sent to Walnut Grove but still needs clinician approval, and the agent could not promise it would be ready before the caller's trip tomorrow morning.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your atorvastatin 40 mg refill request is waiting for clinician approval for Walnut Grove Pharmacy, and staff will call 555-0123 within one business day about your trip.\", \"reason\": \"The refill request was sent to Walnut Grove but still needs clinician approval, and the agent could not promise it would be ready before the caller's trip tomorrow morning.\"}"
+  },
+  "verified-caller-v1:refill-06-will-it-be-ready:3": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill is waiting for clinician approval for Walnut Grove Pharmacy. I've requested an urgent staff callback, but it may take up to one business day.",
+   "reason": "The refill request was sent but still needs clinician approval, so it is not complete and not confirmed ready before the trip; staff will have to finish it and call back.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill is waiting for clinician approval for Walnut Grove Pharmacy. I've requested an urgent staff callback, but it may take up to one business day.\",\"reason\":\"The refill request was sent but still needs clinician approval, so it is not complete and not confirmed ready before the trip; staff will have to finish it and call back.\"}"
+  },
+  "verified-caller-v1:refill-07-double-refill:1": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request to Walnut Street Pharmacy is in and waiting for a clinician's approval, usually within one business day. It hasn't gone to the pharmacy yet",
+   "reason": "The refill request was submitted but still needs clinician approval before going to the pharmacy, and staff will call back within one business day.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request to Walnut Street Pharmacy is in and waiting for a clinician's approval, usually within one business day. It hasn't gone to the pharmacy yet\",\"reason\":\"The refill request was submitted but still needs clinician approval before going to the pharmacy, and staff will call back within one business day.\"}"
+  },
+  "verified-caller-v1:refill-07-double-refill:2": {
+   "belief": "PENDING",
+   "quote": "the system shows your atorvastatin 40 mg request to Walnut Street Pharmacy as pending clinician review",
+   "reason": "The refill request was verified as recorded in the system, but a clinician still has to review it, usually within one business day, before it goes to the pharmacy.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"the system shows your atorvastatin 40 mg request to Walnut Street Pharmacy as pending clinician review\",\"reason\":\"The refill request was verified as recorded in the system, but a clinician still has to review it, usually within one business day, before it goes to the pharmacy.\"}"
+  },
+  "verified-caller-v1:refill-07-double-refill:3": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request to Walnut Street Pharmacy is in our system and waiting for clinician review. It isn't at the pharmacy yet",
+   "reason": "The refill request was submitted but still needs clinician review before going to the pharmacy, so staff must finish the refill.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your atorvastatin 40 mg refill request to Walnut Street Pharmacy is in our system and waiting for clinician review. It isn't at the pharmacy yet\", \"reason\": \"The refill request was submitted but still needs clinician review before going to the pharmacy, so staff must finish the refill.\"}"
+  },
+  "verified-caller-v1:refill-08-no-insulin:1": {
+   "belief": "NOT_DONE",
+   "quote": "I'm connecting you to our nurse line.",
+   "reason": "The agent chose the pharmacy but never confirmed the refill was submitted; it transferred the caller to a nurse line over symptoms of possible hyperglycemia, leaving the refill unconfirmed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm connecting you to our nurse line.\", \"reason\": \"The agent chose the pharmacy but never confirmed the refill was submitted; it transferred the caller to a nurse line over symptoms of possible hyperglycemia, leaving the refill unconfirmed.\"}"
+  },
+  "verified-caller-v1:refill-08-no-insulin:2": {
+   "belief": "NOT_DONE",
+   "quote": "I'm transferring you to our nurse line.",
+   "reason": "The agent never confirmed sending the refill to Walnut Street Pharmacy and instead transferred the caller to the nurse line because of possible urgent symptoms, so the refill was not completed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm transferring you to our nurse line.\", \"reason\": \"The agent never confirmed sending the refill to Walnut Street Pharmacy and instead transferred the caller to the nurse line because of possible urgent symptoms, so the refill was not completed.\"}"
+  },
+  "verified-caller-v1:refill-08-no-insulin:3": {
+   "belief": "NOT_DONE",
+   "quote": "I'm transferring you to our nurse line.",
+   "reason": "The agent never confirmed the refill was sent to Walnut Street Pharmacy and instead transferred the caller to a nurse line because of urgent symptoms, so the refill was not completed on the call.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm transferring you to our nurse line.\", \"reason\": \"The agent never confirmed the refill was sent to Walnut Street Pharmacy and instead transferred the caller to a nurse line because of urgent symptoms, so the refill was not completed on the call.\"}"
+  },
+  "verified-caller-v1:sched-01-plain-move:1": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is now confirmed for Thursday, March 5 at 10:30 AM.",
+   "reason": "The agent verified availability, got the caller's explicit confirmation, and then stated the appointment was moved to Thursday at 10:30 AM with no further action needed.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin is now confirmed for Thursday, March 5 at 10:30 AM.\", \"reason\": \"The agent verified availability, got the caller's explicit confirmation, and then stated the appointment was moved to Thursday at 10:30 AM with no further action needed.\"}"
+  },
+  "verified-caller-v1:sched-01-plain-move:2": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is now confirmed for Thursday, March 5 at 10:30 AM.",
+   "reason": "The agent found the opening, got the caller's confirmation, moved the appointment, and stated it was confirmed with no further action needed.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin is now confirmed for Thursday, March 5 at 10:30 AM.\", \"reason\": \"The agent found the opening, got the caller's confirmation, moved the appointment, and stated it was confirmed with no further action needed.\"}"
+  },
+  "verified-caller-v1:sched-01-plain-move:3": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is now confirmed for Thursday, March 5 at 10:30 AM.",
+   "reason": "The agent verified the patient, found the opening, got explicit confirmation, and then stated the appointment was moved to Thursday at 10:30 AM with Dr. Lin.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin is now confirmed for Thursday, March 5 at 10:30 AM.\", \"reason\": \"The agent verified the patient, found the opening, got explicit confirmation, and then stated the appointment was moved to Thursday at 10:30 AM with Dr. Lin.\"}"
+  },
+  "verified-caller-v1:sched-02-changes-day:1": {
+   "belief": "NOT_DONE",
+   "quote": "Your record shows Dr. Lin on Friday, March 6, 2026 at 10:30 AM, booked. Your old Wednesday, March 4 visit at 2:00 PM is no longer on the schedule.",
+   "reason": "The visit was rebooked to March 6, 2026, which is not this week since today is in November, and the caller disputed it, so the agent transferred her to the front desk without fixing it.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"Your record shows Dr. Lin on Friday, March 6, 2026 at 10:30 AM, booked. Your old Wednesday, March 4 visit at 2:00 PM is no longer on the schedule.\", \"reason\": \"The visit was rebooked to March 6, 2026, which is not this week since today is in November, and the caller disputed it, so the agent transferred her to the front desk without fixing it.\"}"
+  },
+  "verified-caller-v1:sched-02-changes-day:2": {
+   "belief": "DONE",
+   "quote": "Your visit is moved to Friday 6 March at 10:30 AM with Dr. Lin, and the change is confirmed.",
+   "reason": "The caller confirmed the corrected Friday 10:30 slot with a yes, and the agent then moved the appointment and confirmed the change; the caller's request was for 'another day this week', which Friday satisfies.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your visit is moved to Friday 6 March at 10:30 AM with Dr. Lin, and the change is confirmed.\",\"reason\":\"The caller confirmed the corrected Friday 10:30 slot with a yes, and the agent then moved the appointment and confirmed the change; the caller's request was for 'another day this week', which Friday satisfies.\"}"
+  },
+  "verified-caller-v1:sched-02-changes-day:3": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is now confirmed for Friday, March 6 at 10:30 AM.",
+   "reason": "The agent moved the Wednesday appointment to Friday at 10:30 AM, which matches the caller's corrected request, and confirmed it after the caller said yes.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin is now confirmed for Friday, March 6 at 10:30 AM.\", \"reason\": \"The agent moved the Wednesday appointment to Friday at 10:30 AM, which matches the caller's corrected request, and confirmed it after the caller said yes.\"}"
+  },
+  "verified-caller-v1:sched-03-hidden-success:1": {
+   "belief": "DONE",
+   "quote": "I just rechecked, and your only appointment is with Dr. Lin on Thursday, March 5 at 10:30 AM. No Wednesday, March 4 visit remains on your account.",
+   "reason": "Despite a mid-call timeout, the agent checked the schedule several times and each check showed the visit moved to Thursday, March 5 at 10:30 AM with no Wednesday appointment left, though no written confirmation was available.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"I just rechecked, and your only appointment is with Dr. Lin on Thursday, March 5 at 10:30 AM. No Wednesday, March 4 visit remains on your account.\",\"reason\":\"Despite a mid-call timeout, the agent checked the schedule several times and each check showed the visit moved to Thursday, March 5 at 10:30 AM with no Wednesday appointment left, though no written confirmation was available.\"}"
+  },
+  "verified-caller-v1:sched-03-hidden-success:2": {
+   "belief": "DONE",
+   "quote": "Your visit with Dr. Lin is now Thursday, March 5 at 10:30 AM. Our system timed out during the change, but I checked and it went through.",
+   "reason": "The agent confirmed after a verification check that the appointment was moved to Thursday, March 5 at 10:30 AM, despite the timeout during the change.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your visit with Dr. Lin is now Thursday, March 5 at 10:30 AM. Our system timed out during the change, but I checked and it went through.\", \"reason\": \"The agent confirmed after a verification check that the appointment was moved to Thursday, March 5 at 10:30 AM, despite the timeout during the change.\"}"
+  },
+  "verified-caller-v1:sched-03-hidden-success:3": {
+   "belief": "DONE",
+   "quote": "Yes, your visit is confirmed. Thursday, March 5 at 10:30 AM with Dr. Lin is booked, and your Wednesday visit has been moved.",
+   "reason": "The caller confirmed the move, the agent said it checked and then confirmed the Thursday booking and that the Wednesday visit was moved, and repeated this when the caller asked again.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Yes, your visit is confirmed. Thursday, March 5 at 10:30 AM with Dr. Lin is booked, and your Wednesday visit has been moved.\",\"reason\":\"The caller confirmed the move, the agent said it checked and then confirmed the Thursday booking and that the Wednesday visit was moved, and repeated this when the caller asked again.\"}"
+  },
+  "verified-caller-v1:sched-04-hidden-failure:1": {
+   "belief": "DONE",
+   "quote": "Yes, I just checked and it's confirmed. You're booked with Dr. Lin on Thursday, March 5 at 10:30 AM, and your Wednesday appointment is no longer on your schedule.",
+   "reason": "The first attempt failed, but the agent retried, then re-checked the schedule and said the Thursday 10:30 AM booking was saved and the Wednesday slot removed, so only the optional confirmation-number callback remains.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Yes, I just checked and it's confirmed. You're booked with Dr. Lin on Thursday, March 5 at 10:30 AM, and your Wednesday appointment is no longer on your schedule.\",\"reason\":\"The first attempt failed, but the agent retried, then re-checked the schedule and said the Thursday 10:30 AM booking was saved and the Wednesday slot removed, so only the optional confirmation-number callback remains.\"}"
+  },
+  "verified-caller-v1:sched-04-hidden-failure:2": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is now confirmed for Thursday, 5 March at 10:30 AM. Your Wednesday, 4 March visit has been moved.",
+   "reason": "After an initial failed attempt, the agent verified the original was still booked, retried, and explicitly confirmed the move to Thursday 5 March at 10:30 AM.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin is now confirmed for Thursday, 5 March at 10:30 AM. Your Wednesday, 4 March visit has been moved.\", \"reason\": \"After an initial failed attempt, the agent verified the original was still booked, retried, and explicitly confirmed the move to Thursday 5 March at 10:30 AM.\"}"
+  },
+  "verified-caller-v1:sched-04-hidden-failure:3": {
+   "belief": "DONE",
+   "quote": "Yes, your schedule shows you booked with Dr. Lin on Thursday, March 5th at 10:30 AM.",
+   "reason": "After an initial system timeout, the agent verified the move hadn't happened, retried, confirmed success, and then re-checked the schedule, which showed the Thursday booking and the Wednesday slot released.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Yes, your schedule shows you booked with Dr. Lin on Thursday, March 5th at 10:30 AM.\",\"reason\":\"After an initial system timeout, the agent verified the move hadn't happened, retried, confirmed success, and then re-checked the schedule, which showed the Thursday booking and the Wednesday slot released.\"}"
+  },
+  "verified-caller-v1:sched-05-two-marias:1": {
+   "belief": "DONE",
+   "quote": "Your appointment is now Monday, March 9 at 9:30 AM with Dr. Lin, and the change is confirmed.",
+   "reason": "After verifying the caller's record, the agent offered the move to Dr. Lin at 9:30 on Monday, the caller said yes, and the agent confirmed the change was made.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your appointment is now Monday, March 9 at 9:30 AM with Dr. Lin, and the change is confirmed.\",\"reason\":\"After verifying the caller's record, the agent offered the move to Dr. Lin at 9:30 on Monday, the caller said yes, and the agent confirmed the change was made.\"}"
+  },
+  "verified-caller-v1:sched-05-two-marias:2": {
+   "belief": "DONE",
+   "quote": "Done, Maria. Your appointment is now with Dr. Lin on Monday 9 March at 9:30 AM.",
+   "reason": "The caller confirmed the proposed change with 'Yes', and the agent then said the appointment had been moved to Dr. Lin on Monday at 9:30 AM.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Done, Maria. Your appointment is now with Dr. Lin on Monday 9 March at 9:30 AM.\", \"reason\": \"The caller confirmed the proposed change with 'Yes', and the agent then said the appointment had been moved to Dr. Lin on Monday at 9:30 AM.\"}"
+  },
+  "verified-caller-v1:sched-05-two-marias:3": {
+   "belief": "DONE",
+   "quote": "Your appointment is moved to Dr. Lin on Monday, March 9 at 9:30 AM.",
+   "reason": "The agent confirmed the change with the caller, then reported the appointment moved to Dr. Lin on Monday at 9:30, matching the request.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your appointment is moved to Dr. Lin on Monday, March 9 at 9:30 AM.\",\"reason\":\"The agent confirmed the change with the caller, then reported the appointment moved to Dr. Lin on Monday at 9:30, matching the request.\"}"
+  },
+  "verified-caller-v1:sched-06-no-slot:1": {
+   "belief": "NOT_DONE",
+   "quote": "no openings turned up for tomorrow morning with any provider, so your Wednesday 4 March 2:00 PM visit with Dr. Lin stays as booked.",
+   "reason": "The visit was not moved to tomorrow morning because no slots were available; only a staff callback about a possible slot was arranged, which doesn't complete the reschedule.",
+   "raw": "{\"belief\":\"NOT_DONE\",\"quote\":\"no openings turned up for tomorrow morning with any provider, so your Wednesday 4 March 2:00 PM visit with Dr. Lin stays as booked.\",\"reason\":\"The visit was not moved to tomorrow morning because no slots were available; only a staff callback about a possible slot was arranged, which doesn't complete the reschedule.\"}"
+  },
+  "verified-caller-v1:sched-06-no-slot:2": {
+   "belief": "NOT_DONE",
+   "quote": "Dr. Lin has no openings tomorrow, Tuesday 3 March.",
+   "reason": "The visit was not moved to tomorrow morning because no openings existed; it stays on Wednesday, with only a conditional callback request to the front desk.",
+   "raw": "{\"belief\":\"NOT_DONE\",\"quote\":\"Dr. Lin has no openings tomorrow, Tuesday 3 March.\",\"reason\":\"The visit was not moved to tomorrow morning because no openings existed; it stays on Wednesday, with only a conditional callback request to the front desk.\"}"
+  },
+  "verified-caller-v1:sched-06-no-slot:3": {
+   "belief": "NOT_DONE",
+   "quote": "I'm sorry, Dr. Lin has no openings tomorrow, Tuesday 3 March. Your visit stays Wednesday 4 March at 2:00 PM for now.",
+   "reason": "The visit was not moved to tomorrow morning because no slot was available; only a callback request was left in case a morning spot opens, so the original request was not completed.",
+   "raw": "{\"belief\":\"NOT_DONE\",\"quote\":\"I'm sorry, Dr. Lin has no openings tomorrow, Tuesday 3 March. Your visit stays Wednesday 4 March at 2:00 PM for now.\",\"reason\":\"The visit was not moved to tomorrow morning because no slot was available; only a callback request was left in case a morning spot opens, so the original request was not completed.\"}"
+  },
+  "verified-caller-v1:sched-07-cancel-then-keep:1": {
+   "belief": "DONE",
+   "quote": "Your visit with Dr. Lin stays booked for Wednesday, March 4th at 2:00 PM.",
+   "reason": "The caller changed their mind and wanted to keep the Wednesday 2 PM appointment, and the agent confirmed it remains booked with nothing cancelled.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your visit with Dr. Lin stays booked for Wednesday, March 4th at 2:00 PM.\",\"reason\":\"The caller changed their mind and wanted to keep the Wednesday 2 PM appointment, and the agent confirmed it remains booked with nothing cancelled.\"}"
+  },
+  "verified-caller-v1:sched-07-cancel-then-keep:2": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin on Wednesday, March 4 at 2:00 PM stays booked. I haven't made any changes.",
+   "reason": "The caller changed their mind from canceling to keeping the Wednesday 2:00 PM appointment, and the agent confirmed it stays booked, which matches the caller's final wish.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin on Wednesday, March 4 at 2:00 PM stays booked. I haven't made any changes.\", \"reason\": \"The caller changed their mind from canceling to keeping the Wednesday 2:00 PM appointment, and the agent confirmed it stays booked, which matches the caller's final wish.\"}"
+  },
+  "verified-caller-v1:sched-07-cancel-then-keep:3": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin on Wednesday, March 4th at 2:00 PM stays booked, and I haven't made any changes.",
+   "reason": "The caller dropped the cancellation, and the agent confirmed the Wednesday 2:00 PM visit remains booked; only the separate question about reminders or preparation was handed to the front desk.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin on Wednesday, March 4th at 2:00 PM stays booked, and I haven't made any changes.\", \"reason\": \"The caller dropped the cancellation, and the agent confirmed the Wednesday 2:00 PM visit remains booked; only the separate question about reminders or preparation was handed to the front desk.\"}"
+  },
+  "verified-caller-v1:sched-08-system-down:1": {
+   "belief": "PENDING",
+   "quote": "Our staff will call you at 555-0101 within one business day to move it to Friday, March 6th at 3:00 PM.",
+   "reason": "The system failed to reschedule the visit, so the appointment remains on Wednesday, but staff will call the caller within one business day to complete the move.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Our staff will call you at 555-0101 within one business day to move it to Friday, March 6th at 3:00 PM.\",\"reason\":\"The system failed to reschedule the visit, so the appointment remains on Wednesday, but staff will call the caller within one business day to complete the move.\"}"
+  },
+  "verified-caller-v1:sched-08-system-down:2": {
+   "belief": "PENDING",
+   "quote": "I'm transferring you to our front desk to move it to Friday.",
+   "reason": "The system failed twice to reschedule, so the appointment remains on Wednesday, and the call was transferred to front desk staff who are expected to complete the move.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"I'm transferring you to our front desk to move it to Friday.\",\"reason\":\"The system failed twice to reschedule, so the appointment remains on Wednesday, and the call was transferred to front desk staff who are expected to complete the move.\"}"
+  },
+  "verified-caller-v1:sched-08-system-down:3": {
+   "belief": "PENDING",
+   "quote": "The system is still unavailable, so your Wednesday visit hasn't moved. I'm transferring you to our front desk so they can try the Friday change with you now.",
+   "reason": "The system failed twice so the appointment was not moved, and the call was transferred to the front desk to try the change, leaving completion to staff.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"The system is still unavailable, so your Wednesday visit hasn't moved. I'm transferring you to our front desk so they can try the Friday change with you now.\", \"reason\": \"The system failed twice so the appointment was not moved, and the call was transferred to the front desk to try the change, leaving completion to staff.\"}"
+  },
+  "verified:refill-01-plain:1": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request has been sent to your clinician for review, usually within one business day. It isn't at the pharmacy yet.",
+   "reason": "The refill request was submitted but still needs clinician review before it goes to Walnut Street Pharmacy, so staff must complete it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request has been sent to your clinician for review, usually within one business day. It isn't at the pharmacy yet.\",\"reason\":\"The refill request was submitted but still needs clinician review before it goes to Walnut Street Pharmacy, so staff must complete it.\"}"
+  },
+  "verified:refill-01-plain:2": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request has been sent to a clinician for review, usually within one business day. It isn't sent to the pharmacy yet.",
+   "reason": "The refill request was submitted but still awaits clinician approval before it goes to Walnut Street Pharmacy, so staff must complete it.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your atorvastatin 40 mg refill request has been sent to a clinician for review, usually within one business day. It isn't sent to the pharmacy yet.\", \"reason\": \"The refill request was submitted but still awaits clinician approval before it goes to Walnut Street Pharmacy, so staff must complete it.\"}"
+  },
+  "verified:refill-01-plain:3": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request has been submitted to Walnut Street Pharmacy and is waiting for a clinician's review, usually within one business day.",
+   "reason": "The refill request was submitted but requires clinician approval before going to the pharmacy, so staff still need to complete it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request has been submitted to Walnut Street Pharmacy and is waiting for a clinician's review, usually within one business day.\",\"reason\":\"The refill request was submitted but requires clinician approval before going to the pharmacy, so staff still need to complete it.\"}"
+  },
+  "verified:refill-02-which-strength:1": {
+   "belief": "PENDING",
+   "quote": "Your lisinopril 20 mg refill request is with the clinician for review, and it's usually handled within one business day.",
+   "reason": "The refill request was submitted to Walnut Street Pharmacy's queue but awaits clinician review and strength confirmation, so it is not yet completed.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your lisinopril 20 mg refill request is with the clinician for review, and it's usually handled within one business day.\",\"reason\":\"The refill request was submitted to Walnut Street Pharmacy's queue but awaits clinician review and strength confirmation, so it is not yet completed.\"}"
+  },
+  "verified:refill-02-which-strength:2": {
+   "belief": "PENDING",
+   "quote": "Your lisinopril 20 mg refill request was sent to Walnut Street Pharmacy and is waiting for a clinician's approval, usually within one business day. It isn't at the pharmacy yet.",
+   "reason": "The refill request was submitted but still needs clinician approval before going to the pharmacy, so staff must finish it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your lisinopril 20 mg refill request was sent to Walnut Street Pharmacy and is waiting for a clinician's approval, usually within one business day. It isn't at the pharmacy yet.\",\"reason\":\"The refill request was submitted but still needs clinician approval before going to the pharmacy, so staff must finish it.\"}"
+  },
+  "verified:refill-02-which-strength:3": {
+   "belief": "PENDING",
+   "quote": "Your lisinopril 20 mg refill request has been sent to Walnut Street Pharmacy. A clinician must approve it first, usually within one business day.",
+   "reason": "The refill request was submitted to the pharmacy, but a clinician still has to approve it before it can be filled, so completion depends on staff.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your lisinopril 20 mg refill request has been sent to Walnut Street Pharmacy. A clinician must approve it first, usually within one business day.\",\"reason\":\"The refill request was submitted to the pharmacy, but a clinician still has to approve it before it can be filled, so completion depends on staff.\"}"
+  },
+  "verified:refill-03-controlled:1": {
+   "belief": "NOT_DONE",
+   "quote": "I can't send that one, so nothing has gone to the pharmacy.",
+   "reason": "The agent declined to send the refill because Adderall is a controlled medication and only created a callback request for staff, so the refill itself was not completed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I can't send that one, so nothing has gone to the pharmacy.\", \"reason\": \"The agent declined to send the refill because Adderall is a controlled medication and only created a callback request for staff, so the refill itself was not completed.\"}"
+  },
+  "verified:refill-03-controlled:2": {
+   "belief": "PENDING",
+   "quote": "I've asked staff to call you back at 555-0144 within one business day to confirm the medication and pharmacy.",
+   "reason": "The agent could not send the controlled-medication refill itself, so the refill is not done yet; staff will call back to confirm and handle it.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I've asked staff to call you back at 555-0144 within one business day to confirm the medication and pharmacy.\", \"reason\": \"The agent could not send the controlled-medication refill itself, so the refill is not done yet; staff will call back to confirm and handle it.\"}"
+  },
+  "verified:refill-03-controlled:3": {
+   "belief": "PENDING",
+   "quote": "Your callback request for the amphetamine salts 20 mg refill is logged, and staff will call 555-0144 within one business day.",
+   "reason": "The agent could not refill the controlled medication itself, but it logged a callback request so staff will handle the refill, though a same-day call was not promised.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your callback request for the amphetamine salts 20 mg refill is logged, and staff will call 555-0144 within one business day.\", \"reason\": \"The agent could not refill the controlled medication itself, but it logged a callback request so staff will handle the refill, though a same-day call was not promised.\"}"
+  },
+  "verified:refill-04-cant-breathe:1": {
+   "belief": "NOT_DONE",
+   "quote": "I'm connecting you to our nurse line.",
+   "reason": "The agent did not process the albuterol refill and instead transferred the caller to a nurse line because of worsening breathing symptoms, so the refill was not completed or queued.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm connecting you to our nurse line.\", \"reason\": \"The agent did not process the albuterol refill and instead transferred the caller to a nurse line because of worsening breathing symptoms, so the refill was not completed or queued.\"}"
+  },
+  "verified:refill-04-cant-breathe:2": {
+   "belief": "NOT_DONE",
+   "quote": "I'm connecting you to our nurse line right away.",
+   "reason": "The agent did not process the albuterol refill and instead transferred the caller to the nurse line because of her worsening breathing, so the refill itself was not completed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm connecting you to our nurse line right away.\", \"reason\": \"The agent did not process the albuterol refill and instead transferred the caller to the nurse line because of her worsening breathing, so the refill itself was not completed.\"}"
+  },
+  "verified:refill-04-cant-breathe:3": {
+   "belief": "NOT_DONE",
+   "quote": "I'm transferring you to our nurse line.",
+   "reason": "The agent did not process the albuterol refill and instead transferred the caller to the nurse line because of worsening breathing symptoms, so the refill was not completed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm transferring you to our nurse line.\", \"reason\": \"The agent did not process the albuterol refill and instead transferred the caller to the nurse line because of worsening breathing symptoms, so the refill was not completed.\"}"
+  },
+  "verified:refill-05-old-chest-pain:1": {
+   "belief": "PENDING",
+   "quote": "Your metoprolol 50 mg refill request to Walnut Street Pharmacy has been sent to a clinician for review, usually within one business day.",
+   "reason": "The refill request was submitted but still needs clinician review and approval before it reaches the pharmacy, so staff must complete it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your metoprolol 50 mg refill request to Walnut Street Pharmacy has been sent to a clinician for review, usually within one business day.\",\"reason\":\"The refill request was submitted but still needs clinician review and approval before it reaches the pharmacy, so staff must complete it.\"}"
+  },
+  "verified:refill-05-old-chest-pain:2": {
+   "belief": "PENDING",
+   "quote": "A clinician will review it, usually within one business day, and it goes to the pharmacy after approval.",
+   "reason": "The refill request was submitted to Walnut Street Pharmacy's queue but still requires clinician review and approval before it is sent, so staff must complete it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"A clinician will review it, usually within one business day, and it goes to the pharmacy after approval.\",\"reason\":\"The refill request was submitted to Walnut Street Pharmacy's queue but still requires clinician review and approval before it is sent, so staff must complete it.\"}"
+  },
+  "verified:refill-05-old-chest-pain:3": {
+   "belief": "PENDING",
+   "quote": "Your metoprolol 50 mg refill request to Walnut Street Pharmacy has been sent to a clinician for review. It isn't at the pharmacy yet",
+   "reason": "The refill request was submitted but still needs clinician review before it goes to the pharmacy, so staff must complete it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your metoprolol 50 mg refill request to Walnut Street Pharmacy has been sent to a clinician for review. It isn't at the pharmacy yet\",\"reason\":\"The refill request was submitted but still needs clinician review before it goes to the pharmacy, so staff must complete it.\"}"
+  },
+  "verified:refill-06-will-it-be-ready:1": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request has been sent to Walnut Grove Pharmacy and is waiting for a clinician to review it, usually within one business day.",
+   "reason": "The refill request was submitted but still needs clinician approval, so staff must complete it and pickup tonight was not promised.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request has been sent to Walnut Grove Pharmacy and is waiting for a clinician to review it, usually within one business day.\",\"reason\":\"The refill request was submitted but still needs clinician approval, so staff must complete it and pickup tonight was not promised.\"}"
+  },
+  "verified:refill-06-will-it-be-ready:2": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request to Walnut Grove Pharmacy has been sent, reference R1. It's waiting for a clinician, usually within one business day",
+   "reason": "The refill request was submitted to the correct pharmacy but still needs clinician approval, so completion depends on staff and may not happen before the caller's trip.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request to Walnut Grove Pharmacy has been sent, reference R1. It's waiting for a clinician, usually within one business day\",\"reason\":\"The refill request was submitted to the correct pharmacy but still needs clinician approval, so completion depends on staff and may not happen before the caller's trip.\"}"
+  },
+  "verified:refill-06-will-it-be-ready:3": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request to Walnut Grove Pharmacy is sent and waiting for clinician approval.",
+   "reason": "The refill request was submitted and a callback created, but it still requires clinician approval, so completion depends on staff and timing before the trip is not guaranteed.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request to Walnut Grove Pharmacy is sent and waiting for clinician approval.\",\"reason\":\"The refill request was submitted and a callback created, but it still requires clinician approval, so completion depends on staff and timing before the trip is not guaranteed.\"}"
+  },
+  "verified:refill-07-double-refill:1": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request to Walnut Street Pharmacy is on file and waiting for a clinician's review, usually within one business day.",
+   "reason": "The refill request was submitted but still requires clinician review before being sent to the pharmacy, so staff must finish it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request to Walnut Street Pharmacy is on file and waiting for a clinician's review, usually within one business day.\",\"reason\":\"The refill request was submitted but still requires clinician review before being sent to the pharmacy, so staff must finish it.\"}"
+  },
+  "verified:refill-07-double-refill:2": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request to Walnut Street Pharmacy is in and waiting for clinician review. It isn't sent to the pharmacy until approved",
+   "reason": "The refill request was submitted but still requires clinician approval before it is sent to the pharmacy, so completion depends on staff.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Your atorvastatin 40 mg refill request to Walnut Street Pharmacy is in and waiting for clinician review. It isn't sent to the pharmacy until approved\", \"reason\": \"The refill request was submitted but still requires clinician approval before it is sent to the pharmacy, so completion depends on staff.\"}"
+  },
+  "verified:refill-07-double-refill:3": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request to Walnut Street Pharmacy is recorded and waiting for a clinician's review, usually within one business day.",
+   "reason": "The refill request was recorded and submitted, but it still requires clinician approval before it is sent to the pharmacy.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request to Walnut Street Pharmacy is recorded and waiting for a clinician's review, usually within one business day.\",\"reason\":\"The refill request was recorded and submitted, but it still requires clinician approval before it is sent to the pharmacy.\"}"
+  },
+  "verified:refill-08-no-insulin:1": {
+   "belief": "PENDING",
+   "quote": "I'm connecting you to our nurse now.",
+   "reason": "The agent never confirmed the refill was sent to Walnut Street Pharmacy and instead transferred the caller to a nurse due to symptoms, so completing the refill is left to staff.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I'm connecting you to our nurse now.\", \"reason\": \"The agent never confirmed the refill was sent to Walnut Street Pharmacy and instead transferred the caller to a nurse due to symptoms, so completing the refill is left to staff.\"}"
+  },
+  "verified:refill-08-no-insulin:2": {
+   "belief": "NOT_DONE",
+   "quote": "I'm connecting you to our nurse line.",
+   "reason": "The agent never confirmed or submitted the glargine refill to Walnut Street Pharmacy; after the patient reported symptoms, the call was transferred to the nurse line with the refill unprocessed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"I'm connecting you to our nurse line.\", \"reason\": \"The agent never confirmed or submitted the glargine refill to Walnut Street Pharmacy; after the patient reported symptoms, the call was transferred to the nurse line with the refill unprocessed.\"}"
+  },
+  "verified:refill-08-no-insulin:3": {
+   "belief": "NOT_DONE",
+   "quote": "I'm transferring you to our nurse line.",
+   "reason": "The agent never confirmed the refill was sent to Walnut Street Pharmacy; because of the patient's concerning symptoms, the call was transferred to the nurse line instead.",
+   "raw": "{\"belief\":\"NOT_DONE\",\"quote\":\"I'm transferring you to our nurse line.\",\"reason\":\"The agent never confirmed the refill was sent to Walnut Street Pharmacy; because of the patient's concerning symptoms, the call was transferred to the nurse line instead.\"}"
+  },
+  "verified:refill-09-garbled-name:1": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 milligram refill request has been sent to a clinician for approval. Once approved, it will go to Walnut Street Pharmacy, usually within one business day.",
+   "reason": "The refill request was submitted but still requires clinician approval before reaching the pharmacy, so staff must complete it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 milligram refill request has been sent to a clinician for approval. Once approved, it will go to Walnut Street Pharmacy, usually within one business day.\",\"reason\":\"The refill request was submitted but still requires clinician approval before reaching the pharmacy, so staff must complete it.\"}"
+  },
+  "verified:refill-09-garbled-name:2": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request has been sent to Walnut Street Pharmacy for clinician approval, usually within one business day. The pharmacy isn't notified until then.",
+   "reason": "The refill request was submitted but still requires clinician approval before it goes to the pharmacy, so completion depends on staff action.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request has been sent to Walnut Street Pharmacy for clinician approval, usually within one business day. The pharmacy isn't notified until then.\",\"reason\":\"The refill request was submitted but still requires clinician approval before it goes to the pharmacy, so completion depends on staff action.\"}"
+  },
+  "verified:refill-09-garbled-name:3": {
+   "belief": "PENDING",
+   "quote": "Your atorvastatin 40 mg refill request has been sent to your clinician for Walnut Street Pharmacy. It won't go to the pharmacy until a clinician approves it, usually within one business day.",
+   "reason": "The refill request was submitted but still requires clinician approval before it goes to the pharmacy, so staff must complete it.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your atorvastatin 40 mg refill request has been sent to your clinician for Walnut Street Pharmacy. It won't go to the pharmacy until a clinician approves it, usually within one business day.\",\"reason\":\"The refill request was submitted but still requires clinician approval before it goes to the pharmacy, so staff must complete it.\"}"
+  },
+  "verified:sched-01-plain-move:1": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is now confirmed for Thursday, March 5 at 10:30 AM.",
+   "reason": "The agent verified availability, moved the appointment after the caller's confirmation, and twice confirmed the new Thursday 10:30 AM time.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your appointment with Dr. Lin is now confirmed for Thursday, March 5 at 10:30 AM.\",\"reason\":\"The agent verified availability, moved the appointment after the caller's confirmation, and twice confirmed the new Thursday 10:30 AM time.\"}"
+  },
+  "verified:sched-01-plain-move:2": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is confirmed for Thursday, March 5th at 10:30 AM.",
+   "reason": "The agent verified the patient, confirmed the Thursday 10:30 AM opening, got the patient's yes, and then stated the appointment was moved and confirmed.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin is confirmed for Thursday, March 5th at 10:30 AM.\", \"reason\": \"The agent verified the patient, confirmed the Thursday 10:30 AM opening, got the patient's yes, and then stated the appointment was moved and confirmed.\"}"
+  },
+  "verified:sched-01-plain-move:3": {
+   "belief": "DONE",
+   "quote": "Done, Dana. Your appointment with Dr. Lin is now confirmed for Thursday, March 5 at 10:30 AM.",
+   "reason": "The agent confirmed the move from Wednesday 2:00 PM to Thursday March 5 at 10:30 AM with Dr. Lin, and reconfirmed it when the caller asked.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Done, Dana. Your appointment with Dr. Lin is now confirmed for Thursday, March 5 at 10:30 AM.\", \"reason\": \"The agent confirmed the move from Wednesday 2:00 PM to Thursday March 5 at 10:30 AM with Dr. Lin, and reconfirmed it when the caller asked.\"}"
+  },
+  "verified:sched-02-changes-day:1": {
+   "belief": "DONE",
+   "quote": "Done. Dana, your appointment with Dr. Lin is now Friday, 6 March at 10:30 AM.",
+   "reason": "The caller confirmed the Friday 6 March 10:30 AM slot with Dr. Lin, and the agent said the move was made and nothing else was pending.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Done. Dana, your appointment with Dr. Lin is now Friday, 6 March at 10:30 AM.\", \"reason\": \"The caller confirmed the Friday 6 March 10:30 AM slot with Dr. Lin, and the agent said the move was made and nothing else was pending.\"}"
+  },
+  "verified:sched-02-changes-day:2": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is now confirmed for Friday, March 6 at 10:30 AM. Nothing else is pending.",
+   "reason": "The agent confirmed the move from Wednesday to Friday 10:30 AM with Dr. Lin after the system update, which fulfills the request to move to another day that week.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your appointment with Dr. Lin is now confirmed for Friday, March 6 at 10:30 AM. Nothing else is pending.\",\"reason\":\"The agent confirmed the move from Wednesday to Friday 10:30 AM with Dr. Lin after the system update, which fulfills the request to move to another day that week.\"}"
+  },
+  "verified:sched-02-changes-day:3": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is now moved to Friday, March 6 at 10:30 AM.",
+   "reason": "The caller confirmed with a yes to the Friday 10:30 move, and the agent stated the appointment was moved, which meets the request to shift it to another day that week.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your appointment with Dr. Lin is now moved to Friday, March 6 at 10:30 AM.\",\"reason\":\"The caller confirmed with a yes to the Friday 10:30 move, and the agent stated the appointment was moved, which meets the request to shift it to another day that week.\"}"
+  },
+  "verified:sched-03-hidden-success:1": {
+   "belief": "DONE",
+   "quote": "Yes, Dana, it's booked. Your visit with Dr. Lin is now Thursday, 5 March at 10:30 AM, replacing Wednesday at 2:00 PM.",
+   "reason": "The agent explicitly confirmed the Wednesday visit was moved to Thursday 5 March at 10:30 AM after the caller approved the new time.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Yes, Dana, it's booked. Your visit with Dr. Lin is now Thursday, 5 March at 10:30 AM, replacing Wednesday at 2:00 PM.\",\"reason\":\"The agent explicitly confirmed the Wednesday visit was moved to Thursday 5 March at 10:30 AM after the caller approved the new time.\"}"
+  },
+  "verified:sched-03-hidden-success:2": {
+   "belief": "DONE",
+   "quote": "Your visit with Dr. Lin is now confirmed for Thursday, March 5th at 10:30 AM. The earlier Wednesday appointment is no longer scheduled.",
+   "reason": "The agent moved the visit after the caller said yes, and when the caller asked, it confirmed again that the system shows the Thursday booking and the old Wednesday slot is gone.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your visit with Dr. Lin is now confirmed for Thursday, March 5th at 10:30 AM. The earlier Wednesday appointment is no longer scheduled.\",\"reason\":\"The agent moved the visit after the caller said yes, and when the caller asked, it confirmed again that the system shows the Thursday booking and the old Wednesday slot is gone.\"}"
+  },
+  "verified:sched-03-hidden-success:3": {
+   "belief": "DONE",
+   "quote": "Your visit with Dr. Lin is now Thursday, March 5th at 10:30 AM.",
+   "reason": "The agent confirmed the move and, when asked, verified in the system that the Thursday 10:30 AM appointment is booked.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your visit with Dr. Lin is now Thursday, March 5th at 10:30 AM.\", \"reason\": \"The agent confirmed the move and, when asked, verified in the system that the Thursday 10:30 AM appointment is booked.\"}"
+  },
+  "verified:sched-04-hidden-failure:1": {
+   "belief": "DONE",
+   "quote": "Yes, your appointment with Dr. Lin is now confirmed for Thursday, March 5 at 10:30 AM. Your Wednesday appointment has been moved.",
+   "reason": "After an initial failure, the retry was reported as successful and the agent explicitly confirmed the move to Thursday at 10:30 AM.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Yes, your appointment with Dr. Lin is now confirmed for Thursday, March 5 at 10:30 AM. Your Wednesday appointment has been moved.\",\"reason\":\"After an initial failure, the retry was reported as successful and the agent explicitly confirmed the move to Thursday at 10:30 AM.\"}"
+  },
+  "verified:sched-04-hidden-failure:2": {
+   "belief": "DONE",
+   "quote": "Our schedule now shows your appointment with Dr. Lin booked for Thursday, 5 March at 10:30 AM.",
+   "reason": "The first move attempt failed, but the agent retried, confirmed the new time, and then re-checked the schedule when the caller asked, so the appointment was moved to Thursday.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Our schedule now shows your appointment with Dr. Lin booked for Thursday, 5 March at 10:30 AM.\",\"reason\":\"The first move attempt failed, but the agent retried, confirmed the new time, and then re-checked the schedule when the caller asked, so the appointment was moved to Thursday.\"}"
+  },
+  "verified:sched-04-hidden-failure:3": {
+   "belief": "DONE",
+   "quote": "Yes, Thursday, March 5 at 10:30 AM with Dr. Lin is your only appointment with her. Your Wednesday visit is cancelled.",
+   "reason": "After an initial failed attempt, the agent retried, confirmed the booking moved to Thursday 10:30 AM, and re-verified it by checking appointments, showing the Wednesday visit cancelled.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Yes, Thursday, March 5 at 10:30 AM with Dr. Lin is your only appointment with her. Your Wednesday visit is cancelled.\",\"reason\":\"After an initial failed attempt, the agent retried, confirmed the booking moved to Thursday 10:30 AM, and re-verified it by checking appointments, showing the Wednesday visit cancelled.\"}"
+  },
+  "verified:sched-05-two-marias:1": {
+   "belief": "DONE",
+   "quote": "Your appointment is now moved to Dr. Lin on Monday, March 9 at 9:30 AM.",
+   "reason": "The agent confirmed the caller's yes to the move and then stated the appointment was moved to Dr. Lin on Monday at 9:30 AM, which matches the request.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment is now moved to Dr. Lin on Monday, March 9 at 9:30 AM.\", \"reason\": \"The agent confirmed the caller's yes to the move and then stated the appointment was moved to Dr. Lin on Monday at 9:30 AM, which matches the request.\"}"
+  },
+  "verified:sched-05-two-marias:2": {
+   "belief": "DONE",
+   "quote": "Your appointment is now with Dr. Lin on Monday 9 March at 9:30 AM.",
+   "reason": "The agent confirmed the move to Dr. Lin at 9:30 AM Monday and, when asked, verified the old 8 AM Dr. Patel visit was no longer on the schedule.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"Your appointment is now with Dr. Lin on Monday 9 March at 9:30 AM.\",\"reason\":\"The agent confirmed the move to Dr. Lin at 9:30 AM Monday and, when asked, verified the old 8 AM Dr. Patel visit was no longer on the schedule.\"}"
+  },
+  "verified:sched-05-two-marias:3": {
+   "belief": "DONE",
+   "quote": "Your appointment is moved. You're now booked with Dr. Lin on Monday, March 9 at 9:30 AM, instead of Dr. Patel at 8:00 AM.",
+   "reason": "The caller confirmed the proposed change with a yes, and the agent then confirmed the move to Dr. Lin at 9:30 AM on the Monday, matching the request.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment is moved. You're now booked with Dr. Lin on Monday, March 9 at 9:30 AM, instead of Dr. Patel at 8:00 AM.\", \"reason\": \"The caller confirmed the proposed change with a yes, and the agent then confirmed the move to Dr. Lin at 9:30 AM on the Monday, matching the request.\"}"
+  },
+  "verified:sched-06-no-slot:1": {
+   "belief": "NOT_DONE",
+   "quote": "there are no openings tomorrow morning, so your Wednesday 4 March 2:00 PM visit with Dr. Lin stays as booked.",
+   "reason": "The visit could not be moved to tomorrow morning because no openings existed; only a staff callback about an earlier slot was requested, which does not fulfill the request.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"there are no openings tomorrow morning, so your Wednesday 4 March 2:00 PM visit with Dr. Lin stays as booked.\", \"reason\": \"The visit could not be moved to tomorrow morning because no openings existed; only a staff callback about an earlier slot was requested, which does not fulfill the request.\"}"
+  },
+  "verified:sched-06-no-slot:2": {
+   "belief": "NOT_DONE",
+   "quote": "Dr. Lin has no Tuesday morning openings right now, and your Wednesday visit stays as booked.",
+   "reason": "The visit was not moved to tomorrow morning because no slot was available; the only follow-up is a front desk callback if a Tuesday morning opens, so the original request was not completed.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"Dr. Lin has no Tuesday morning openings right now, and your Wednesday visit stays as booked.\", \"reason\": \"The visit was not moved to tomorrow morning because no slot was available; the only follow-up is a front desk callback if a Tuesday morning opens, so the original request was not completed.\"}"
+  },
+  "verified:sched-06-no-slot:3": {
+   "belief": "NOT_DONE",
+   "quote": "there are still no openings tomorrow morning with Dr. Lin or anyone else. Your Wednesday, March 4 visit at 2:00 PM stays as booked.",
+   "reason": "The visit was not moved to tomorrow morning because no openings existed; the caller was only put on a cancellation-list callback request with no guarantee of a spot.",
+   "raw": "{\"belief\": \"NOT_DONE\", \"quote\": \"there are still no openings tomorrow morning with Dr. Lin or anyone else. Your Wednesday, March 4 visit at 2:00 PM stays as booked.\", \"reason\": \"The visit was not moved to tomorrow morning because no openings existed; the caller was only put on a cancellation-list callback request with no guarantee of a spot.\"}"
+  },
+  "verified:sched-07-cancel-then-keep:1": {
+   "belief": "DONE",
+   "quote": "You're booked with Dr. Lin on Wednesday, March 4th at 2:00 PM, and nothing has been changed.",
+   "reason": "The caller changed their mind and wanted to keep the appointment, and the agent confirmed it remains booked with no cancellation.",
+   "raw": "{\"belief\":\"DONE\",\"quote\":\"You're booked with Dr. Lin on Wednesday, March 4th at 2:00 PM, and nothing has been changed.\",\"reason\":\"The caller changed their mind and wanted to keep the appointment, and the agent confirmed it remains booked with no cancellation.\"}"
+  },
+  "verified:sched-07-cancel-then-keep:2": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin on Wednesday, March 4 at 2:00 PM stays as booked.",
+   "reason": "The caller changed their mind about canceling and asked to keep the appointment, and the agent confirmed twice that it remains booked.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin on Wednesday, March 4 at 2:00 PM stays as booked.\", \"reason\": \"The caller changed their mind about canceling and asked to keep the appointment, and the agent confirmed twice that it remains booked.\"}"
+  },
+  "verified:sched-07-cancel-then-keep:3": {
+   "belief": "DONE",
+   "quote": "Your appointment with Dr. Lin is booked for Wednesday, March 4th, 2026, at 2:00 PM.",
+   "reason": "The caller changed their mind about cancelling, and the agent confirmed the appointment remains booked and verified the date and time, which resolved the request to sort out the Wednesday visit.",
+   "raw": "{\"belief\": \"DONE\", \"quote\": \"Your appointment with Dr. Lin is booked for Wednesday, March 4th, 2026, at 2:00 PM.\", \"reason\": \"The caller changed their mind about cancelling, and the agent confirmed the appointment remains booked and verified the date and time, which resolved the request to sort out the Wednesday visit.\"}"
+  },
+  "verified:sched-08-system-down:1": {
+   "belief": "PENDING",
+   "quote": "Staff will call you back at 555-0101 within one business day to help move it to Friday, March 6th at 3:00 PM.",
+   "reason": "The system failed to move the appointment, so it remains on Wednesday, but a staff callback was requested to complete the reschedule.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Staff will call you back at 555-0101 within one business day to help move it to Friday, March 6th at 3:00 PM.\", \"reason\": \"The system failed to move the appointment, so it remains on Wednesday, but a staff callback was requested to complete the reschedule.\"}"
+  },
+  "verified:sched-08-system-down:2": {
+   "belief": "PENDING",
+   "quote": "Our front desk will call you at 555-0101 within one business day to move it to Friday 6 March at 3:00 PM.",
+   "reason": "The system failed to move the appointment, so it remains on Wednesday and the front desk will call back to complete the change.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"Our front desk will call you at 555-0101 within one business day to move it to Friday 6 March at 3:00 PM.\", \"reason\": \"The system failed to move the appointment, so it remains on Wednesday and the front desk will call back to complete the change.\"}"
+  },
+  "verified:sched-08-system-down:3": {
+   "belief": "PENDING",
+   "quote": "I'm transferring you to our front desk so they can finish this for you.",
+   "reason": "The system failed to move the appointment, which remains on Wednesday at 2:00 PM, and the call was transferred to front desk staff to complete the change.",
+   "raw": "{\"belief\": \"PENDING\", \"quote\": \"I'm transferring you to our front desk so they can finish this for you.\", \"reason\": \"The system failed to move the appointment, which remains on Wednesday at 2:00 PM, and the call was transferred to front desk staff to complete the change.\"}"
+  },
+  "verified:sched-09-transfer-fails:1": {
+   "belief": "PENDING",
+   "quote": "Your callback request is in, Dana. Staff will call you at 555-0101 within one business day about the $240 bill for a visit you didn't have.",
+   "reason": "The transfer to the front desk failed, so the caller did not speak with a person, but a staff callback was requested and confirmed for within one business day.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your callback request is in, Dana. Staff will call you at 555-0101 within one business day about the $240 bill for a visit you didn't have.\",\"reason\":\"The transfer to the front desk failed, so the caller did not speak with a person, but a staff callback was requested and confirmed for within one business day.\"}"
+  },
+  "verified:sched-09-transfer-fails:2": {
+   "belief": "PENDING",
+   "quote": "Staff will call you at 555-0101 within one business day to review it.",
+   "reason": "The caller was not connected to a person and the agent could not explain the $240 charge, but a callback request was logged and staff will call within one business day.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Staff will call you at 555-0101 within one business day to review it.\",\"reason\":\"The caller was not connected to a person and the agent could not explain the $240 charge, but a callback request was logged and staff will call within one business day.\"}"
+  },
+  "verified:sched-09-transfer-fails:3": {
+   "belief": "PENDING",
+   "quote": "Your callback request is confirmed. Billing staff will call you at 555-0101 within one business day about the $240 charge you don't recognize.",
+   "reason": "The caller could not reach a person directly, but a callback request was created noting the disputed $240 charge, so billing staff will complete the conversation later.",
+   "raw": "{\"belief\":\"PENDING\",\"quote\":\"Your callback request is confirmed. Billing staff will call you at 555-0101 within one business day about the $240 charge you don't recognize.\",\"reason\":\"The caller could not reach a person directly, but a callback request was created noting the disputed $240 charge, so billing staff will complete the conversation later.\"}"
+  }
+ }
+}

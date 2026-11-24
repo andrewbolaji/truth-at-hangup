@@ -22,7 +22,7 @@ async function pool<T, R>(xs: T[], n: number, f: (x: T) => Promise<R>): Promise<
 async function makeRun(version: string, model: string, repeats: number, id: string, replay: boolean, only: string, note: string, callerVersion: string): Promise<{ file: RunFile; failed: string[] }> {
   const agentPrompt = readText('agents', `${version}.md`); const protocol = readText('agents', 'protocol.md'); const callerPrompt = readText('agents', `caller-${callerVersion}.md`);
   const L = llm(replay); const failed: string[] = [];
-  const jobs = scenarios.filter((s) => !only || s.id.includes(only)).flatMap((s) => Array.from({ length: repeats }, (_, i) => ({ s, i: i + 1 })));
+  const jobs = scenarios.filter((s) => !only || only.split(',').some((k) => s.id.includes(k))).flatMap((s) => Array.from({ length: repeats }, (_, i) => ({ s, i: i + 1 })));
   const traces = await pool(jobs, replay ? 1 : Number(opt('parallel', '3')), async ({ s, i }) => {
     try { const t = await runScenario(s, { llm: L, model, agentPrompt, protocol, callerPrompt, callerVersion, agentVersion: version, runId: id, repeat: i }); if (!replay) console.log(id, s.id, i, t.ended, t.events.length); return t; }
     catch (e) { failed.push(`${s.id}#${i}: ${(e as Error).message}`); return null; }

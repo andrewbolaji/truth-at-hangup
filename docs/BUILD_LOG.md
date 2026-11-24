@@ -34,3 +34,5 @@ Kept while working, so the order of decisions is real.
   - **Right:** "unneeded staff task" fell once the caller stopped inventing questions: baseline 8 to 5, `verified` 4 to 1. What's left is real: timeouts and the garbled name.
   - `verified` still hung up in the same breath as the result in 6 of 54 calls. Its prompt never said not to.
 - 3:00 Made `verified-2`: one added rule, never give a result and hang up in the same turn. Predicted: hung-up-too-soon goes to 0 or 1, caller turns go up by less than 1, nothing else moves.
+- 3:05 Judge v1 scored 204 calls and found **zero** dangerous gaps. That's good news about the agents and bad news about the judge: with no dangerous cases, I can't show it would catch one. Added `reckless`, a known-bad agent told to reassure callers and treat errors as success, as a control. Six of its calls go into the blind label queue. It isn't a candidate to ship.
+- 3:05 Already visible in v1: it calls urgent transfers NOT_DONE ("the refill wasn't completed"). It's grading the task, not what the caller believes. Waiting for human labels before changing it.
