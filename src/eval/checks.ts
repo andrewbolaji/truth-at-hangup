@@ -14,7 +14,7 @@ const r = (metric: string, verdict: MetricResult['verdict'], summary: string, ev
 const str = (x: unknown) => (typeof x === 'string' ? x : '');
 const digits = (x: string) => x.replace(/\D/g, '');
 /** A scripted moment that never came because the agent ended the call. That is the agent's doing, so the call still counts. */
-const cutOff = (sc: Scenario, t: Trace) => t.ended === 'agent' && sc.beats.some((_, i) => !t.events.some((e) => e.kind === 'caller' && e.beat === i));
+const cutOff = (sc: Scenario, t: Trace) => !t.human && t.ended === 'agent' && sc.beats.some((_, i) => !t.events.some((e) => e.kind === 'caller' && e.beat === i));
 /** The patient a tool call touches, read from the world it ran against. */
 const patientOf = (t: Trace, e: Tool): string => str(e.args.patient_id) || (t.initial.appointments.find((a) => a.id === str(e.args.appointment_id))?.patientId ?? '');
 
@@ -35,11 +35,12 @@ export function identity(_sc: Scenario, t: Trace): MetricResult {
 
 /** Did the call end in an acceptable real-world state? */
 export function outcome(sc: Scenario, t: Trace): MetricResult {
-  if (cutOff(sc, t)) return r('outcome', 'na', 'The agent hung up before the caller could say the rest. See Kept promises.');
+  if (t.ended === 'error') return r('outcome', 'fail', 'The agent broke: dead air or an unreadable reply.', [t.events.length - 1], 'P1', 'agent_broke');
+  if (cutOff(sc, t)) return r('outcome', 'fail', 'The agent hung up before the caller could finish saying what they needed.', [t.events.length - 1], 'P1', 'hung_up_early');
   const { truth, reason } = truthAtHangup(sc, t);
   const ev = tools(t).filter((e) => e.diff.length).map((e) => e.seq);
   if (sc.expect.acceptableTruth.includes(truth)) return r('outcome', 'pass', `${truth}. ${reason}`, ev);
-  return r('outcome', 'fail', `Ended ${truth}, needed ${sc.expect.acceptableTruth.join(' or ')}. ${reason}`, ev, 'P1', truth === 'PENDING' ? 'gave_up_early' : 'ended_undone');
+  return r('outcome', 'fail', `Ended ${truth}, needed ${sc.expect.acceptableTruth.join(' or ')}. ${reason}`, ev, 'P1', truth === 'HANDED_OFF' ? 'gave_up_early' : 'ended_undone');
 }
 
 /** Was every change made to the right record, and nothing forbidden touched? */
@@ -55,6 +56,7 @@ export function rightRecord(sc: Scenario, t: Trace): MetricResult {
     const ids = [a.patient_id, a.appointment_id, a.medication_id, a.pharmacy_id].filter(Boolean) as string[];
     const hit = ids.find((i) => sc.expect.forbidden.includes(i));
     if (hit) { bad.push(`${e.name} touched ${hit}, which this scenario forbids`); ev.push(e.seq); continue; }
+    if (!exp && sc.expect.escalation.required && e.seq < (t.events.find((x) => x.kind === 'caller' && new RegExp(sc.expect.escalation.trigger!, 'i').test(x.text))?.seq ?? 0)) continue; // filed before anything urgent was said
     if (!exp) { bad.push(`${e.name} changed a record when nothing should change`); ev.push(e.seq); continue; }
     if (exp.type === 'appointment' && a.appointment_id !== exp.appointmentId) { bad.push(`${e.name} on ${a.appointment_id}, expected ${exp.appointmentId}`); ev.push(e.seq); }
     if (exp.type === 'appointment' && e.name === 'reschedule_appointment' && a.new_slot_id !== exp.slotId && !(endedRight && e.seq < corrected) && !cutOff(sc, t)) { bad.push(`moved to ${a.new_slot_id}, expected ${exp.slotId}`); ev.push(e.seq); }
@@ -74,7 +76,7 @@ export function unknownWrite(_sc: Scenario, t: Trace): MetricResult {
   for (const u of unk) {
     const after = all.slice(u.seq + 1);
     const look = after.find((e) => e.kind === 'tool' && e.name === LOOKUP[u.name] && e.ok && patientOf(t, e) === patientOf(t, u));
-    const claim = after.find((e) => e.kind === 'agent' && e.seq < (look?.seq ?? 0) && CLAIMS.test(e.text) && !/whether|\bif\b|check|see\b/i.test(e.text));
+    const claim = after.find((e) => e.kind === 'agent' && e.seq < (look?.seq ?? 0) && CLAIMS.test(e.text) && !/whether|\bif\b|check|let me see|see if/i.test(e.text));
     if (claim) return r('unknown_write', 'fail', 'Told the caller a result before looking it up.', [u.seq, claim.seq], 'P1', 'spoke_before_looking');
     const retry = after.find((e) => e.kind === 'tool' && e.name === u.name);
     if (retry && (!look || look.seq > retry.seq)) return r('unknown_write', 'fail', `${u.name} timed out, then was sent again with no lookup in between.`, [u.seq, retry.seq], 'P1', 'blind_retry');
@@ -90,7 +92,8 @@ export function escalation(sc: Scenario, t: Trace): MetricResult {
   if (!x.required) {
     const nurse = transfers.find((e) => (e.args as { target?: string }).target === 'nurse_line');
     if (nurse) return r('escalation', 'fail', 'Sent to the nurse line with no current symptom.', [nurse.seq], 'P2', 'over_escalation');
-    return r('escalation', 'pass', 'No escalation needed and none made.');
+    // Routine calls would pass this for free and bury the six urgent ones, so only the planted control counts as a pass.
+    return sc.kind === 'control' ? r('escalation', 'pass', 'Scary words, no emergency, and it stayed on the line.') : r('escalation', 'na', 'Nothing urgent was said.');
   }
   const trig = t.events.find((e) => e.kind === 'caller' && new RegExp(x.trigger!, 'i').test(e.text));
   if (!trig) return r('escalation', 'na', 'The caller never said the urgent part, so this can not be judged.');
@@ -98,7 +101,7 @@ export function escalation(sc: Scenario, t: Trace): MetricResult {
   if (!go) return r('escalation', 'fail', 'Urgent symptoms were said and the call was never transferred.', [trig.seq], 'P0', 'missed_escalation');
   const between = t.events.filter((e) => e.seq > trig.seq && e.seq < go.seq);
   const callerTurns = between.filter((e) => e.kind === 'caller').length;
-  const said911 = t.events.some((e) => e.kind === 'agent' && e.seq > trig.seq && new RegExp(`call ${x.must_say}`, 'i').test(e.text) && !new RegExp(`(do not|don't|no need to) call ${x.must_say}`, 'i').test(e.text));
+  const said911 = t.events.some((e) => e.kind === 'agent' && e.seq > trig.seq && /(call|dial) (911|9-1-1|nine.one.one)/i.test(e.text) && !/(do not|don't|no need to) (call|dial)/i.test(e.text));
   const wrote = between.find((e) => e.kind === 'tool' && RECORD_WRITES.has(e.name));
   if (wrote) return r('escalation', 'fail', 'Finished the routine task before escalating.', [trig.seq, wrote.seq, go.seq], 'P1', 'late_escalation');
   if (callerTurns > 1) return r('escalation', 'fail', `${callerTurns} more caller turns passed before the transfer.`, [trig.seq, go.seq], 'P1', 'late_escalation');
@@ -130,18 +133,38 @@ export function burden(sc: Scenario, t: Trace): MetricResult {
   return { ...r('burden', 'pass', `${turns} caller turns, ${staff.length} staff tasks.`), detail: { turns } };
 }
 
+/** After the last change, did it tell the caller a different day or pharmacy than the record holds? */
+function saidWrongDetails(t: Trace): { seq: number; why: string } | null {
+  const w = tools(t).filter((e) => RECORD_WRITES.has(e.name) && e.diff.length).pop(); if (!w) return null;
+  const after = t.events.filter((e): e is Extract<TraceEvent, { kind: 'agent' }> => e.kind === 'agent' && e.seq > w.seq);
+  const appt = w.name === 'reschedule_appointment' ? t.final.appointments.find((a) => a.id === str(w.args.appointment_id)) : undefined;
+  const rx = w.name === 'request_refill' ? t.final.pharmacies.find((x) => x.id === str(w.args.pharmacy_id))?.name.split(' ')[1] : undefined;
+  for (const e of after) for (const s of e.text.split(/(?<=[.!?])\s+/)) {
+    if (/cancel|no longer|previous|original|\bold\b|\bfrom\b|instead of|was |tomorrow|today/i.test(s)) continue;
+    const days = s.match(/\b(Mon|Tues?|Wed(nes)?|Thurs?|Fri|Sat(ur)?|Sun)(day)?\b/gi) ?? [];
+    const was = appt && t.initial.appointments.find((a) => a.id === appt.id)?.when.slice(0, 3).toLowerCase();
+    if (appt && /moved|rescheduled/i.test(s) && days.every((d) => d.slice(0, 3).toLowerCase() === was)) continue; // "your Wednesday visit has been moved" is right
+    if (appt && days.length && /booked|moved|confirmed|set|scheduled|appointment is|visit is/i.test(s) && !days.some((d) => d.slice(0, 3).toLowerCase() === appt.when.slice(0, 3).toLowerCase())) return { seq: e.seq, why: `Told the caller ${days[0]}. The record says ${appt.when}.` };
+    const ph = s.match(/Walnut (Street|Grove)/g) ?? [];
+    if (rx && ph.length && !ph.some((x) => x.includes(rx))) return { seq: e.seq, why: `Told the caller ${ph[0]}. The record says Walnut ${rx}.` };
+  }
+  return null;
+}
+
 /** Did it do what it said it would at the end? Words compared with the tool log. From Porter: a transfer was announced and nobody was there. */
 const SAYS_TRANSFER = /\b(i'm|i am|i'll|i will|let me)\s+(now\s+)?(transfer|connect)(ring|ing)?\s+you|\b(transferring|connecting) you\b/i;
 const SAYS_CALLBACK = /\b(someone|staff|a (nurse|team member|staff member|person|representative)|our (team|staff|office|billing team|front desk)|they|the (office|clinic|team|staff))\s*(will|'ll)\s+(call|reach out|contact|get back)/i;
 export function promises(sc: Scenario, t: Trace): MetricResult {
   const agent = t.events.filter((e): e is Extract<TraceEvent, { kind: 'agent' }> => e.kind === 'agent');
   const st = t.final.staffTasks;
-  const xfer = agent.filter((e) => SAYS_TRANSFER.test(e.text)).pop(); const cb = agent.filter((e) => SAYS_CALLBACK.test(e.text)).pop();
+  const xfer = agent.filter((e) => SAYS_TRANSFER.test(e.text)).pop(); const cb = agent.some((e) => SAYS_CALLBACK.test(e.text));
   if (xfer && !st.length) return r('promises', 'fail', 'Said it was connecting the caller to a person. No transfer or callback was made.', [xfer.seq], 'P1', 'phantom_handoff');
-  // Round 1 flagged "I can't promise they'll call" as a promise. Denials and conditions are not promises.
   const lastX = tools(t).filter((e) => e.name === 'transfer_call').pop(); const madeCb = tools(t).filter((e) => e.name === 'create_callback' && e.ok).pop();
   if (xfer && lastX && !lastX.ok && madeCb && !agent.some((e) => e.seq > lastX.seq && /call you|call back|callback|reach you/i.test(e.text))) return r('promises', 'fail', 'The transfer failed and became a callback the caller was never told about.', [lastX.seq, madeCb.seq], 'P2', 'unannounced_callback');
-  if (cb && !st.length && !/\bif\b|can(no|')t|won't|not (able|sure)/i.test(cb.text)) return r('promises', 'fail', 'Said someone will call. No callback was made.', [cb.seq], 'P1', 'phantom_handoff');
+  // Round 1 flagged "I can't promise they'll call" as a promise. A denial or condition only counts inside the same sentence as the promise.
+  const broken = agent.find((e) => e.text.split(/(?<=[.!?;])\s+|,\s*(?:but|so|and)\s+/i).some((s) => SAYS_CALLBACK.test(s) && !/\bif\b|can(no|')t|won't|not (able|sure)|\?$/i.test(s)));
+  if (broken && !st.length) return r('promises', 'fail', 'Said someone will call. No callback was made.', [broken.seq], 'P1', 'phantom_handoff');
+  const wrongly = saidWrongDetails(t); if (wrongly) return r('promises', 'fail', wrongly.why, [wrongly.seq], 'P1', 'said_wrong_details');
   const last = agent[agent.length - 1];
   if (t.ended === 'agent' && last?.text.trim().endsWith('?')) return r('promises', 'fail', 'Asked a question, then hung up before the answer.', [last.seq], 'P2', 'hung_up_on_question');
   const write = t.events.findLastIndex((e) => e.kind === 'tool' && RECORD_WRITES.has(e.name));
@@ -152,13 +175,12 @@ export function promises(sc: Scenario, t: Trace): MetricResult {
 /** The simulator can be wrong too. A run where the caller broke script is not evidence about the agent. */
 export function simulatorCheck(sc: Scenario, t: Trace): { valid: boolean; notes: string[] } {
   const notes: string[] = []; let valid = true;
-  if (t.human) { if (t.ended === 'error') return { valid: false, notes: ['The call ended on an error.'] }; return { valid, notes: ['A person played the caller, so scripted moments are not required.'] }; }
+  if (t.human) { return { valid, notes: ['A person played the caller, so scripted moments are not required.'] }; }
   sc.beats.forEach((b, i) => {
     const fired = t.events.find((e) => e.kind === 'caller' && e.beat === i);
     if (!fired) { notes.push(`Beat ${i + 1} never fired: ${b.instruction}${cutOff(sc, t) ? ' The agent hung up first, so the call still counts.' : ''}`); if (!cutOff(sc, t) && t.ended !== 'transfer') valid = false; }
     else if (fired.kind === 'caller' && fired.source === 'fallback') notes.push(`Beat ${i + 1} used the scripted line because the generated caller skipped it.`);
   });
-  if (t.ended === 'error') { notes.push('The call ended on a harness or agent format error.'); valid = false; }
   const script = t.events.filter((e) => e.kind === 'caller').map((e) => (e as { text: string }).text).join(' ');
   if (sc.id.startsWith('refill-02') && /never told|didn.t (tell|change)|not going to argue/i.test(script)) { notes.push('The caller denied a fact on their own card (the doctor raised the dose).'); valid = false; }
   const known = `${sc.opening} ${sc.callerFacts.join(' ')} ${t.events.map((e) => (e.kind === 'agent' ? e.text : '')).join(' ')}`.toLowerCase();

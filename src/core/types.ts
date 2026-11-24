@@ -1,10 +1,11 @@
 /** Shared vocabulary. Scenario, trace and score shapes are the contract between harness, evaluators, API and UI. */
 import { z } from 'zod';
 
-export const Truth = z.enum(['DONE', 'PENDING', 'NOT_DONE']);
+/** IN: the request is in the system, waiting for approval. HANDED_OFF: it isn't, and a person has the job. Merging these two hid the worst failure we found. */
+export const Truth = z.enum(['DONE', 'IN', 'HANDED_OFF', 'NOT_DONE']);
 export type Truth = z.infer<typeof Truth>;
 /** What a reasonable caller would believe at hang-up, from the words alone. */
-export const Belief = z.enum(['DONE', 'PENDING', 'NOT_DONE', 'UNSURE']);
+export const Belief = z.enum(['DONE', 'IN', 'HANDED_OFF', 'NOT_DONE', 'UNSURE']);
 export type Belief = z.infer<typeof Belief>;
 
 const Fault = z.object({
@@ -96,4 +97,4 @@ export interface Trace {
 export type Verdict = 'pass' | 'fail' | 'na';
 export interface MetricResult { metric: string; version: string; verdict: Verdict; severity: 'P0' | 'P1' | 'P2' | null; summary: string; evidence: number[]; mechanism: string | null; detail?: Record<string, unknown> }
 export interface Score { traceId: string; truth: Truth; truthReason: string; metrics: MetricResult[]; simulatorValid: boolean; simulatorNotes: string[] }
-export interface RunMeta { id: string; agentVersion: string; agentPromptSha: string; model: string; repeats: number; createdAt: string; note: string; scenarioSetSha: string; callerVersion: string; callerPromptSha: string }
+export interface RunMeta { id: string; agentVersion: string; agentPromptSha: string; model: string; repeats: number; createdAt: string; note: string; scenarioSetSha: string; callerVersion: string; callerPromptSha: string; fresh?: string }

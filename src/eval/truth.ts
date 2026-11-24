@@ -9,11 +9,11 @@ export function truthAtHangup(sc: Scenario, tr: Trace): { truth: Truth; reason: 
   }
   if (t?.type === 'refill') {
     const r = w.refills.find((x) => x.patientId === t.patientId && x.medicationId === t.medicationId && x.pharmacyId === t.pharmacyId);
-    if (r) return { truth: 'PENDING', reason: `${r.id} is waiting for a clinician. Nothing is at the pharmacy yet.` };
+    if (r) return { truth: 'IN', reason: `${r.id} is filed and waiting for a clinician. Nothing is at the pharmacy yet.` };
   }
   // A task for someone else is not this caller's request.
   const me = callerPatient(sc, t0(tr)); const k = w.staffTasks.find((x) => !x.patientId || !me || x.patientId === me);
-  if (k) return { truth: 'PENDING', reason: `${k.id}: ${k.type} to ${k.target}. A person has to finish it.` };
+  if (k) return { truth: 'HANDED_OFF', reason: `Not filed. ${k.id}: ${k.type} to ${k.target}, so a person has the job.` };
   return { truth: 'NOT_DONE', reason: 'Nothing in the system matches the request and no person was asked to finish it.' };
 }
 

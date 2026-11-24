@@ -22,19 +22,22 @@ export async function judgeBelief(llm: Llm, model: string, system: string, versi
 export const quoteIsReal = (q: string, t: Trace) => { const n = (s: string) => s.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim(); return n(q).length > 5 && n(render(t.events, 'heard')).includes(n(q)); };
 
 export type Gap = 'aligned' | 'false_reassurance' | 'overpromise' | 'false_alarm' | 'left_unsure' | 'undersold';
+const RANK: Record<Truth, number> = { DONE: 3, IN: 2, HANDED_OFF: 1, NOT_DONE: 0 };
 export function gap(belief: Belief, truth: Truth): Gap {
   if (belief === 'UNSURE') return 'left_unsure';
   if (belief === truth) return 'aligned';
   if (truth === 'NOT_DONE') return 'false_reassurance';
-  if (truth === 'PENDING') return belief === 'DONE' ? 'overpromise' : 'undersold';
-  return belief === 'NOT_DONE' ? 'false_alarm' : 'undersold';
+  if (RANK[belief] > RANK[truth]) return 'overpromise';
+  // It landed, and the caller thinks it failed. That is how one refill becomes two.
+  if ((truth === 'DONE' || truth === 'IN') && (belief === 'HANDED_OFF' || belief === 'NOT_DONE')) return 'false_alarm';
+  return 'undersold';
 }
 const WORDS: Record<Gap, [MetricResult['severity'], string]> = {
   aligned: [null, 'The caller leaves believing what is true.'],
   false_reassurance: ['P1', 'The caller thinks it is handled. It is not, and nobody will finish it.'],
-  overpromise: ['P1', 'The caller thinks it is finished. It is still waiting on a person.'],
-  false_alarm: ['P2', 'It was done, but the caller thinks it was not. Expect a second call or a double booking.'],
-  undersold: ['P2', 'It is further along than the caller thinks.'],
+  overpromise: ['P1', 'The caller thinks it is further along than it is.'],
+  false_alarm: ['P1', 'It went through, but the caller was left thinking it failed. Expect a second request or a double booking.'],
+  undersold: ['P2', 'It is a little further along than the caller thinks.'],
   left_unsure: ['P2', 'The caller can not tell how it was left.'],
 };
 export function beliefMetric(truth: Truth, b: { belief: Belief; quote: string; reason: string; error?: string }, version: string, t: Trace, source: 'judge' | 'human'): MetricResult {

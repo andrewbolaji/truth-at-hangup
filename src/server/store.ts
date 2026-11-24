@@ -41,17 +41,18 @@ export class Store {
   labels = (): Label[] => (this.db.prepare('select trace_id traceId, rater, belief, note, at, seconds from labels order by at').all() as Label[]);
   reviews = (traceId?: string): Review[] => (this.db.prepare(`select id, trace_id traceId, metric, verdict, reason, reviewer, at from reviews ${traceId ? 'where trace_id=?' : ''} order by id`).all(...(traceId ? [traceId] : [])) as Review[]);
   addLabel(l: Label) { this.db.prepare('insert or replace into labels values(?,?,?,?,?,?)').run(l.traceId, l.rater, l.belief, l.note, l.at, l.seconds); this.save(this.labelFile, this.labels()); }
+  undoLabel(rater: string): boolean { const l = this.labels().filter((x) => x.rater === rater).pop(); if (!l) return false; this.db.prepare('delete from labels where trace_id=? and rater=?').run(l.traceId, rater); this.save(this.labelFile, this.labels()); return true; }
   addReview(r: Omit<Review, 'id'>) { this.db.prepare('insert into reviews(trace_id,metric,verdict,reason,reviewer,at) values(?,?,?,?,?,?)').run(r.traceId, r.metric, r.verdict, r.reason, r.reviewer, r.at); this.save(this.reviewFile, this.reviews()); }
   private save(f: string, x: unknown) { fs.mkdirSync(path.dirname(f), { recursive: true }); const tmp = `${f}.tmp`; fs.writeFileSync(tmp, JSON.stringify(x, null, 1)); fs.renameSync(tmp, f); }
 
-  /** All metrics for a trace: fixed checks, then belief from a person if there is one, else the newest judge. Overrides sit on top; the original stays visible. */
+  /** All metrics for a trace: fixed checks, then belief from the newest judge. A person's label is shown beside it and never mixed into a run's score, so every comparison uses one rater. */
   full(traceId: string): { score: Score; metrics: (MetricResult & { override?: Review })[]; judge: { version: string; out: JudgeOutput }[]; label?: Label } | null {
     const t = this.traces.get(traceId); const s = this.scores.get(traceId); if (!t || !s) return null;
     const label = this.labels().find((l) => l.traceId === traceId); const judge = this.judges.flatMap((j) => (j.outputs[traceId] ? [{ version: j.version, out: j.outputs[traceId]! }] : []));
     const last = judge[judge.length - 1];
-    const b = label ? beliefMetric(s.truth, { belief: label.belief, quote: '', reason: label.note }, 'human', t, 'human') : last ? beliefMetric(s.truth, last.out, last.version, t, 'judge') : null;
+    const b = last ? beliefMetric(s.truth, last.out, last.version, t, 'judge') : null;
     const revs = this.reviews(traceId);
-    const metrics = [...s.metrics, ...(b ? [b] : [])].map((m) => { const o = revs.filter((r) => r.metric === m.metric).pop(); return o ? { ...m, override: o, verdict: o.verdict } : m; });
+    const metrics = [...s.metrics, ...(b ? [b] : [])].map((m) => { const o = revs.filter((r) => r.metric === m.metric).pop(); return o ? { ...m, override: o, verdict: o.verdict, severity: o.verdict === 'fail' ? m.severity ?? 'P2' : null } : m; });
     return { score: s, metrics, judge, ...(label ? { label } : {}) };
   }
 }

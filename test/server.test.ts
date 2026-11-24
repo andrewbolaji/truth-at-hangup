@@ -28,9 +28,10 @@ describe('api', () => {
     await P('/labels', { key: KEY, belief: 'DONE', note: '', rater: 'A', seconds: 5 });
     const s2 = new Store(path.join(dir, 'other.db'), dir); expect(s2.labels()).toHaveLength(1); s2.db.close();
   });
-  it('a human label takes over from the judge, and the judge stays visible', async () => { await P('/labels', { key: KEY, belief: 'UNSURE', note: 'vague', rater: 'A', seconds: 5 }); const c = await J(`/traces/${id}`); expect(c.metrics.at(-1)).toMatchObject({ mechanism: 'left_unsure', detail: { source: 'human' } }); expect(c.judge).toHaveLength(1); });
+  it('a human label sits beside the judge and is never mixed into the score', async () => { await P('/labels', { key: KEY, belief: 'UNSURE', note: 'vague', rater: 'A', seconds: 5 }); const c = await J(`/traces/${id}`); expect(c.label.belief).toBe('UNSURE'); expect(c.metrics.at(-1)).toMatchObject({ mechanism: 'false_reassurance', detail: { source: 'judge' } }); });
+  it('a label can be undone', async () => { await P('/labels', { key: KEY, belief: 'DONE', note: '', rater: 'A', seconds: 5 }); expect((await P('/labels/undo', { rater: 'A' })).status).toBe(200); expect((await J('/queue?rater=A')).done).toBe(0); expect((await P('/labels/undo', { rater: 'A' })).status).toBe(400); });
   it('refuses junk and unknown calls', async () => { expect((await P('/labels', { key: 'nope', belief: 'DONE', rater: 'A', seconds: 1 })).status).toBe(400); expect((await P('/labels', { key: KEY, belief: 'MAYBE', rater: 'A', seconds: 1 })).status).toBe(400); expect((await fetch(`${base}/traces/nope`)).status).toBe(404); });
-  it('calibration reports the lazy-judge baseline beside agreement', async () => { await P('/labels', { key: KEY, belief: 'DONE', note: '', rater: 'A', seconds: 5 }); expect((await J('/calibration')).versions[0]).toMatchObject({ n: 1, agree: 1, majorityGuess: 1, caught: 1, dangerous: 1 }); });
+  it('calibration reports the lazy-judge baseline beside agreement', async () => { await P('/labels', { key: KEY, belief: 'DONE', note: '', rater: 'A', seconds: 5 }); expect((await J('/calibration')).versions[0]).toMatchObject({ dev: { n: 1, agree: 1, majorityGuess: 1, caught: 1, dangerous: 1 }, test: { n: 0 } }); });
 });
 
 describe('a person plays the caller', () => {
