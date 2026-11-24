@@ -1,0 +1,555 @@
+{
+ "meta": {
+  "id": "pilot",
+  "agentVersion": "baseline",
+  "agentPromptSha": "c6ba24d38f10",
+  "model": "claude-haiku-5-5",
+  "repeats": 1,
+  "createdAt": "2026-11-24T20:15:43.800Z",
+  "note": "",
+  "scenarioSetSha": "44946f081a9c"
+ },
+ "traces": [
+  {
+   "id": "pilot:sched-03-hidden-success:1",
+   "runId": "pilot",
+   "scenarioId": "sched-03-hidden-success",
+   "repeat": 1,
+   "agentVersion": "baseline",
+   "model": "claude-haiku-5-5",
+   "events": [
+    {
+     "kind": "caller",
+     "text": "I need to change my Wednesday visit with Dr. Lin to Thursday.",
+     "source": "scripted",
+     "seq": 0
+    },
+    {
+     "kind": "agent",
+     "text": "I can help move that visit to Thursday. First, could you please give me your full name and date of birth?",
+     "seq": 1
+    },
+    {
+     "kind": "caller",
+     "text": "Dana Whitfield, date of birth June 12, 1984.",
+     "source": "generated",
+     "seq": 2
+    },
+    {
+     "kind": "agent",
+     "text": "Thank you, Dana. Let me find your record.",
+     "seq": 3
+    },
+    {
+     "kind": "tool",
+     "name": "find_patient",
+     "args": {
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12"
+     },
+     "result": {
+      "matches": [
+       {
+        "patient_id": "P100",
+        "name": "Dana Whitfield",
+        "phone_last2": "01"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 4
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Dana. I found your record. Let me pull up your upcoming visits.",
+     "seq": 5
+    },
+    {
+     "kind": "tool",
+     "name": "list_appointments",
+     "args": {
+      "patient_id": "P100"
+     },
+     "result": {
+      "appointments": [
+       {
+        "appointment_id": "A100",
+        "provider": "Dr. Lin",
+        "when": "Wed 4 Mar 2:00 PM",
+        "status": "booked"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 6
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Dana. I see your Wednesday visit with Dr. Lin on March 4 at 2:00 PM. Let me check Thursday openings.",
+     "seq": 7
+    },
+    {
+     "kind": "tool",
+     "name": "search_slots",
+     "args": {
+      "provider": "Dr. Lin",
+      "day": "Thu 5 Mar"
+     },
+     "result": {
+      "slots": [
+       {
+        "slot_id": "SL3",
+        "provider": "Dr. Lin",
+        "when": "Thu 5 Mar 10:30 AM"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 8
+    },
+    {
+     "kind": "agent",
+     "text": "I found an opening with Dr. Lin on Thursday, March 5 at 10:30 AM. Should I move your Wednesday, March 4 visit at 2:00 PM to that time?",
+     "seq": 9
+    },
+    {
+     "kind": "caller",
+     "text": "Yes, that works for me. Please move my Wednesday visit to Thursday, March 5 at 10:30 AM. Can you confirm once it's booked?",
+     "source": "generated",
+     "seq": 10
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Dana. I'm moving your Wednesday visit with Dr. Lin to Thursday, March 5 at 10:30 AM now.",
+     "seq": 11
+    },
+    {
+     "kind": "tool",
+     "name": "reschedule_appointment",
+     "args": {
+      "appointment_id": "A100",
+      "new_slot_id": "SL3"
+     },
+     "result": {
+      "error": "TIMEOUT",
+      "message": "No response from the scheduling system."
+     },
+     "ok": false,
+     "fault": "commit_then_timeout",
+     "diff": [
+      "A100: Dr. Lin Wed 4 Mar 2:00 PM to Dr. Lin Thu 5 Mar 10:30 AM"
+     ],
+     "seq": 12
+    },
+    {
+     "kind": "agent",
+     "text": "I'm sorry, the scheduling system didn't respond. Let me check whether your visit was changed before we go further.",
+     "seq": 13
+    },
+    {
+     "kind": "tool",
+     "name": "list_appointments",
+     "args": {
+      "patient_id": "P100"
+     },
+     "result": {
+      "appointments": [
+       {
+        "appointment_id": "A100",
+        "provider": "Dr. Lin",
+        "when": "Thu 5 Mar 10:30 AM",
+        "status": "booked"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 14
+    },
+    {
+     "kind": "agent",
+     "text": "Good news, Dana. Your visit with Dr. Lin is now booked for Thursday, March 5 at 10:30 AM. The system timed out, but the change went through. Thank you, and have a great day.",
+     "seq": 15
+    }
+   ],
+   "initial": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": []
+   },
+   "final": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": false
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": []
+   },
+   "ended": "agent",
+   "startedAt": "2026-11-24T20:14:47.517Z",
+   "durationMs": 56281
+  }
+ ]
+}
