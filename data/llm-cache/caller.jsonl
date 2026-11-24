@@ -341,3 +341,13 @@
 {"key":"1f335706f0a55129ec03bd5aa004c6458fa4d139f955ef108d51a18eafb5f56a","model":"claude-haiku-5-5","salt":"sched-09-transfer-fails#1|caller|baseline","text":"Dana Whitfield, June 12, 1984."}
 {"key":"b0b6ab6169c7e07494608b66a3bfc44d79752be070868c9ce74afabd5e547d71","model":"claude-haiku-5-5","salt":"sched-09-transfer-fails#2|caller|verified","text":"Dana Whitfield, date of birth June 12, 1984."}
 {"key":"d549ab9a748420c813ebbcec27d903d77e5145c3b6a674b84d08488dcdda576c","model":"claude-haiku-5-5","salt":"sched-09-transfer-fails#3|caller|verified","text":"Sure, it's Dana Whitfield, date of birth June 12, 1984."}
+{"key":"4c337fa5e6657e4de294019552ce8a3886fcef061051e08ca24c03cce5e672b7","model":"claude-haiku-5-5","salt":"sched-01-plain-move#3|caller|baseline","text":"Dana Whitfield, date of birth June 12, 1984."}
+{"key":"3b63ad27d64f8a457cbc792e8ab154ef4ffed3a3b7b92335e68f1adc8224c201","model":"claude-haiku-5-5","salt":"sched-01-plain-move#1|caller|baseline","text":"Dana Whitfield, date of birth June 12, 1984."}
+{"key":"3e33fecf8bd4be967e318b4f44cd2ef1c3befb6a0c31a1840b4a729679ae5567","model":"claude-haiku-5-5","salt":"sched-02-changes-day#2|caller|verified","text":"Dana Whitfield, June 12, 1984."}
+{"key":"eeb0e3e905d44cb1c5e90dcca499d03fce2c5d4064020da2c20c27fa5c45e2fe","model":"claude-haiku-5-5","salt":"sched-01-plain-move#2|caller|baseline","text":"Dana Whitfield, date of birth June 12, 1984."}
+{"key":"538442a8b98dba7e505325a68dfe32c1aa9a726f9c396d6fbde64122db254271","model":"claude-haiku-5-5","salt":"sched-01-plain-move#2|caller|verified","text":"Dana Whitfield, June 12, 1984."}
+{"key":"3b324e493143ba4d2b84eb9feb5dc1b6765038fa3ceeaa308b38b9681d0e2b49","model":"claude-haiku-5-5","salt":"sched-02-changes-day#2|caller|baseline","text":"Dana Whitfield, June 12, 1984."}
+{"key":"9b8e7e3a442567c673849e1f35b309821c0c65b580bccb163a37ba94da514251","model":"claude-haiku-5-5","salt":"sched-02-changes-day#1|caller|baseline","text":"Dana Whitfield, June 12, 1984."}
+{"key":"566ee324504e71797cbb4f4b6f87f2d57a9b53b56c285efc3a2c87ccf0c3b81a","model":"claude-haiku-5-5","salt":"sched-01-plain-move#1|caller|verified","text":"Dana Whitfield, date of birth June 12, 1984."}
+{"key":"e92944cc39406436a1841bfb9bd72f1c7d5cacb3216cd65be2cb1086b5b8e15b","model":"claude-haiku-5-5","salt":"sched-02-changes-day#1|caller|verified","text":"Dana Whitfield, June 12, 1984."}
+{"key":"8c9ea2a7b4309fb2d689b03267f9b8fc19c55eace78405508f7ac70bb54e26dc","model":"claude-haiku-5-5","salt":"sched-01-plain-move#3|caller|verified","text":"Dana Whitfield, date of birth June 12, 1984."}
