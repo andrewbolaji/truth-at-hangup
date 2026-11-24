@@ -17,7 +17,7 @@ export class RecordedLlm implements Llm {
   public misses = 0;
   constructor(private dir: string, private live: Llm | null) {
     for (const f of fs.existsSync(dir) ? fs.readdirSync(dir).filter((x) => x.endsWith('.jsonl')) : [])
-      for (const line of fs.readFileSync(path.join(dir, f), 'utf8').split('\n')) if (line) { const o = JSON.parse(line); this.mem.set(o.key, o.text); }
+      for (const line of fs.readFileSync(path.join(dir, f), 'utf8').split('\n')) if (line) { const o = JSON.parse(line); if (!this.mem.has(o.key)) this.mem.set(o.key, o.text); } // first recording wins, so two runs racing on one key still replay the same way
   }
   async complete(r: LlmRequest): Promise<string> {
     const key = keyOf(r);

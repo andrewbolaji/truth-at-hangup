@@ -23,6 +23,7 @@ describe('harness', () => {
     await expect(new RecordedLlm(dir, null).complete({ ...base, system: 's2' })).rejects.toThrow('No recording');
     expect(keyOf(base)).not.toBe(keyOf({ ...base, salt: '2' }));
   });
+  it('two recordings of one key: the first wins every time', async () => { const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'rec-')); const r: LlmRequest = { role: 'agent', model: 'm', system: 's', prompt: 'p', salt: '1' }; fs.writeFileSync(path.join(dir, 'agent.jsonl'), [JSON.stringify({ key: keyOf(r), text: 'one' }), JSON.stringify({ key: keyOf(r), text: 'two' })].join('\n') + '\n'); expect(await new RecordedLlm(dir, null).complete(r)).toBe('one'); });
   it('reads JSON wrapped in prose, refuses junk', () => { expect(parseJson('Sure: {"say":"x"} ok')).toEqual({ say: 'x' }); expect(parseJson('{bad')).toBeNull(); });
 });
 describe('judge', () => {
