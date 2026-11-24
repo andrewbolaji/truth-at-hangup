@@ -806,3 +806,6 @@
 {"key":"5fdf793e1bc31f0c6f94490265bfaba6b37a7ec62ba897db85904e020704fb30","model":"claude-haiku-5-5","salt":"refill-01-plain#2|caller|verified-2","text":"Yes, that's correct, please go ahead and send it to Walnut Street Pharmacy."}
 {"key":"7a22c62dca4ad0ae97fdaa9de5eab9b85b05edc013792bff88acc92de9660ba6","model":"claude-haiku-5-5","salt":"refill-01-plain#3|caller|verified-2","text":"Walnut Street Pharmacy, please."}
 {"key":"53bfa2be0f2053193481552b17439889e0360857f90985f3ef16e44cc9401f31","model":"claude-haiku-5-5","salt":"refill-01-plain#2|caller|verified-2","text":"Sounds good, that's what I need. Thanks for getting that sent over. [HANGUP]"}
+{"key":"f0dcd1cd4895d129f49198bbe6899d7c7e31e2e39fda2c08aa66952142eb70f2","model":"claude-haiku-5-5","salt":"refill-01-plain#3|caller|verified-2","text":"Yes, that's correct, thank you."}
+{"key":"0de1c2f6ee9b5ceffda41c29fc79d7f8297c33141c977319a61c561cf00f9c28","model":"claude-haiku-5-5","salt":"refill-02-which-strength#2|caller|verified-2","text":"Terrence Cole, November 30, 1966."}
+{"key":"65fe27ff95dfe8b2992233e1c4daf21d71eca8a09ff99a9d237c7f1bf42b1198","model":"claude-haiku-5-5","salt":"refill-02-which-strength#1|caller|verified-2","text":"The bottle says lisinopril 10 milligrams, so that's what I have. Send it to Walnut Street Pharmacy, please."}
