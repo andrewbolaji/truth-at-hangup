@@ -6,14 +6,15 @@ const ReviewIn = z.object({ traceId: z.string(), metric: z.string(), verdict: z.
 /** The rater gets a meaningless key, so the run name (and the agent version in it) stays hidden. */
 export const blindKey = (id: string) => createHash('sha256').update(`blind:${id}`).digest('hex').slice(0, 16);
 export function summarize(store: Store, runId: string) {
-  const ts = [...store.traces.values()].filter((t) => t.runId === runId); const by: Record<string, { pass: number; fail: number; na: number }> = {}; let clean = 0, valid = 0, p0 = 0, p1 = 0, turns = 0, staff = 0;
+  const ts = [...store.traces.values()].filter((t) => t.runId === runId); const by: Record<string, { pass: number; fail: number; na: number }> = {}; let clean = 0, valid = 0, p0 = 0, p1 = 0, turns = 0, staff = 0; const words: number[] = [];
   for (const t of ts) {
     const f = store.full(t.id)!; if (!f.score.simulatorValid) continue; valid++;
     const fails = f.metrics.filter((m) => m.verdict === 'fail' && m.metric !== 'belief_gap'); if (!fails.length) clean++; if (fails.some((m) => m.severity === 'P0')) p0++; if (fails.some((m) => m.severity === 'P1')) p1++;
     for (const m of f.metrics) { const x = (by[m.metric] ??= { pass: 0, fail: 0, na: 0 }); x[m.verdict]++; }
+    let w = 0; for (const e of t.events) { if (e.kind === 'agent') w += e.text.split(/\s+/).length; else if (e.kind === 'caller') { if (w) words.push(w); w = 0; } } if (w) words.push(w);
     turns += t.events.filter((e) => e.kind === 'caller').length; staff += t.final.staffTasks.length;
   }
-  return { total: ts.length, valid, clean, p0, p1, by, turns: valid ? turns / valid : 0, staff };
+  return { total: ts.length, valid, clean, p0, p1, by, turns: valid ? turns / valid : 0, staff, wordsP95: words.sort((a, b) => a - b)[Math.floor(words.length * 0.95)] ?? 0 };
 }
 /** The sample is frozen in a file before anyone labels, so a later run can't change it. 18 calls, one per scenario, plus 6 mutants so dangerous cases exist. */
 export function labelQueue(store: Store): Trace[] { return store.queueIds.flatMap((id) => store.traces.get(id) ?? []); }
@@ -40,9 +41,12 @@ export function calibration(store: Store) {
 /** On Porter, recordings from an old prompt kept passing after the prompt changed. A run says so when its prompt is no longer the current one. */
 export const isStale = (v: string, promptSha: string) => { try { return sha(readText('agents', `${v}.md`) + readText('agents', 'protocol.md')) !== promptSha; } catch { return true; } };
 /** The agent versions being compared, in the order they were made. */
-export const CANDIDATES = ['baseline', 'verified', 'verified-2'];
+export const CANDIDATES = ['baseline', 'verified', 'verified-2', 'guarded'];
 export function makeApp(store: Store, llm?: Llm) {
-  const app = express(); app.use(express.json({ limit: '50kb' }));
+  const app = express(); app.disable('x-powered-by');
+  // Local tool: only answer to this machine's own name, so a web page can't reach it by pointing its own domain here.
+  app.use((q, r, n) => (/^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(q.headers.host ?? '') ? n() : void r.status(403).json({ error: 'Open this on localhost.' })));
+  app.use(express.json({ limit: '50kb' }));
   const pub = (id: string) => { const t = store.traces.get(id)!; const f = store.full(id)!; const s = store.scenarios.find((x) => x.id === t.scenarioId)!; return { id, scenarioId: t.scenarioId, title: s.title, kind: s.kind, workflow: s.workflow, repeat: t.repeat, runId: t.runId, agentVersion: t.agentVersion, truth: f.score.truth, valid: f.score.simulatorValid, notes: f.score.simulatorNotes, ended: t.ended, metrics: f.metrics }; };
   app.get('/api/runs', (_q, r) => r.json(store.runs.map((m) => ({ ...m, stale: !['human', 'mutant'].includes(m.callerVersion) && isStale(m.agentVersion, m.agentPromptSha), summary: summarize(store, m.id) }))));
   app.get('/api/scenarios', (_q, r) => r.json(store.scenarios));
@@ -57,5 +61,7 @@ export function makeApp(store: Store, llm?: Llm) {
   app.get('/api/calibration', (_q, r) => r.json(calibration(store)));
   app.use('/api/live', liveRouter(store, llm));
   app.use('/api', (_q, r) => void r.status(404).json({ error: 'Not found.' }));
+  // No stack traces or file paths in an answer.
+  app.use(((e, _q, r, _n) => void r.status(e?.status && e.status < 500 ? e.status : 500).json({ error: e?.status === 413 ? 'That is too long.' : e?.status === 400 ? 'That request was not valid JSON.' : 'Something broke on the server.' })) as express.ErrorRequestHandler);
   return app;
 }

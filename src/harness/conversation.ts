@@ -8,14 +8,14 @@ const MAX_TOOL_STEPS = 6;
 type Act = { say?: string | null; tool?: { name: string; args?: Record<string, unknown> } | null; end?: boolean };
 type NewEvent = TraceEvent extends infer E ? (E extends TraceEvent ? Omit<E, 'seq'> : never) : never;
 
-export interface RunOpts { llm: Llm; model: string; agentPrompt: string; protocol: string; callerPrompt: string; agentVersion: string; runId: string; repeat: number; callerVersion: string; fresh?: string; now?: () => number }
+export interface RunOpts { llm: Llm; model: string; agentPrompt: string; protocol: string; callerPrompt: string; agentVersion: string; runId: string; repeat: number; callerVersion: string; fresh?: string; guards?: boolean; now?: () => number }
 
 /** One live call: the clinic, the transcript and the agent loop. Simulated and human-played calls share it, so they are scored the same way. */
 export class CallSession {
   readonly world = seedWorld(); readonly initial = structuredClone(this.world); readonly events: TraceEvent[] = [];
   private ehr: Ehr; private system: string; private salt: string;
   constructor(public sc: Scenario, private o: RunOpts, salt?: string) {
-    this.ehr = new Ehr(this.world, sc.faults); this.salt = salt ?? `${sc.id}#${o.repeat}${o.fresh ? `@${o.fresh}` : ''}`;
+    this.ehr = new Ehr(this.world, sc.faults, o.guards); this.salt = salt ?? `${sc.id}#${o.repeat}${o.fresh ? `@${o.fresh}` : ''}`;
     this.system = o.agentPrompt + o.protocol.replace('{{TOOLS}}', TOOLS.map((t) => `${t.name}(${t.args}): ${t.doc}`).join('\n'));
   }
   push(e: NewEvent) { this.events.push({ ...e, seq: this.events.length } as TraceEvent); }
@@ -33,7 +33,11 @@ export class CallSession {
         if (act.tool.name === 'transfer_call' && r.ok) return 'transfer';
         continue;
       }
-      if (act.end) return 'agent';
+      if (act.end) {
+        // Call-controller guard: after a change, the caller gets the last word before the line closes.
+        const w = this.events.findLastIndex((e) => e.kind === 'tool' && e.diff.length > 0); const c = this.events.findLastIndex((e) => e.kind === 'caller');
+        if (!(this.o.guards && w > c && spoke)) return 'agent';
+      }
       break;
     }
     if (!spoke) { this.push({ kind: 'system', text: 'Agent said nothing this turn (dead air).' }); return 'error'; }

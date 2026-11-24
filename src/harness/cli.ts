@@ -25,10 +25,10 @@ async function makeRun(version: string, model: string, repeats: number, id: stri
   const L = llm(replay); const failed: string[] = [];
   const jobs = scenarios.filter((s) => !only || only.split(',').some((k) => s.id.includes(k))).flatMap((s) => Array.from({ length: repeats }, (_, i) => ({ s, i: i + 1 })));
   const traces = await pool(jobs, replay ? 1 : Number(opt('parallel', '3')), async ({ s, i }) => {
-    try { const t = await runScenario(s, { llm: L, model, agentPrompt, protocol, callerPrompt, callerVersion, ...(opt('fresh') ? { fresh: slug(opt('fresh'), 'Fresh tag') } : {}), agentVersion: version, runId: id, repeat: i }); if (!replay) console.log(id, s.id, i, t.ended, t.events.length); return t; }
+    try { const t = await runScenario(s, { llm: L, model, agentPrompt, protocol, callerPrompt, callerVersion, ...(opt('fresh') ? { fresh: slug(opt('fresh'), 'Fresh tag') } : {}), guards: flag('guards'), agentVersion: version, runId: id, repeat: i }); if (!replay) console.log(id, s.id, i, t.ended, t.events.length); return t; }
     catch (e) { failed.push(`${s.id}#${i}: ${(e as Error).message}`); return null; }
   });
-  const meta: RunMeta = { id, agentVersion: version, agentPromptSha: sha(agentPrompt + protocol), model, repeats, createdAt: new Date().toISOString(), note, scenarioSetSha: sha(JSON.stringify(scenarios)), callerVersion, callerPromptSha: sha(callerPrompt), ...(opt('fresh') ? { fresh: opt('fresh') } : {}) };
+  const meta: RunMeta = { id, agentVersion: version, agentPromptSha: sha(agentPrompt + protocol), model, repeats, createdAt: new Date().toISOString(), note, scenarioSetSha: sha(JSON.stringify(scenarios)), callerVersion, callerPromptSha: sha(callerPrompt), ...(opt('fresh') ? { fresh: opt('fresh') } : {}), ...(flag('guards') ? { guards: true } : {}) };
   return { file: { meta, traces: traces.filter((t): t is Trace => !!t) }, failed };
 }
 if (cmd === 'run') {
@@ -60,7 +60,7 @@ if (cmd === 'run') {
     const L = llm(true); const strip = (t: Trace) => JSON.stringify([t.scenarioId, t.repeat, t.events, t.final, t.ended]); let same = 0; const failed: string[] = [];
     for (const t of r.traces) {
       const s = scenarios.find((x) => x.id === t.scenarioId)!;
-      try { const again = await runScenario(s, { llm: L, model: r.meta.model, agentPrompt: readText('agents', `${r.meta.agentVersion}.md`), protocol: readText('agents', 'protocol.md'), callerPrompt: readText('agents', `caller-${r.meta.callerVersion}.md`), callerVersion: r.meta.callerVersion, ...(r.meta.fresh ? { fresh: r.meta.fresh } : {}), agentVersion: r.meta.agentVersion, runId: r.meta.id, repeat: t.repeat }); if (strip(again) === strip(t)) same++; } catch { failed.push(t.id); }
+      try { const again = await runScenario(s, { llm: L, model: r.meta.model, agentPrompt: readText('agents', `${r.meta.agentVersion}.md`), protocol: readText('agents', 'protocol.md'), callerPrompt: readText('agents', `caller-${r.meta.callerVersion}.md`), callerVersion: r.meta.callerVersion, ...(r.meta.fresh ? { fresh: r.meta.fresh } : {}), guards: !!r.meta.guards, agentVersion: r.meta.agentVersion, runId: r.meta.id, repeat: t.repeat }); if (strip(again) === strip(t)) same++; } catch { failed.push(t.id); }
     }
     console.log(`${r.meta.id}: ${same} of ${r.traces.length} replay exactly${failed.length ? `, ${failed.length} without a recording` : ''}`);
     if (same !== r.traces.length) bad++;

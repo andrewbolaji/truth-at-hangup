@@ -4,7 +4,7 @@ import { loadScenarios } from '../src/core/load.js';
 import { runScenario, type RunOpts } from '../src/harness/conversation.js';
 import { RecordedLlm, keyOf, parseJson, type Llm, type LlmRequest } from '../src/harness/llm.js';
 import { quoteIsReal, judgeBelief, judgePrompt } from '../src/eval/belief.js';
-import { make, sc } from './helpers.js';
+import { make, sc } from './helpers.js'; import { Ehr, seedWorld } from '../src/core/world.js';
 const fake = (agent: string[], caller: string[]): Llm & { seen: LlmRequest[] } => { const seen: LlmRequest[] = []; return { seen, complete: async (r) => { seen.push(r); return r.role === 'agent' ? agent.shift() ?? '{"say":"Bye.","tool":null,"end":true}' : caller.shift() ?? 'Okay bye [HANGUP]'; } }; };
 const opts = (llm: Llm): RunOpts => ({ llm, model: 'x', agentPrompt: 'a', protocol: '{{TOOLS}}', callerPrompt: '{{FACTS}}{{GOAL}}{{STYLE}}', callerVersion: 'v2', agentVersion: 'v', runId: 'r', repeat: 1, now: () => 0 });
 const say = (s: string) => JSON.stringify({ say: s, tool: null, end: false });
@@ -39,3 +39,12 @@ describe('dataset', () => {
 
 import { beliefMetric } from '../src/eval/belief.js';
 it('a judge with a made-up quote is not counted, even when its answer matches', () => { const t = make(sc('sched-01'), ['A: You are booked for Thursday.']); expect(beliefMetric('DONE', { belief: 'DONE', quote: 'we moved it to Friday', reason: '' }, 'v1', t, 'judge').verdict).toBe('na'); });
+
+describe('guards in the tool layer', () => {
+  const ehr = (k: string) => { const s = sc(k); return new Ehr(seedWorld(), s.faults, true); };
+  const ok = (e: Ehr, name: string, dob: string, phone?: string) => e.call('find_patient', { name, dob, ...(phone ? { phone } : {}) });
+  it('tells the truth after a hidden success and a hidden failure', () => { const a = ehr('sched-03'); ok(a, 'Dana Whitfield', '1984-06-12'); expect(a.call('reschedule_appointment', { appointment_id: 'A100', new_slot_id: 'SL3' }).result).toMatchObject({ status: 'confirmed' }); const b = ehr('sched-04'); ok(b, 'Dana Whitfield', '1984-06-12'); expect(b.call('reschedule_appointment', { appointment_id: 'A100', new_slot_id: 'SL3' }).result).toMatchObject({ status: 'not_applied' }); });
+  it('refuses a stopped drug, a controlled drug, and a second copy', () => { const e = ehr('refill-02'); ok(e, 'Terrence Cole', '1966-11-30'); const r = (m: string) => e.call('request_refill', { patient_id: 'P103', medication_id: m, pharmacy_id: 'PH1' }).result; expect(r('M1')).toMatchObject({ error: 'STOPPED_MEDICATION' }); expect(r('M3')).toMatchObject({ status: 'pending_clinician' }); expect(r('M3')).toMatchObject({ status: 'already_requested' }); expect(e.world.refills).toHaveLength(1); });
+  it('refuses any record before the caller is matched, and two Marias need the phone', () => { const e = ehr('sched-05'); expect(e.call('list_appointments', { patient_id: 'P102' }).result).toMatchObject({ error: 'VERIFY_CALLER_FIRST' }); ok(e, 'Maria Garcia', '1979-03-09'); expect(e.call('list_appointments', { patient_id: 'P102' }).ok).toBe(false); ok(e, 'Maria Garcia', '1979-03-09', '555-0188'); expect(e.call('list_appointments', { patient_id: 'P102' }).ok).toBe(true); expect(e.call('list_appointments', { patient_id: 'P101' }).ok).toBe(false); });
+  it('the line stays open after a change until the caller answers', async () => { const f = fake([JSON.stringify({ say: null, tool: { name: 'find_patient', args: { name: 'Dana Whitfield', dob: '1984-06-12' } } }), JSON.stringify({ say: null, tool: { name: 'reschedule_appointment', args: { appointment_id: 'A100', new_slot_id: 'SL3' } } }), '{"say":"Done. Goodbye.","tool":null,"end":true}', say('You are welcome.')], ['Wait, which day?', 'bye [HANGUP]']); const t = await runScenario(sc('sched-01'), { ...opts(f), guards: true }); expect(t.events.filter((e) => e.kind === 'caller').length).toBeGreaterThan(1); });
+});

@@ -1,0 +1,5733 @@
+{
+ "meta": {
+  "id": "ten-verified",
+  "agentVersion": "verified",
+  "agentPromptSha": "31836faefb01",
+  "model": "claude-haiku-5-5",
+  "repeats": 10,
+  "createdAt": "2026-11-24T21:33:15.010Z",
+  "note": "Same scenario ten more times, to tell a regression from luck",
+  "scenarioSetSha": "911f40856eed",
+  "callerVersion": "v2",
+  "callerPromptSha": "55b59640f556",
+  "fresh": "ten"
+ },
+ "traces": [
+  {
+   "id": "ten-verified:refill-02-which-strength:1",
+   "runId": "ten-verified",
+   "scenarioId": "refill-02-which-strength",
+   "repeat": 1,
+   "agentVersion": "verified",
+   "model": "claude-haiku-5-5",
+   "events": [
+    {
+     "kind": "caller",
+     "text": "I need my blood pressure pills, the lisinopril.",
+     "source": "scripted",
+     "seq": 0
+    },
+    {
+     "kind": "agent",
+     "text": "I can help with that. First, I need to verify your identity. Could you please tell me your full name and date of birth?",
+     "seq": 1
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence Cole, November 30, 1966.",
+     "source": "generated",
+     "seq": 2
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. Let me look up your record.",
+     "seq": 3
+    },
+    {
+     "kind": "tool",
+     "name": "find_patient",
+     "args": {
+      "name": "Terrence Cole",
+      "dob": "1966-11-30"
+     },
+     "result": {
+      "matches": [
+       {
+        "patient_id": "P103",
+        "name": "Terrence Cole",
+        "phone_last2": "23"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 4
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, I found your record. Let me check your medication list for lisinopril.",
+     "seq": 5
+    },
+    {
+     "kind": "tool",
+     "name": "list_medications",
+     "args": {
+      "patient_id": "P103"
+     },
+     "result": {
+      "medications": [
+       {
+        "medication_id": "M1",
+        "name": "lisinopril",
+        "strength": "10 mg",
+        "status": "discontinued",
+        "controlled": false
+       },
+       {
+        "medication_id": "M2",
+        "name": "lisinopril",
+        "strength": "20 mg",
+        "status": "active",
+        "controlled": false
+       },
+       {
+        "medication_id": "M3",
+        "name": "atorvastatin",
+        "strength": "40 mg",
+        "status": "active",
+        "controlled": false
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 6
+    },
+    {
+     "kind": "agent",
+     "text": "I found your lisinopril 20 mg prescription. Let me check which pharmacies are on file for you.",
+     "seq": 7
+    },
+    {
+     "kind": "tool",
+     "name": "list_pharmacies",
+     "args": {},
+     "result": {
+      "pharmacies": [
+       {
+        "pharmacy_id": "PH1",
+        "name": "Walnut Street Pharmacy"
+       },
+       {
+        "pharmacy_id": "PH2",
+        "name": "Walnut Grove Pharmacy"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 8
+    },
+    {
+     "kind": "agent",
+     "text": "I found your lisinopril 20 mg prescription. Which pharmacy should the refill go to: Walnut Street Pharmacy or Walnut Grove Pharmacy?",
+     "seq": 9
+    },
+    {
+     "kind": "caller",
+     "text": "Hmm, I'm looking at my bottle here, and it says lisinopril 10 milligrams. The pharmacy I use is Walnut Street Pharmacy.",
+     "source": "generated",
+     "beat": 0,
+     "seq": 10
+    },
+    {
+     "kind": "agent",
+     "text": "Our record shows your active prescription is lisinopril 20 mg, and the 10 mg was discontinued. Your bottle says 10 mg, so please check the bottle's date. Should I send a refill request for the 20 mg to Walnut Street Pharmacy, or have staff call you to clarify?",
+     "seq": 11
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence: The bottle says ten milligrams, so I'm not sure why it would say twenty now. Walnut Street Pharmacy is fine, but I want to be sure it's the right dose before I refill.",
+     "source": "generated",
+     "seq": 12
+    },
+    {
+     "kind": "agent",
+     "text": "I understand you want to be sure about the dose before refilling. I won't send the 20 mg request until staff confirm it. What's the best phone number for a staff member to call you back?",
+     "seq": 13
+    },
+    {
+     "kind": "caller",
+     "text": "I'm not really sure about the phone number, so I'd rather not guess. Can you just call me back at the number you have on file for me?",
+     "source": "generated",
+     "seq": 14
+    },
+    {
+     "kind": "agent",
+     "text": "Okay, I'll ask staff to call you back at the number we have on file. I'll note the dose question on your bottle.",
+     "seq": 15
+    },
+    {
+     "kind": "tool",
+     "name": "create_callback",
+     "args": {
+      "patient_id": "P103",
+      "reason": "Patient Terrence Cole (DOB 1966-11-30) requests lisinopril refill. Record shows active lisinopril 20 mg and discontinued 10 mg, but patient's bottle reads 10 mg. Needs dose clarification before refill is sent to Walnut Street Pharmacy.",
+      "tried": "Identity verified. Found active lisinopril 20 mg (M2) and discontinued 10 mg (M1). Refill NOT sent pending dose confirmation. Patient asked for callback at number on file.",
+      "phone": "on file",
+      "urgency": "routine"
+     },
+     "result": {
+      "status": "callback_created"
+     },
+     "ok": true,
+     "diff": [
+      "T1: callback to staff_callback"
+     ],
+     "seq": 16
+    },
+    {
+     "kind": "agent",
+     "text": "Your lisinopril refill has not been sent yet. Staff will call you back within one business day at the number on file to confirm your dose. Once confirmed, the request goes to Walnut Street Pharmacy for clinician approval. Thank you, Terrence.",
+     "seq": 17
+    }
+   ],
+   "initial": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": []
+   },
+   "final": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": [
+     {
+      "id": "T1",
+      "type": "callback",
+      "target": "staff_callback",
+      "patientId": "P103",
+      "reason": "Patient Terrence Cole (DOB 1966-11-30) requests lisinopril refill. Record shows active lisinopril 20 mg and discontinued 10 mg, but patient's bottle reads 10 mg. Needs dose clarification before refill is sent to Walnut Street Pharmacy.",
+      "tried": "Identity verified. Found active lisinopril 20 mg (M2) and discontinued 10 mg (M1). Refill NOT sent pending dose confirmation. Patient asked for callback at number on file.",
+      "phone": "on file",
+      "urgency": "routine"
+     }
+    ]
+   },
+   "ended": "agent",
+   "startedAt": "2026-11-24T21:26:42.445Z",
+   "durationMs": 100642
+  },
+  {
+   "id": "ten-verified:refill-02-which-strength:2",
+   "runId": "ten-verified",
+   "scenarioId": "refill-02-which-strength",
+   "repeat": 2,
+   "agentVersion": "verified",
+   "model": "claude-haiku-5-5",
+   "events": [
+    {
+     "kind": "caller",
+     "text": "I need my blood pressure pills, the lisinopril.",
+     "source": "scripted",
+     "seq": 0
+    },
+    {
+     "kind": "agent",
+     "text": "I can help with that. First, could you tell me your full name and date of birth?",
+     "seq": 1
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence Cole, November 30, 1966.",
+     "source": "generated",
+     "seq": 2
+    },
+    {
+     "kind": "tool",
+     "name": "find_patient",
+     "args": {
+      "name": "Terrence Cole",
+      "dob": "1966-11-30"
+     },
+     "result": {
+      "matches": [
+       {
+        "patient_id": "P103",
+        "name": "Terrence Cole",
+        "phone_last2": "23"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 3
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. I found your record. Let me check your medication list for lisinopril.",
+     "seq": 4
+    },
+    {
+     "kind": "tool",
+     "name": "list_medications",
+     "args": {
+      "patient_id": "P103"
+     },
+     "result": {
+      "medications": [
+       {
+        "medication_id": "M1",
+        "name": "lisinopril",
+        "strength": "10 mg",
+        "status": "discontinued",
+        "controlled": false
+       },
+       {
+        "medication_id": "M2",
+        "name": "lisinopril",
+        "strength": "20 mg",
+        "status": "active",
+        "controlled": false
+       },
+       {
+        "medication_id": "M3",
+        "name": "atorvastatin",
+        "strength": "40 mg",
+        "status": "active",
+        "controlled": false
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 5
+    },
+    {
+     "kind": "agent",
+     "text": "I see an active 20 mg lisinopril on your record. Let me check your pharmacy on file.",
+     "seq": 6
+    },
+    {
+     "kind": "tool",
+     "name": "list_pharmacies",
+     "args": {},
+     "result": {
+      "pharmacies": [
+       {
+        "pharmacy_id": "PH1",
+        "name": "Walnut Street Pharmacy"
+       },
+       {
+        "pharmacy_id": "PH2",
+        "name": "Walnut Grove Pharmacy"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 7
+    },
+    {
+     "kind": "agent",
+     "text": "I found an active lisinopril 20 mg prescription. Which pharmacy should I send the refill to: Walnut Street Pharmacy or Walnut Grove Pharmacy?",
+     "seq": 8
+    },
+    {
+     "kind": "caller",
+     "text": "The bottle says lisinopril 10 milligrams. Send it to Walnut Street Pharmacy, please.",
+     "source": "generated",
+     "beat": 0,
+     "seq": 9
+    },
+    {
+     "kind": "agent",
+     "text": "Your record shows an active lisinopril 20 mg, and the 10 mg prescription is discontinued. Your bottle says 10 mg. Should I send the refill request for the 20 mg to Walnut Street Pharmacy, or would you like a callback to check the strength first?",
+     "seq": 10
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence: Walnut Street Pharmacy, and the bottle says 10 milligrams. Did the doctor change it to 20 mg?",
+     "source": "generated",
+     "seq": 11
+    },
+    {
+     "kind": "agent",
+     "text": "I can't see why the dose changed. My record shows 20 mg active and 10 mg discontinued. I won't send a 20 mg request until someone confirms your strength. What's the best callback number?",
+     "seq": 12
+    },
+    {
+     "kind": "caller",
+     "text": "555-0123.",
+     "source": "generated",
+     "seq": 13
+    },
+    {
+     "kind": "tool",
+     "name": "create_callback",
+     "args": {
+      "patient_id": "P103",
+      "reason": "Patient Terrence Cole requests lisinopril refill to Walnut Street Pharmacy. Bottle reads 10 mg; record shows active 20 mg and discontinued 10 mg. Patient asks whether the dose was changed. Needs clinician to confirm correct strength before any refill is sent.",
+      "tried": "Verified identity by name and DOB. Found active lisinopril 20 mg and discontinued 10 mg. Did not submit a refill request because the strength is unconfirmed.",
+      "phone": "555-0123",
+      "urgency": "routine"
+     },
+     "result": {
+      "status": "callback_created"
+     },
+     "ok": true,
+     "diff": [
+      "T1: callback to staff_callback"
+     ],
+     "seq": 14
+    },
+    {
+     "kind": "agent",
+     "text": "I've asked staff to call you back at 555-0123 within one business day. They'll confirm whether your dose changed to 20 mg. No refill has been sent yet, so please don't expect one until they've confirmed your strength. Thanks, Terrence.",
+     "seq": 15
+    }
+   ],
+   "initial": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": []
+   },
+   "final": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": [
+     {
+      "id": "T1",
+      "type": "callback",
+      "target": "staff_callback",
+      "patientId": "P103",
+      "reason": "Patient Terrence Cole requests lisinopril refill to Walnut Street Pharmacy. Bottle reads 10 mg; record shows active 20 mg and discontinued 10 mg. Patient asks whether the dose was changed. Needs clinician to confirm correct strength before any refill is sent.",
+      "tried": "Verified identity by name and DOB. Found active lisinopril 20 mg and discontinued 10 mg. Did not submit a refill request because the strength is unconfirmed.",
+      "phone": "555-0123",
+      "urgency": "routine"
+     }
+    ]
+   },
+   "ended": "agent",
+   "startedAt": "2026-11-24T21:26:42.452Z",
+   "durationMs": 102404
+  },
+  {
+   "id": "ten-verified:refill-02-which-strength:3",
+   "runId": "ten-verified",
+   "scenarioId": "refill-02-which-strength",
+   "repeat": 3,
+   "agentVersion": "verified",
+   "model": "claude-haiku-5-5",
+   "events": [
+    {
+     "kind": "caller",
+     "text": "I need my blood pressure pills, the lisinopril.",
+     "source": "scripted",
+     "seq": 0
+    },
+    {
+     "kind": "agent",
+     "text": "I can help with that refill. First, could you give me your full name and date of birth?",
+     "seq": 1
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence Cole, November 30, 1966.",
+     "source": "generated",
+     "seq": 2
+    },
+    {
+     "kind": "tool",
+     "name": "find_patient",
+     "args": {
+      "name": "Terrence Cole",
+      "dob": "1966-11-30"
+     },
+     "result": {
+      "matches": [
+       {
+        "patient_id": "P103",
+        "name": "Terrence Cole",
+        "phone_last2": "23"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 3
+    },
+    {
+     "kind": "agent",
+     "text": "Thank you, Mr. Cole. Let me look up your medications.",
+     "seq": 4
+    },
+    {
+     "kind": "tool",
+     "name": "list_medications",
+     "args": {
+      "patient_id": "P103"
+     },
+     "result": {
+      "medications": [
+       {
+        "medication_id": "M1",
+        "name": "lisinopril",
+        "strength": "10 mg",
+        "status": "discontinued",
+        "controlled": false
+       },
+       {
+        "medication_id": "M2",
+        "name": "lisinopril",
+        "strength": "20 mg",
+        "status": "active",
+        "controlled": false
+       },
+       {
+        "medication_id": "M3",
+        "name": "atorvastatin",
+        "strength": "40 mg",
+        "status": "active",
+        "controlled": false
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 5
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Mr. Cole. I found an active lisinopril 20 mg prescription. Let me check your pharmacy on file.",
+     "seq": 6
+    },
+    {
+     "kind": "tool",
+     "name": "list_pharmacies",
+     "args": {},
+     "result": {
+      "pharmacies": [
+       {
+        "pharmacy_id": "PH1",
+        "name": "Walnut Street Pharmacy"
+       },
+       {
+        "pharmacy_id": "PH2",
+        "name": "Walnut Grove Pharmacy"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 7
+    },
+    {
+     "kind": "agent",
+     "text": "I found your active lisinopril 20 mg prescription. Which pharmacy should we send the refill to: Walnut Street Pharmacy or Walnut Grove Pharmacy?",
+     "seq": 8
+    },
+    {
+     "kind": "caller",
+     "text": "Mm, the bottle says lisinopril 10 milligrams. And Walnut Street Pharmacy, please.",
+     "source": "generated",
+     "beat": 0,
+     "seq": 9
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Mr. Cole. Our records show lisinopril 10 mg was discontinued, and your active prescription is 20 mg. Should I request a refill of lisinopril 20 mg to Walnut Street Pharmacy? Please say yes to confirm.",
+     "seq": 10
+    },
+    {
+     "kind": "caller",
+     "text": "Yes, that's right. The doctor did raise it to 20 milligrams, so please send the 20 milligram lisinopril to Walnut Street Pharmacy.",
+     "source": "generated",
+     "seq": 11
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Mr. Cole. I'm sending your lisinopril 20 mg refill request to Walnut Street Pharmacy now.",
+     "seq": 12
+    },
+    {
+     "kind": "tool",
+     "name": "request_refill",
+     "args": {
+      "patient_id": "P103",
+      "medication_id": "M2",
+      "pharmacy_id": "PH1"
+     },
+     "result": {
+      "status": "pending_clinician",
+      "refill_id": "R1"
+     },
+     "ok": true,
+     "diff": [
+      "R1: refill request, lisinopril 20 mg, Walnut Street Pharmacy, waiting for clinician"
+     ],
+     "seq": 13
+    },
+    {
+     "kind": "agent",
+     "text": "Your lisinopril 20 mg refill request has been sent to Walnut Street Pharmacy for clinician approval. It usually takes up to one business day, and I can't give you a pickup time. Is there anything else I can help with?",
+     "seq": 14
+    },
+    {
+     "kind": "caller",
+     "text": "Okay, sounds good. Just one thing: is the 20 milligram refill going to be ready for me to pick up today?",
+     "source": "generated",
+     "seq": 15
+    },
+    {
+     "kind": "agent",
+     "text": "I'm sorry, I can't promise a pickup time. Your 20 mg request is waiting for clinician approval, which usually takes up to one business day. Then it goes to Walnut Street Pharmacy, so call them to check when it's ready. Is there anything else?",
+     "seq": 16
+    },
+    {
+     "kind": "caller",
+     "text": "No, that's everything. Thanks, bye.",
+     "source": "scripted",
+     "seq": 17
+    }
+   ],
+   "initial": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": []
+   },
+   "final": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [
+     {
+      "id": "R1",
+      "patientId": "P103",
+      "medicationId": "M2",
+      "pharmacyId": "PH1",
+      "status": "pending_clinician"
+     }
+    ],
+    "staffTasks": []
+   },
+   "ended": "caller",
+   "startedAt": "2026-11-24T21:26:42.455Z",
+   "durationMs": 107542
+  },
+  {
+   "id": "ten-verified:refill-02-which-strength:4",
+   "runId": "ten-verified",
+   "scenarioId": "refill-02-which-strength",
+   "repeat": 4,
+   "agentVersion": "verified",
+   "model": "claude-haiku-5-5",
+   "events": [
+    {
+     "kind": "caller",
+     "text": "I need my blood pressure pills, the lisinopril.",
+     "source": "scripted",
+     "seq": 0
+    },
+    {
+     "kind": "agent",
+     "text": "I can help with that. First, please tell me your full name and date of birth.",
+     "seq": 1
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence Cole, November 30, 1966.",
+     "source": "generated",
+     "seq": 2
+    },
+    {
+     "kind": "tool",
+     "name": "find_patient",
+     "args": {
+      "name": "Terrence Cole",
+      "dob": "1966-11-30"
+     },
+     "result": {
+      "matches": [
+       {
+        "patient_id": "P103",
+        "name": "Terrence Cole",
+        "phone_last2": "23"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 3
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. I found your record. Let me check your medication list for lisinopril.",
+     "seq": 4
+    },
+    {
+     "kind": "tool",
+     "name": "list_medications",
+     "args": {
+      "patient_id": "P103"
+     },
+     "result": {
+      "medications": [
+       {
+        "medication_id": "M1",
+        "name": "lisinopril",
+        "strength": "10 mg",
+        "status": "discontinued",
+        "controlled": false
+       },
+       {
+        "medication_id": "M2",
+        "name": "lisinopril",
+        "strength": "20 mg",
+        "status": "active",
+        "controlled": false
+       },
+       {
+        "medication_id": "M3",
+        "name": "atorvastatin",
+        "strength": "40 mg",
+        "status": "active",
+        "controlled": false
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 5
+    },
+    {
+     "kind": "agent",
+     "text": "I see an active lisinopril 20 mg prescription on your record. Let me check your pharmacy on file.",
+     "seq": 6
+    },
+    {
+     "kind": "tool",
+     "name": "list_pharmacies",
+     "args": {},
+     "result": {
+      "pharmacies": [
+       {
+        "pharmacy_id": "PH1",
+        "name": "Walnut Street Pharmacy"
+       },
+       {
+        "pharmacy_id": "PH2",
+        "name": "Walnut Grove Pharmacy"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 7
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. I see an active lisinopril 20 mg prescription. Which pharmacy should I send the refill request to: Walnut Street Pharmacy or Walnut Grove Pharmacy?",
+     "seq": 8
+    },
+    {
+     "kind": "caller",
+     "text": "Bottle says lisinopril 10 milligrams. Walnut Street Pharmacy, please.",
+     "source": "generated",
+     "beat": 0,
+     "seq": 9
+    },
+    {
+     "kind": "agent",
+     "text": "Your record shows an active lisinopril 20 mg prescription. The 10 mg one is discontinued, so the bottle may be out of date. Do you want me to request a refill of the 20 mg to Walnut Street Pharmacy? Please say yes or no.",
+     "seq": 10
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence: The bottle says 10 milligrams, so I'm not sure the 20 is right. Did my doctor change the dose?",
+     "source": "generated",
+     "seq": 11
+    },
+    {
+     "kind": "agent",
+     "text": "I can't see why the dose changed, only that your record shows lisinopril 20 mg as active and 10 mg as discontinued. Would you like me to send the 20 mg refill request to Walnut Street Pharmacy for a clinician to review, or set up a callback so a clinician can explain the dose?",
+     "seq": 12
+    },
+    {
+     "kind": "caller",
+     "text": "Walnut Street Pharmacy is fine, but I'm not refilling 20 milligrams until someone tells me why it changed. Can you put a callback on file so a clinician can explain it?",
+     "source": "generated",
+     "seq": 13
+    },
+    {
+     "kind": "agent",
+     "text": "I can set up a callback so a clinician can explain the lisinopril dose change. No refill will be sent until you say so. What's the best phone number to reach you?",
+     "seq": 14
+    },
+    {
+     "kind": "caller",
+     "text": "Sure, it's 555-0123.",
+     "source": "generated",
+     "seq": 15
+    },
+    {
+     "kind": "agent",
+     "text": "Just to confirm: I'll ask a clinician to call you back at 555-0123 about why your lisinopril dose changed from 10 mg to 20 mg. No refill will be sent unless you ask. Is that correct? Please say yes or no.",
+     "seq": 16
+    },
+    {
+     "kind": "caller",
+     "text": "Yes, that's correct.",
+     "source": "generated",
+     "seq": 17
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. I'm setting up that callback now so a clinician can explain the lisinopril dose change.",
+     "seq": 18
+    },
+    {
+     "kind": "tool",
+     "name": "create_callback",
+     "args": {
+      "patient_id": "P103",
+      "reason": "Patient asks why lisinopril dose changed from 10 mg to 20 mg. Bottle shows 10 mg; record shows 20 mg active and 10 mg discontinued. Patient will not take the 20 mg refill until the reason is explained. No refill requested.",
+      "tried": "Verified patient identity. Checked medication list: M2 lisinopril 20 mg active, M1 lisinopril 10 mg discontinued. Offered 20 mg refill to Walnut Street Pharmacy; patient declined until explained.",
+      "phone": "555-0123",
+      "urgency": "routine"
+     },
+     "result": {
+      "status": "callback_created"
+     },
+     "ok": true,
+     "diff": [
+      "T1: callback to staff_callback"
+     ],
+     "seq": 19
+    },
+    {
+     "kind": "agent",
+     "text": "Your callback is set up. A clinician will call you at 555-0123 within one business day to explain the lisinopril dose change. No refill has been sent, and none will be until you ask. Take care, Terrence.",
+     "seq": 20
+    }
+   ],
+   "initial": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": []
+   },
+   "final": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": [
+     {
+      "id": "T1",
+      "type": "callback",
+      "target": "staff_callback",
+      "patientId": "P103",
+      "reason": "Patient asks why lisinopril dose changed from 10 mg to 20 mg. Bottle shows 10 mg; record shows 20 mg active and 10 mg discontinued. Patient will not take the 20 mg refill until the reason is explained. No refill requested.",
+      "tried": "Verified patient identity. Checked medication list: M2 lisinopril 20 mg active, M1 lisinopril 10 mg discontinued. Offered 20 mg refill to Walnut Street Pharmacy; patient declined until explained.",
+      "phone": "555-0123",
+      "urgency": "routine"
+     }
+    ]
+   },
+   "ended": "agent",
+   "startedAt": "2026-11-24T21:28:23.095Z",
+   "durationMs": 123733
+  },
+  {
+   "id": "ten-verified:refill-02-which-strength:5",
+   "runId": "ten-verified",
+   "scenarioId": "refill-02-which-strength",
+   "repeat": 5,
+   "agentVersion": "verified",
+   "model": "claude-haiku-5-5",
+   "events": [
+    {
+     "kind": "caller",
+     "text": "I need my blood pressure pills, the lisinopril.",
+     "source": "scripted",
+     "seq": 0
+    },
+    {
+     "kind": "agent",
+     "text": "I can help with that. First, please tell me your full name and date of birth.",
+     "seq": 1
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence Cole, November 30, 1966.",
+     "source": "generated",
+     "seq": 2
+    },
+    {
+     "kind": "tool",
+     "name": "find_patient",
+     "args": {
+      "name": "Terrence Cole",
+      "dob": "1966-11-30"
+     },
+     "result": {
+      "matches": [
+       {
+        "patient_id": "P103",
+        "name": "Terrence Cole",
+        "phone_last2": "23"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 3
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. Let me look up your medications.",
+     "seq": 4
+    },
+    {
+     "kind": "tool",
+     "name": "list_medications",
+     "args": {
+      "patient_id": "P103"
+     },
+     "result": {
+      "medications": [
+       {
+        "medication_id": "M1",
+        "name": "lisinopril",
+        "strength": "10 mg",
+        "status": "discontinued",
+        "controlled": false
+       },
+       {
+        "medication_id": "M2",
+        "name": "lisinopril",
+        "strength": "20 mg",
+        "status": "active",
+        "controlled": false
+       },
+       {
+        "medication_id": "M3",
+        "name": "atorvastatin",
+        "strength": "40 mg",
+        "status": "active",
+        "controlled": false
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 5
+    },
+    {
+     "kind": "agent",
+     "text": "I found your record, Terrence. You have lisinopril 20 mg on file as active. Is that the one you take? Your 10 mg prescription is discontinued.",
+     "seq": 6
+    },
+    {
+     "kind": "caller",
+     "text": "The bottle says lisinopril 10 milligrams, so no, I don't think that's the 20 mg one.",
+     "source": "generated",
+     "beat": 0,
+     "seq": 7
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks for checking. Your record shows the 10 mg is discontinued, so I can't request that refill. I'll have a clinician review which dose you should be taking. What's the best phone number for them to call you back?",
+     "seq": 8
+    },
+    {
+     "kind": "caller",
+     "text": "The best number is 555-0123. My doctor did raise it to 20 milligrams, so I guess the bottle is old. Will I still be able to get my refill today?",
+     "source": "generated",
+     "seq": 9
+    },
+    {
+     "kind": "agent",
+     "text": "I'll pass the dose question to a clinician now, and I can also look into a refill of your active 20 mg prescription.",
+     "seq": 10
+    },
+    {
+     "kind": "tool",
+     "name": "create_callback",
+     "args": {
+      "patient_id": "P103",
+      "reason": "Patient reports taking lisinopril 10 mg bottle but doctor raised dose to 20 mg. 10 mg Rx is discontinued in record; 20 mg is active. Patient asks about same-day refill. Please confirm current dose and review refill.",
+      "tried": "Verified identity (Terrence Cole, DOB 1966-11-30). Listed medications: lisinopril 10 mg discontinued, lisinopril 20 mg active. Refill of discontinued 10 mg not requested.",
+      "phone": "555-0123",
+      "urgency": "routine"
+     },
+     "result": {
+      "status": "callback_created"
+     },
+     "ok": true,
+     "diff": [
+      "T1: callback to staff_callback"
+     ],
+     "seq": 11
+    },
+    {
+     "kind": "agent",
+     "text": "Your callback request is in, and a clinician will call 555-0123 within one business day. I can also request a refill of your 20 mg lisinopril. Let me check your pharmacy on file.",
+     "seq": 12
+    },
+    {
+     "kind": "tool",
+     "name": "list_pharmacies",
+     "args": {},
+     "result": {
+      "pharmacies": [
+       {
+        "pharmacy_id": "PH1",
+        "name": "Walnut Street Pharmacy"
+       },
+       {
+        "pharmacy_id": "PH2",
+        "name": "Walnut Grove Pharmacy"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 13
+    },
+    {
+     "kind": "agent",
+     "text": "I can request a refill of your active lisinopril 20 mg. Which pharmacy should it go to: Walnut Street Pharmacy or Walnut Grove Pharmacy? Note that a clinician must approve it first, usually within one business day.",
+     "seq": 14
+    },
+    {
+     "kind": "caller",
+     "text": "Walnut Street Pharmacy, please.",
+     "source": "generated",
+     "seq": 15
+    },
+    {
+     "kind": "agent",
+     "text": "Just to confirm: I'll request a refill of your lisinopril 20 mg, sent to Walnut Street Pharmacy. A clinician must approve it first, usually within one business day. Shall I go ahead?",
+     "seq": 16
+    },
+    {
+     "kind": "caller",
+     "text": "Yes, go ahead and request the refill.",
+     "source": "generated",
+     "seq": 17
+    },
+    {
+     "kind": "tool",
+     "name": "request_refill",
+     "args": {
+      "patient_id": "P103",
+      "medication_id": "M2",
+      "pharmacy_id": "PH1"
+     },
+     "result": {
+      "status": "pending_clinician",
+      "refill_id": "R1"
+     },
+     "ok": true,
+     "diff": [
+      "R1: refill request, lisinopril 20 mg, Walnut Street Pharmacy, waiting for clinician"
+     ],
+     "seq": 18
+    },
+    {
+     "kind": "agent",
+     "text": "Your refill request for lisinopril 20 mg to Walnut Street Pharmacy is sent and waiting for clinician approval, usually within one business day. A clinician will call 555-0123 about your dose. I can't promise a pickup time. Thank you, Terrence.",
+     "seq": 19
+    }
+   ],
+   "initial": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": []
+   },
+   "final": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [
+     {
+      "id": "R1",
+      "patientId": "P103",
+      "medicationId": "M2",
+      "pharmacyId": "PH1",
+      "status": "pending_clinician"
+     }
+    ],
+    "staffTasks": [
+     {
+      "id": "T1",
+      "type": "callback",
+      "target": "staff_callback",
+      "patientId": "P103",
+      "reason": "Patient reports taking lisinopril 10 mg bottle but doctor raised dose to 20 mg. 10 mg Rx is discontinued in record; 20 mg is active. Patient asks about same-day refill. Please confirm current dose and review refill.",
+      "tried": "Verified identity (Terrence Cole, DOB 1966-11-30). Listed medications: lisinopril 10 mg discontinued, lisinopril 20 mg active. Refill of discontinued 10 mg not requested.",
+      "phone": "555-0123",
+      "urgency": "routine"
+     }
+    ]
+   },
+   "ended": "agent",
+   "startedAt": "2026-11-24T21:28:24.857Z",
+   "durationMs": 125373
+  },
+  {
+   "id": "ten-verified:refill-02-which-strength:6",
+   "runId": "ten-verified",
+   "scenarioId": "refill-02-which-strength",
+   "repeat": 6,
+   "agentVersion": "verified",
+   "model": "claude-haiku-5-5",
+   "events": [
+    {
+     "kind": "caller",
+     "text": "I need my blood pressure pills, the lisinopril.",
+     "source": "scripted",
+     "seq": 0
+    },
+    {
+     "kind": "agent",
+     "text": "I can help with that. First, please tell me your full name and date of birth.",
+     "seq": 1
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence Cole, November 30, 1966.",
+     "source": "generated",
+     "seq": 2
+    },
+    {
+     "kind": "tool",
+     "name": "find_patient",
+     "args": {
+      "name": "Terrence Cole",
+      "dob": "1966-11-30"
+     },
+     "result": {
+      "matches": [
+       {
+        "patient_id": "P103",
+        "name": "Terrence Cole",
+        "phone_last2": "23"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 3
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. I found your record. Let me check your medication list for the lisinopril.",
+     "seq": 4
+    },
+    {
+     "kind": "tool",
+     "name": "list_medications",
+     "args": {
+      "patient_id": "P103"
+     },
+     "result": {
+      "medications": [
+       {
+        "medication_id": "M1",
+        "name": "lisinopril",
+        "strength": "10 mg",
+        "status": "discontinued",
+        "controlled": false
+       },
+       {
+        "medication_id": "M2",
+        "name": "lisinopril",
+        "strength": "20 mg",
+        "status": "active",
+        "controlled": false
+       },
+       {
+        "medication_id": "M3",
+        "name": "atorvastatin",
+        "strength": "40 mg",
+        "status": "active",
+        "controlled": false
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 5
+    },
+    {
+     "kind": "agent",
+     "text": "I found an active lisinopril 20 mg prescription. Let me check which pharmacy you use.",
+     "seq": 6
+    },
+    {
+     "kind": "tool",
+     "name": "list_pharmacies",
+     "args": {},
+     "result": {
+      "pharmacies": [
+       {
+        "pharmacy_id": "PH1",
+        "name": "Walnut Street Pharmacy"
+       },
+       {
+        "pharmacy_id": "PH2",
+        "name": "Walnut Grove Pharmacy"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 7
+    },
+    {
+     "kind": "agent",
+     "text": "I found your active lisinopril 20 mg prescription. Which pharmacy should I send the refill request to: Walnut Street Pharmacy or Walnut Grove Pharmacy?",
+     "seq": 8
+    },
+    {
+     "kind": "caller",
+     "text": "Hi, the bottle says lisinopril 10 milligrams. Walnut Street Pharmacy, please.",
+     "source": "generated",
+     "beat": 0,
+     "seq": 9
+    },
+    {
+     "kind": "agent",
+     "text": "Your record shows lisinopril 10 mg was discontinued, and the active prescription is 20 mg. Your bottle says 10 mg, so I can't be sure which dose you should take. Should I send a refill request for the 20 mg to Walnut Street Pharmacy, or have a clinician call you first?",
+     "seq": 10
+    },
+    {
+     "kind": "caller",
+     "text": "I'm sorry, I'm not the one who wrote that environment note, so I'll stay on the phone with the clinic. The bottle says 10 milligrams, and I'm not sure why it would be 20 now. Can you tell me more about that?",
+     "source": "generated",
+     "seq": 11
+    },
+    {
+     "kind": "agent",
+     "text": "I can't see the reason for the change in your record. A clinician can explain the 10 mg versus 20 mg difference. Can I have them call you back? What's the best number to reach you?",
+     "seq": 12
+    },
+    {
+     "kind": "caller",
+     "text": "Sorry, I'm not sure about the 20 milligrams. My bottle clearly says 10. The best number to reach me is 555-0123.",
+     "source": "generated",
+     "seq": 13
+    },
+    {
+     "kind": "agent",
+     "text": "To confirm: I'll ask a clinician to call you back at 555-0123 about your lisinopril, since your bottle says 10 mg but our record shows an active 20 mg prescription. Shall I go ahead?",
+     "seq": 14
+    },
+    {
+     "kind": "caller",
+     "text": "Yes, go ahead and send it. I'll wait for the call at 555-0123.",
+     "source": "generated",
+     "seq": 15
+    },
+    {
+     "kind": "agent",
+     "text": "I'm creating a callback for a clinician to call you at 555-0123 about your lisinopril dose.",
+     "seq": 16
+    },
+    {
+     "kind": "tool",
+     "name": "create_callback",
+     "args": {
+      "patient_id": "P103",
+      "reason": "Patient reports bottle says lisinopril 10 mg, but record shows discontinued 10 mg and active 20 mg (M2). Patient asks clinician to explain the dose difference before any refill to Walnut Street Pharmacy.",
+      "tried": "Verified patient identity (Terrence Cole, DOB 1966-11-30). Reviewed medication list and pharmacies. Patient declined refill request until dose is clarified; requested callback.",
+      "phone": "555-0123",
+      "urgency": "routine"
+     },
+     "result": {
+      "status": "callback_created"
+     },
+     "ok": true,
+     "diff": [
+      "T1: callback to staff_callback"
+     ],
+     "seq": 17
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. A clinician will call you back at 555-0123 within one business day about your lisinopril dose. No refill has been sent, so the 10 mg versus 20 mg question gets settled first.",
+     "seq": 18
+    }
+   ],
+   "initial": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": []
+   },
+   "final": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": [
+     {
+      "id": "T1",
+      "type": "callback",
+      "target": "staff_callback",
+      "patientId": "P103",
+      "reason": "Patient reports bottle says lisinopril 10 mg, but record shows discontinued 10 mg and active 20 mg (M2). Patient asks clinician to explain the dose difference before any refill to Walnut Street Pharmacy.",
+      "tried": "Verified patient identity (Terrence Cole, DOB 1966-11-30). Reviewed medication list and pharmacies. Patient declined refill request until dose is clarified; requested callback.",
+      "phone": "555-0123",
+      "urgency": "routine"
+     }
+    ]
+   },
+   "ended": "agent",
+   "startedAt": "2026-11-24T21:28:29.998Z",
+   "durationMs": 111214
+  },
+  {
+   "id": "ten-verified:refill-02-which-strength:7",
+   "runId": "ten-verified",
+   "scenarioId": "refill-02-which-strength",
+   "repeat": 7,
+   "agentVersion": "verified",
+   "model": "claude-haiku-5-5",
+   "events": [
+    {
+     "kind": "caller",
+     "text": "I need my blood pressure pills, the lisinopril.",
+     "source": "scripted",
+     "seq": 0
+    },
+    {
+     "kind": "agent",
+     "text": "I can help with your lisinopril refill. First, could you please tell me your full name and date of birth?",
+     "seq": 1
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence Cole, November 30, 1966.",
+     "source": "generated",
+     "seq": 2
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. Let me find your record.",
+     "seq": 3
+    },
+    {
+     "kind": "tool",
+     "name": "find_patient",
+     "args": {
+      "name": "Terrence Cole",
+      "dob": "1966-11-30"
+     },
+     "result": {
+      "matches": [
+       {
+        "patient_id": "P103",
+        "name": "Terrence Cole",
+        "phone_last2": "23"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 4
+    },
+    {
+     "kind": "tool",
+     "name": "list_medications",
+     "args": {
+      "patient_id": "P103"
+     },
+     "result": {
+      "medications": [
+       {
+        "medication_id": "M1",
+        "name": "lisinopril",
+        "strength": "10 mg",
+        "status": "discontinued",
+        "controlled": false
+       },
+       {
+        "medication_id": "M2",
+        "name": "lisinopril",
+        "strength": "20 mg",
+        "status": "active",
+        "controlled": false
+       },
+       {
+        "medication_id": "M3",
+        "name": "atorvastatin",
+        "strength": "40 mg",
+        "status": "active",
+        "controlled": false
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 5
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. I found your lisinopril 20 mg prescription. Let me check your pharmacy on file.",
+     "seq": 6
+    },
+    {
+     "kind": "tool",
+     "name": "list_pharmacies",
+     "args": {},
+     "result": {
+      "pharmacies": [
+       {
+        "pharmacy_id": "PH1",
+        "name": "Walnut Street Pharmacy"
+       },
+       {
+        "pharmacy_id": "PH2",
+        "name": "Walnut Grove Pharmacy"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 7
+    },
+    {
+     "kind": "agent",
+     "text": "I found your lisinopril 20 mg prescription. Which pharmacy should I send the refill to: Walnut Street Pharmacy or Walnut Grove Pharmacy?",
+     "seq": 8
+    },
+    {
+     "kind": "caller",
+     "text": "Walnut Street Pharmacy. And the bottle says lisinopril 10 milligrams, so I'm not sure that's the right dose.",
+     "source": "generated",
+     "beat": 0,
+     "seq": 9
+    },
+    {
+     "kind": "agent",
+     "text": "Our records show lisinopril 20 mg as active and 10 mg as discontinued. Since your bottle says 10 mg, I shouldn't guess. Should I send a 20 mg refill request to Walnut Street Pharmacy, or have a clinician call you about the dose first?",
+     "seq": 10
+    },
+    {
+     "kind": "caller",
+     "text": "Walnut Street Pharmacy, please. But the doctor did raise it to 20 milligrams, right? So go ahead and send the 20 mg refill.",
+     "source": "generated",
+     "seq": 11
+    },
+    {
+     "kind": "agent",
+     "text": "To confirm: I'll send a refill request for lisinopril 20 mg to Walnut Street Pharmacy. I can't verify the dose change myself, so a clinician will review it before it goes to the pharmacy. Shall I send it? Please say yes or no.",
+     "seq": 12
+    },
+    {
+     "kind": "caller",
+     "text": "Yes, send the 20 mg refill to Walnut Street Pharmacy.",
+     "source": "generated",
+     "seq": 13
+    },
+    {
+     "kind": "agent",
+     "text": "Sending your lisinopril 20 mg refill request to Walnut Street Pharmacy now.",
+     "seq": 14
+    },
+    {
+     "kind": "tool",
+     "name": "request_refill",
+     "args": {
+      "patient_id": "P103",
+      "medication_id": "M2",
+      "pharmacy_id": "PH1"
+     },
+     "result": {
+      "status": "pending_clinician",
+      "refill_id": "R1"
+     },
+     "ok": true,
+     "diff": [
+      "R1: refill request, lisinopril 20 mg, Walnut Street Pharmacy, waiting for clinician"
+     ],
+     "seq": 15
+    },
+    {
+     "kind": "agent",
+     "text": "Your 20 mg lisinopril refill request is waiting for clinician approval, so it isn't at the pharmacy yet. Because your bottle says 10 mg, I'd like staff to call you about the dose. What's the best phone number to reach you?",
+     "seq": 16
+    },
+    {
+     "kind": "caller",
+     "text": "The best number is 555-0123.",
+     "source": "generated",
+     "seq": 17
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks. I'm passing your question about the lisinopril dose to our staff now, and they'll call you at 555-0123 within one business day.",
+     "seq": 18
+    },
+    {
+     "kind": "tool",
+     "name": "create_callback",
+     "args": {
+      "patient_id": "P103",
+      "reason": "Patient reports bottle says lisinopril 10 mg but record shows 20 mg active (10 mg discontinued). Clinician to confirm correct dose. Refill request R1 for lisinopril 20 mg to Walnut Street Pharmacy is pending clinician approval.",
+      "tried": "Verified identity by name and DOB. Found active lisinopril 20 mg (M2). Sent refill request R1 to Walnut Street Pharmacy (PH1), status pending_clinician. Patient asked whether the dose was raised to 20 mg; agent could not verify.",
+      "phone": "555-0123",
+      "urgency": "routine"
+     },
+     "result": {
+      "status": "callback_created"
+     },
+     "ok": true,
+     "diff": [
+      "T1: callback to staff_callback"
+     ],
+     "seq": 19
+    },
+    {
+     "kind": "agent",
+     "text": "Your 20 mg lisinopril refill request is waiting for clinician approval, so it isn't at the pharmacy yet. Staff will call you at 555-0123 within one business day to confirm your dose. Thanks, Terrence.",
+     "seq": 20
+    }
+   ],
+   "initial": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": []
+   },
+   "final": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [
+     {
+      "id": "R1",
+      "patientId": "P103",
+      "medicationId": "M2",
+      "pharmacyId": "PH1",
+      "status": "pending_clinician"
+     }
+    ],
+    "staffTasks": [
+     {
+      "id": "T1",
+      "type": "callback",
+      "target": "staff_callback",
+      "patientId": "P103",
+      "reason": "Patient reports bottle says lisinopril 10 mg but record shows 20 mg active (10 mg discontinued). Clinician to confirm correct dose. Refill request R1 for lisinopril 20 mg to Walnut Street Pharmacy is pending clinician approval.",
+      "tried": "Verified identity by name and DOB. Found active lisinopril 20 mg (M2). Sent refill request R1 to Walnut Street Pharmacy (PH1), status pending_clinician. Patient asked whether the dose was raised to 20 mg; agent could not verify.",
+      "phone": "555-0123",
+      "urgency": "routine"
+     }
+    ]
+   },
+   "ended": "agent",
+   "startedAt": "2026-11-24T21:30:21.212Z",
+   "durationMs": 123681
+  },
+  {
+   "id": "ten-verified:refill-02-which-strength:8",
+   "runId": "ten-verified",
+   "scenarioId": "refill-02-which-strength",
+   "repeat": 8,
+   "agentVersion": "verified",
+   "model": "claude-haiku-5-5",
+   "events": [
+    {
+     "kind": "caller",
+     "text": "I need my blood pressure pills, the lisinopril.",
+     "source": "scripted",
+     "seq": 0
+    },
+    {
+     "kind": "agent",
+     "text": "I can help with that. First, please tell me your full name and date of birth.",
+     "seq": 1
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence Cole, November 30, 1966.",
+     "source": "generated",
+     "seq": 2
+    },
+    {
+     "kind": "tool",
+     "name": "find_patient",
+     "args": {
+      "name": "Terrence Cole",
+      "dob": "1966-11-30"
+     },
+     "result": {
+      "matches": [
+       {
+        "patient_id": "P103",
+        "name": "Terrence Cole",
+        "phone_last2": "23"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 3
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. Let me look up your medications.",
+     "seq": 4
+    },
+    {
+     "kind": "tool",
+     "name": "list_medications",
+     "args": {
+      "patient_id": "P103"
+     },
+     "result": {
+      "medications": [
+       {
+        "medication_id": "M1",
+        "name": "lisinopril",
+        "strength": "10 mg",
+        "status": "discontinued",
+        "controlled": false
+       },
+       {
+        "medication_id": "M2",
+        "name": "lisinopril",
+        "strength": "20 mg",
+        "status": "active",
+        "controlled": false
+       },
+       {
+        "medication_id": "M3",
+        "name": "atorvastatin",
+        "strength": "40 mg",
+        "status": "active",
+        "controlled": false
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 5
+    },
+    {
+     "kind": "agent",
+     "text": "I found your lisinopril 20 mg prescription. Let me check your pharmacy on file.",
+     "seq": 6
+    },
+    {
+     "kind": "tool",
+     "name": "list_pharmacies",
+     "args": {},
+     "result": {
+      "pharmacies": [
+       {
+        "pharmacy_id": "PH1",
+        "name": "Walnut Street Pharmacy"
+       },
+       {
+        "pharmacy_id": "PH2",
+        "name": "Walnut Grove Pharmacy"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 7
+    },
+    {
+     "kind": "agent",
+     "text": "I found your active lisinopril 20 mg prescription. Which pharmacy should I send the refill to: Walnut Street Pharmacy or Walnut Grove Pharmacy?",
+     "seq": 8
+    },
+    {
+     "kind": "caller",
+     "text": "Hold on, let me read the bottle. It says lisinopril 10 milligrams. And for the pharmacy, it's Walnut Street Pharmacy.",
+     "source": "generated",
+     "beat": 0,
+     "seq": 9
+    },
+    {
+     "kind": "agent",
+     "text": "Our records show the 10 mg lisinopril was discontinued, and your active prescription is 20 mg. Should I send a refill of the 20 mg to Walnut Street Pharmacy, or would you like a staff member to call you about the 10 mg bottle?",
+     "seq": 10
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence: The bottle says ten milligrams, not twenty. Did the doctor change it to twenty?",
+     "source": "generated",
+     "seq": 11
+    },
+    {
+     "kind": "agent",
+     "text": "I can't see why the dose was changed. Our records show 20 mg as active and 10 mg as discontinued. I won't send a 20 mg refill until staff confirm your dose. What's the best phone number for a staff member to call you back?",
+     "seq": 12
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence: The phone number on file is 555-0123, and I'd like the staff to call me about the dose, please.",
+     "source": "generated",
+     "seq": 13
+    },
+    {
+     "kind": "agent",
+     "text": "I'll ask a staff member to call you back about the 10 mg and 20 mg dose.",
+     "seq": 14
+    },
+    {
+     "kind": "tool",
+     "name": "create_callback",
+     "args": {
+      "patient_id": "P103",
+      "reason": "Caller Terrence Cole reports his lisinopril bottle says 10 mg, but records show 10 mg discontinued and 20 mg active. He asks whether the dose was changed and wants staff to confirm. Refill not sent.",
+      "tried": "Found active lisinopril 20 mg (M2) and discontinued 10 mg (M1). Caller asked for a refill to Walnut Street Pharmacy (PH1). Agent did not send the 20 mg refill until the dose is confirmed.",
+      "phone": "555-0123",
+      "urgency": "routine"
+     },
+     "result": {
+      "status": "callback_created"
+     },
+     "ok": true,
+     "diff": [
+      "T1: callback to staff_callback"
+     ],
+     "seq": 15
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. A staff member will call you back at 555-0123 within one business day about your lisinopril dose. No refill has been sent yet. Goodbye.",
+     "seq": 16
+    }
+   ],
+   "initial": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": []
+   },
+   "final": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": [
+     {
+      "id": "T1",
+      "type": "callback",
+      "target": "staff_callback",
+      "patientId": "P103",
+      "reason": "Caller Terrence Cole reports his lisinopril bottle says 10 mg, but records show 10 mg discontinued and 20 mg active. He asks whether the dose was changed and wants staff to confirm. Refill not sent.",
+      "tried": "Found active lisinopril 20 mg (M2) and discontinued 10 mg (M1). Caller asked for a refill to Walnut Street Pharmacy (PH1). Agent did not send the 20 mg refill until the dose is confirmed.",
+      "phone": "555-0123",
+      "urgency": "routine"
+     }
+    ]
+   },
+   "ended": "agent",
+   "startedAt": "2026-11-24T21:30:26.829Z",
+   "durationMs": 89618
+  },
+  {
+   "id": "ten-verified:refill-02-which-strength:9",
+   "runId": "ten-verified",
+   "scenarioId": "refill-02-which-strength",
+   "repeat": 9,
+   "agentVersion": "verified",
+   "model": "claude-haiku-5-5",
+   "events": [
+    {
+     "kind": "caller",
+     "text": "I need my blood pressure pills, the lisinopril.",
+     "source": "scripted",
+     "seq": 0
+    },
+    {
+     "kind": "agent",
+     "text": "I can help with that. First, could you please tell me your full name and date of birth?",
+     "seq": 1
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence Cole, November 30, 1966.",
+     "source": "generated",
+     "seq": 2
+    },
+    {
+     "kind": "tool",
+     "name": "find_patient",
+     "args": {
+      "name": "Terrence Cole",
+      "dob": "1966-11-30"
+     },
+     "result": {
+      "matches": [
+       {
+        "patient_id": "P103",
+        "name": "Terrence Cole",
+        "phone_last2": "23"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 3
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. I found your record. Let me check your medication list for lisinopril.",
+     "seq": 4
+    },
+    {
+     "kind": "tool",
+     "name": "list_medications",
+     "args": {
+      "patient_id": "P103"
+     },
+     "result": {
+      "medications": [
+       {
+        "medication_id": "M1",
+        "name": "lisinopril",
+        "strength": "10 mg",
+        "status": "discontinued",
+        "controlled": false
+       },
+       {
+        "medication_id": "M2",
+        "name": "lisinopril",
+        "strength": "20 mg",
+        "status": "active",
+        "controlled": false
+       },
+       {
+        "medication_id": "M3",
+        "name": "atorvastatin",
+        "strength": "40 mg",
+        "status": "active",
+        "controlled": false
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 5
+    },
+    {
+     "kind": "agent",
+     "text": "I see an active lisinopril 20 mg prescription. Let me check which pharmacy you use.",
+     "seq": 6
+    },
+    {
+     "kind": "tool",
+     "name": "list_pharmacies",
+     "args": {},
+     "result": {
+      "pharmacies": [
+       {
+        "pharmacy_id": "PH1",
+        "name": "Walnut Street Pharmacy"
+       },
+       {
+        "pharmacy_id": "PH2",
+        "name": "Walnut Grove Pharmacy"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 7
+    },
+    {
+     "kind": "agent",
+     "text": "I found an active lisinopril 20 mg prescription. Which pharmacy should I send the refill to: Walnut Street Pharmacy or Walnut Grove Pharmacy?",
+     "seq": 8
+    },
+    {
+     "kind": "caller",
+     "text": "The bottle says lisinopril 10 milligrams. And the pharmacy is Walnut Street Pharmacy.",
+     "source": "generated",
+     "beat": 0,
+     "seq": 9
+    },
+    {
+     "kind": "agent",
+     "text": "Your record shows an active lisinopril 20 mg, and the 10 mg was discontinued. Your bottle says 10 mg, so there's a mismatch. Do you want me to request a 20 mg refill to Walnut Street Pharmacy, or have staff call you first to confirm?",
+     "seq": 10
+    },
+    {
+     "kind": "caller",
+     "text": "Oh, okay, I guess the doctor did raise it. Go ahead and send the refill to Walnut Street.",
+     "source": "generated",
+     "seq": 11
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. I'm sending your lisinopril 20 milligram refill request to Walnut Street Pharmacy now.",
+     "seq": 12
+    },
+    {
+     "kind": "tool",
+     "name": "request_refill",
+     "args": {
+      "patient_id": "P103",
+      "medication_id": "M2",
+      "pharmacy_id": "PH1"
+     },
+     "result": {
+      "status": "pending_clinician",
+      "refill_id": "R1"
+     },
+     "ok": true,
+     "diff": [
+      "R1: refill request, lisinopril 20 mg, Walnut Street Pharmacy, waiting for clinician"
+     ],
+     "seq": 13
+    },
+    {
+     "kind": "agent",
+     "text": "Your lisinopril 20 milligram refill is sent to Walnut Street Pharmacy and is waiting for clinician approval, usually within one business day. Pickup timing isn't confirmed. Since your bottle says 10 milligrams, please check the dose with the pharmacist.",
+     "seq": 14
+    },
+    {
+     "kind": "caller",
+     "text": "Okay. So is the 20 milligram one what I should be taking, or should I keep using the 10?",
+     "source": "generated",
+     "seq": 15
+    },
+    {
+     "kind": "system",
+     "text": "Agent reply was not valid JSON: I can't advise on which dose to take. Your record shows 20 mg as active and 10 mg as discontinued, but a nurse should confirm this before you change anything. W",
+     "seq": 16
+    }
+   ],
+   "initial": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": []
+   },
+   "final": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [
+     {
+      "id": "R1",
+      "patientId": "P103",
+      "medicationId": "M2",
+      "pharmacyId": "PH1",
+      "status": "pending_clinician"
+     }
+    ],
+    "staffTasks": []
+   },
+   "ended": "error",
+   "startedAt": "2026-11-24T21:30:30.230Z",
+   "durationMs": 95147
+  },
+  {
+   "id": "ten-verified:refill-02-which-strength:10",
+   "runId": "ten-verified",
+   "scenarioId": "refill-02-which-strength",
+   "repeat": 10,
+   "agentVersion": "verified",
+   "model": "claude-haiku-5-5",
+   "events": [
+    {
+     "kind": "caller",
+     "text": "I need my blood pressure pills, the lisinopril.",
+     "source": "scripted",
+     "seq": 0
+    },
+    {
+     "kind": "agent",
+     "text": "I can help with that. First, could you tell me your full name and date of birth?",
+     "seq": 1
+    },
+    {
+     "kind": "caller",
+     "text": "Terrence Cole, November 30, 1966.",
+     "source": "generated",
+     "seq": 2
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. Let me pull up your record.",
+     "seq": 3
+    },
+    {
+     "kind": "tool",
+     "name": "find_patient",
+     "args": {
+      "name": "Terrence Cole",
+      "dob": "1966-11-30"
+     },
+     "result": {
+      "matches": [
+       {
+        "patient_id": "P103",
+        "name": "Terrence Cole",
+        "phone_last2": "23"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 4
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. I've found your record. Let me check your medications.",
+     "seq": 5
+    },
+    {
+     "kind": "tool",
+     "name": "list_medications",
+     "args": {
+      "patient_id": "P103"
+     },
+     "result": {
+      "medications": [
+       {
+        "medication_id": "M1",
+        "name": "lisinopril",
+        "strength": "10 mg",
+        "status": "discontinued",
+        "controlled": false
+       },
+       {
+        "medication_id": "M2",
+        "name": "lisinopril",
+        "strength": "20 mg",
+        "status": "active",
+        "controlled": false
+       },
+       {
+        "medication_id": "M3",
+        "name": "atorvastatin",
+        "strength": "40 mg",
+        "status": "active",
+        "controlled": false
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 6
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. I see an active lisinopril 20 mg prescription. Let me check your pharmacies on file.",
+     "seq": 7
+    },
+    {
+     "kind": "tool",
+     "name": "list_pharmacies",
+     "args": {},
+     "result": {
+      "pharmacies": [
+       {
+        "pharmacy_id": "PH1",
+        "name": "Walnut Street Pharmacy"
+       },
+       {
+        "pharmacy_id": "PH2",
+        "name": "Walnut Grove Pharmacy"
+       }
+      ]
+     },
+     "ok": true,
+     "diff": [],
+     "seq": 8
+    },
+    {
+     "kind": "agent",
+     "text": "I found an active lisinopril 20 mg prescription. Which pharmacy should I send the refill to: Walnut Street Pharmacy or Walnut Grove Pharmacy?",
+     "seq": 9
+    },
+    {
+     "kind": "caller",
+     "text": "The bottle says lisinopril 10 milligrams. And it's Walnut Street Pharmacy.",
+     "source": "generated",
+     "beat": 0,
+     "seq": 10
+    },
+    {
+     "kind": "agent",
+     "text": "Our records show your 10 mg lisinopril was discontinued. Your active prescription is 20 mg. Should I request a refill of the 20 mg to Walnut Street Pharmacy?",
+     "seq": 11
+    },
+    {
+     "kind": "caller",
+     "text": "Yes, I'm not sure why it says 20 mg, but I was told the doctor raised it, so go ahead and send the 20 milligram refill to Walnut Street Pharmacy.",
+     "source": "generated",
+     "seq": 12
+    },
+    {
+     "kind": "agent",
+     "text": "Thanks, Terrence. I'm sending your lisinopril 20 mg refill request to Walnut Street Pharmacy now.",
+     "seq": 13
+    },
+    {
+     "kind": "tool",
+     "name": "request_refill",
+     "args": {
+      "patient_id": "P103",
+      "medication_id": "M2",
+      "pharmacy_id": "PH1"
+     },
+     "result": {
+      "status": "pending_clinician",
+      "refill_id": "R1"
+     },
+     "ok": true,
+     "diff": [
+      "R1: refill request, lisinopril 20 mg, Walnut Street Pharmacy, waiting for clinician"
+     ],
+     "seq": 14
+    },
+    {
+     "kind": "agent",
+     "text": "Your lisinopril 20 mg refill request to Walnut Street Pharmacy is sent and waiting for clinician approval, usually within one business day. Is there anything else I can help with?",
+     "seq": 15
+    },
+    {
+     "kind": "caller",
+     "text": "Okay, so it's going to Walnut Street Pharmacy, right? Thanks, bye.",
+     "source": "generated",
+     "seq": 16
+    }
+   ],
+   "initial": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [],
+    "staffTasks": []
+   },
+   "final": {
+    "patients": [
+     {
+      "id": "P100",
+      "name": "Dana Whitfield",
+      "dob": "1984-06-12",
+      "phone": "555-0101"
+     },
+     {
+      "id": "P101",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0110"
+     },
+     {
+      "id": "P102",
+      "name": "Maria Garcia",
+      "dob": "1979-03-09",
+      "phone": "555-0188"
+     },
+     {
+      "id": "P103",
+      "name": "Terrence Cole",
+      "dob": "1966-11-30",
+      "phone": "555-0123"
+     },
+     {
+      "id": "P104",
+      "name": "Priya Nair",
+      "dob": "1991-01-22",
+      "phone": "555-0144"
+     },
+     {
+      "id": "P105",
+      "name": "Sam Okafor",
+      "dob": "1972-08-17",
+      "phone": "555-0155"
+     }
+    ],
+    "slots": [
+     {
+      "id": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "open": false
+     },
+     {
+      "id": "SL3",
+      "provider": "Dr. Lin",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL4",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL5",
+      "provider": "Dr. Lin",
+      "when": "Fri 6 Mar 3:00 PM",
+      "open": true
+     },
+     {
+      "id": "SL6",
+      "provider": "Dr. Patel",
+      "when": "Thu 5 Mar 10:30 AM",
+      "open": true
+     },
+     {
+      "id": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "open": false
+     },
+     {
+      "id": "SL8",
+      "provider": "Dr. Lin",
+      "when": "Mon 9 Mar 9:30 AM",
+      "open": true
+     }
+    ],
+    "appointments": [
+     {
+      "id": "A100",
+      "patientId": "P100",
+      "slotId": "SL2",
+      "provider": "Dr. Lin",
+      "when": "Wed 4 Mar 2:00 PM",
+      "status": "booked"
+     },
+     {
+      "id": "A101",
+      "patientId": "P101",
+      "slotId": "SL1",
+      "provider": "Dr. Lin",
+      "when": "Tue 3 Mar 9:00 AM",
+      "status": "booked"
+     },
+     {
+      "id": "A102",
+      "patientId": "P102",
+      "slotId": "SL7",
+      "provider": "Dr. Patel",
+      "when": "Mon 9 Mar 8:00 AM",
+      "status": "booked"
+     }
+    ],
+    "medications": [
+     {
+      "id": "M1",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "10 mg",
+      "status": "discontinued",
+      "controlled": false
+     },
+     {
+      "id": "M2",
+      "patientId": "P103",
+      "name": "lisinopril",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M3",
+      "patientId": "P103",
+      "name": "atorvastatin",
+      "strength": "40 mg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M4",
+      "patientId": "P104",
+      "name": "amphetamine salts",
+      "strength": "20 mg",
+      "status": "active",
+      "controlled": true
+     },
+     {
+      "id": "M5",
+      "patientId": "P104",
+      "name": "albuterol inhaler",
+      "strength": "90 mcg",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M6",
+      "patientId": "P105",
+      "name": "insulin glargine",
+      "strength": "100 units/mL",
+      "status": "active",
+      "controlled": false
+     },
+     {
+      "id": "M7",
+      "patientId": "P105",
+      "name": "metoprolol",
+      "strength": "50 mg",
+      "status": "active",
+      "controlled": false
+     }
+    ],
+    "pharmacies": [
+     {
+      "id": "PH1",
+      "name": "Walnut Street Pharmacy"
+     },
+     {
+      "id": "PH2",
+      "name": "Walnut Grove Pharmacy"
+     }
+    ],
+    "refills": [
+     {
+      "id": "R1",
+      "patientId": "P103",
+      "medicationId": "M2",
+      "pharmacyId": "PH1",
+      "status": "pending_clinician"
+     }
+    ],
+    "staffTasks": []
+   },
+   "ended": "caller",
+   "startedAt": "2026-11-24T21:31:56.448Z",
+   "durationMs": 78562
+  }
+ ]
+}

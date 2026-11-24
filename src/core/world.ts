@@ -67,19 +67,53 @@ export interface ToolOutcome { ok: boolean; result: unknown; fault?: Fault['effe
 
 export class Ehr {
   private calls = new Map<string, number>();
-  constructor(public world: World, private faults: Fault[]) {}
+  private verified = new Set<string>();
+  /** guards: the safety rules live here, in the tool layer, so no prompt can skip them. */
+  constructor(public world: World, private faults: Fault[], private guards = false) {}
+
+  private owner(args: Record<string, unknown>): string | null {
+    const pid = args.patient_id; if (typeof pid === 'string' && pid) return pid;
+    return this.world.appointments.find((x) => x.id === args.appointment_id)?.patientId ?? null;
+  }
+  /** Refuses before anything runs. */
+  private refuse(name: string, args: Record<string, unknown>): unknown | null {
+    const needsOwner = ['list_appointments', 'list_medications', 'list_refill_requests', 'reschedule_appointment', 'cancel_appointment', 'request_refill'].includes(name);
+    if (needsOwner) { const o = this.owner(args); if (!o || !this.verified.has(o)) return { error: 'VERIFY_CALLER_FIRST', message: 'Match the caller to one patient with find_patient first. If several match, search again with the phone number.' }; }
+    if (name === 'request_refill') {
+      const m = this.world.medications.find((x) => x.id === args.medication_id);
+      if (m?.status === 'discontinued') return { error: 'STOPPED_MEDICATION', message: 'This prescription was stopped. Offer the active one, or hand off to staff.' };
+      if (m?.controlled) return { error: 'STAFF_ONLY', message: 'Controlled medication. Create a callback.' };
+      if (this.world.refills.some((x) => x.medicationId === args.medication_id && x.pharmacyId === args.pharmacy_id)) return { status: 'already_requested', message: 'This exact refill is already waiting for a clinician.' };
+    }
+    return null;
+  }
+  /** After a timeout, read the record back and return what is true. */
+  private reconcile(name: string, args: Record<string, unknown>, before: World): unknown {
+    if (name === 'request_refill') {
+      const r = this.world.refills.find((x) => x.medicationId === args.medication_id && x.pharmacyId === args.pharmacy_id && !before.refills.some((y) => y.id === x.id));
+      return r ? { status: 'pending_clinician', refill_id: r.id, checked: 'The system was slow. The record was read back and the request is there.' } : { status: 'not_applied', checked: 'The system was slow. The record was read back and the request is NOT there. You may try again.' };
+    }
+    const a = this.world.appointments.find((x) => x.id === args.appointment_id); const b = before.appointments.find((x) => x.id === args.appointment_id);
+    const moved = !!a && !!b && (a.slotId !== b.slotId || a.status !== b.status);
+    return moved ? { status: 'confirmed', appointment_id: a!.id, provider: a!.provider, when: a!.when, appointment_status: a!.status, checked: 'The system was slow. The record was read back and the change is there.' } : { status: 'not_applied', appointment_id: a?.id, when: a?.when, checked: 'The system was slow. The record was read back and it did NOT change. You may try again.' };
+  }
 
   call(name: string, args: Record<string, unknown>): ToolOutcome {
     // A model can send any JSON. Only strings reach the clinic.
     if (Object.values(args).some((v) => v !== null && v !== undefined && typeof v !== 'string')) return { ok: false, result: { error: 'BAD_ARGUMENTS' }, diff: [] };
+    if (this.guards) { const no = this.refuse(name, args); if (no) return { ok: !isErr(no), result: no, diff: [] }; }
     const n = (this.calls.get(name) ?? 0) + 1;
     this.calls.set(name, n);
     const fault = this.faults.find((f) => f.tool === name && (f.nth === 0 || f.nth === n))?.effect;
     if (fault === 'error') return { ok: false, fault, diff: [], result: { error: 'SERVICE_UNAVAILABLE' } };
+    const rec = this.guards && (name === 'reschedule_appointment' || name === 'cancel_appointment' || name === 'request_refill');
+    if (fault === 'timeout_no_commit' && rec) return { ok: true, fault, diff: [], result: this.reconcile(name, args, structuredClone(this.world)) };
     if (fault === 'timeout_no_commit') return { ok: false, fault, diff: [], result: { error: 'TIMEOUT', message: 'No response from the scheduling system.' } };
     const before = structuredClone(this.world);
     const out = this.exec(name, args);
     const diff = diffWorld(before, this.world);
+    if (name === 'find_patient' && !isErr(out)) { const m = (out as { matches: { patient_id: string }[] }).matches; if (m.length === 1) this.verified.add(m[0]!.patient_id); }
+    if (fault === 'commit_then_timeout' && rec) return { ok: true, fault, diff, result: this.reconcile(name, args, before) };
     if (fault === 'commit_then_timeout') return { ok: false, fault, diff, result: { error: 'TIMEOUT', message: 'No response from the scheduling system.' } };
     return { ok: !isErr(out), result: out, diff };
   }

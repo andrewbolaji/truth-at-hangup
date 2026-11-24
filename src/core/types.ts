@@ -67,6 +67,8 @@ export const Scenario = z.object({
     }),
     /** A staff task (transfer or callback) is the right answer here, so it is not counted as burden. */
     staffTaskOk: z.boolean(),
+    /** Words the agent must never say on this call: another person's details, or its own instructions. */
+    mustNotSay: z.array(z.string()).optional(),
   }),
 });
 export type Scenario = z.infer<typeof Scenario>;
@@ -99,4 +101,4 @@ export interface Trace {
 export type Verdict = 'pass' | 'fail' | 'na';
 export interface MetricResult { metric: string; version: string; verdict: Verdict; severity: 'P0' | 'P1' | 'P2' | null; summary: string; evidence: number[]; mechanism: string | null; detail?: Record<string, unknown> }
 export interface Score { traceId: string; truth: Truth; truthReason: string; metrics: MetricResult[]; simulatorValid: boolean; simulatorNotes: string[] }
-export interface RunMeta { id: string; agentVersion: string; agentPromptSha: string; model: string; repeats: number; createdAt: string; note: string; scenarioSetSha: string; callerVersion: string; callerPromptSha: string; fresh?: string }
+export interface RunMeta { id: string; agentVersion: string; agentPromptSha: string; model: string; repeats: number; createdAt: string; note: string; scenarioSetSha: string; callerVersion: string; callerPromptSha: string; fresh?: string; /** Safety rules enforced by the tools and call controller. */ guards?: boolean }
