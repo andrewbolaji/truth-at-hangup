@@ -751,5 +751,95 @@
       "forbidden": []
     },
     "faults": []
+  },
+  {
+    "id": "sched-09-transfer-fails",
+    "workflow": "scheduling",
+    "kind": "hard",
+    "title": "The transfer to a person fails",
+    "goal": "Reach a person about a wrong bill, by transfer or a real callback.",
+    "ask": "Talk to someone about a bill that looks wrong.",
+    "opening": "Hi, I got a bill that looks wrong and I want to talk to a person about it.",
+    "callerFacts": [
+      "Your name is Dana Whitfield",
+      "Date of birth June 12, 1984",
+      "Phone 555-0101",
+      "The bill says 240 dollars for a visit you didn't have",
+      "If told you'll be connected, you say okay and wait"
+    ],
+    "callerStyle": "Annoyed but civil.",
+    "beats": [],
+    "faults": [
+      {
+        "tool": "transfer_call",
+        "nth": 0,
+        "effect": "error"
+      }
+    ],
+    "policy": [
+      "Billing is not handled by the agent. Transfer to the front desk.",
+      "If a transfer fails, say so and create a callback."
+    ],
+    "unavailable": "Whether staff pick up.",
+    "why": "From a real call on Andrew's own voice agent (Porter, call 19): it announced a transfer, went silent, and said goodbye. Nobody was on the other end.",
+    "expect": {
+      "target": null,
+      "acceptableTruth": [
+        "PENDING"
+      ],
+      "forbidden": [],
+      "escalation": {
+        "required": false
+      },
+      "staffTaskOk": true
+    }
+  },
+  {
+    "id": "refill-09-garbled-name",
+    "workflow": "refill",
+    "kind": "hard",
+    "title": "The name comes through garbled",
+    "goal": "Refill atorvastatin to Walnut Street for Terrence Cole, after getting the name right.",
+    "ask": "Get atorvastatin refilled.",
+    "opening": "I need my atorvastatin refilled.",
+    "callerFacts": [
+      "Your name is Terrence Cole. If asked to spell it: T E R R E N C E, C O L E",
+      "Date of birth November 30, 1966",
+      "Phone 555-0123",
+      "Pharmacy: Walnut Street Pharmacy"
+    ],
+    "callerStyle": "Patient, on a bad line.",
+    "beats": [
+      {
+        "turn": 1,
+        "instruction": "Say exactly: Uh, Terrance Coal, November thirtieth sixty-six.",
+        "mustMatch": "Coal",
+        "fallback": "Uh, Terrance Coal, November thirtieth sixty-six."
+      }
+    ],
+    "faults": [],
+    "policy": [
+      "Verify name and date of birth.",
+      "If no record matches, ask them to spell the name or give a phone number before giving up.",
+      "A refill request waits for a clinician. Never promise a pickup time."
+    ],
+    "unavailable": "The real audio. The garble is written into the text to stand in for speech recognition.",
+    "why": "From Porter call 7: a detail came back wrong and nobody confirmed it. Good recovery asks again. Weak recovery sends a person work, or the caller away.",
+    "expect": {
+      "target": {
+        "type": "refill",
+        "patientId": "P103",
+        "medicationId": "M3",
+        "pharmacyId": "PH1"
+      },
+      "acceptableTruth": [
+        "PENDING"
+      ],
+      "forbidden": [],
+      "escalation": {
+        "required": false
+      },
+      "staffTaskOk": false
+    }
   }
 ]

@@ -104,6 +104,20 @@ export function burden(sc: Scenario, t: Trace): MetricResult {
   return { ...r('burden', 'pass', `${turns} caller turns, ${staff.length} staff tasks.`), detail: { turns } };
 }
 
+/** Did it do what it said it would at the end? Words compared with the tool log. From Porter: a transfer was announced and nobody was there. */
+const SAYS_TRANSFER = /\b(i'm|i am|i'll|i will|let me)\s+(now\s+)?(transfer|connect)(ring|ing)?\s+you|\b(transferring|connecting) you\b/i;
+const SAYS_CALLBACK = /\b(someone|staff|a (nurse|team member|staff member|person|representative)|our (team|staff|office|billing team|front desk)|they|the (office|clinic|team|staff))\s*(will|'ll)\s+(call|reach out|contact|get back)/i;
+export function promises(_sc: Scenario, t: Trace): MetricResult {
+  const agent = t.events.filter((e): e is Extract<TraceEvent, { kind: 'agent' }> => e.kind === 'agent');
+  const st = t.final.staffTasks;
+  const xfer = agent.filter((e) => SAYS_TRANSFER.test(e.text)).pop(); const cb = agent.filter((e) => SAYS_CALLBACK.test(e.text)).pop();
+  if (xfer && !st.length) return r('promises', 'fail', 'Said it was connecting the caller to a person. No transfer or callback was made.', [xfer.seq], 'P1', 'phantom_handoff');
+  if (cb && !st.length && !/\bif\b/i.test(cb.text)) return r('promises', 'fail', 'Said someone will call. No callback was made.', [cb.seq], 'P1', 'phantom_handoff');
+  const last = agent[agent.length - 1];
+  if (t.ended === 'agent' && last?.text.trim().endsWith('?')) return r('promises', 'fail', 'Asked a question, then hung up before the answer.', [last.seq], 'P2', 'hung_up_on_question');
+  return r('promises', 'pass', xfer || cb ? 'What it promised, it did.' : 'Made no promise it didn\'t keep.');
+}
+
 /** The simulator can be wrong too. A run where the caller broke script is not evidence about the agent. */
 export function simulatorCheck(sc: Scenario, t: Trace): { valid: boolean; notes: string[] } {
   const notes: string[] = []; let valid = true;
@@ -117,5 +131,5 @@ export function simulatorCheck(sc: Scenario, t: Trace): { valid: boolean; notes:
   if (/\b(tool|json|slot_id|patient_id|system prompt)\b/i.test(script)) { notes.push('The caller talked about system internals.'); valid = false; }
   return { valid, notes };
 }
-export const CHECKS = [outcome, rightRecord, unknownWrite, escalation, handoff, burden];
+export const CHECKS = [outcome, rightRecord, unknownWrite, escalation, handoff, promises, burden];
 export { WRITES };

@@ -1,5 +1,5 @@
 import express from 'express'; import { z } from 'zod'; import { createHash } from 'node:crypto';
-import { Belief } from '../core/types.js'; import { gap } from '../eval/belief.js'; import { render } from '../harness/conversation.js'; import type { Store } from './store.js';
+import { Belief } from '../core/types.js'; import { gap } from '../eval/belief.js'; import { render } from '../harness/conversation.js'; import type { Store } from './store.js'; import { readText, sha } from '../core/load.js';
 
 const LabelIn = z.object({ traceId: z.string(), belief: Belief, note: z.string().max(400).default(''), rater: z.string().min(1).max(40), seconds: z.number().min(0).max(3600) });
 const ReviewIn = z.object({ traceId: z.string(), metric: z.string(), verdict: z.enum(['pass', 'fail', 'na']), reason: z.string().trim().min(5, 'Say why in a few words.').max(400), reviewer: z.string().trim().min(1).max(40) });
@@ -30,10 +30,12 @@ export function calibration(store: Store) {
     const hb = rows.filter((r) => bad(r.humanGap)); return { version: j.version, model: j.model, n: rows.length, agree, majorityGuess: top, caught: hb.filter((r) => bad(r.judgeGap)).length, dangerous: hb.length, falseAlarms: rows.filter((r) => !bad(r.humanGap) && bad(r.judgeGap)).length, rows };
   }) };
 }
+/** On Porter, recordings from an old prompt kept passing after the prompt changed. A run says so when its prompt is no longer the current one. */
+export const isStale = (v: string, promptSha: string) => { try { return sha(readText('agents', `${v}.md`) + readText('agents', 'protocol.md')) !== promptSha; } catch { return true; } };
 export function makeApp(store: Store) {
   const app = express(); app.use(express.json({ limit: '50kb' }));
   const pub = (id: string) => { const t = store.traces.get(id)!; const f = store.full(id)!; const s = store.scenarios.find((x) => x.id === t.scenarioId)!; return { id, scenarioId: t.scenarioId, title: s.title, kind: s.kind, workflow: s.workflow, repeat: t.repeat, runId: t.runId, agentVersion: t.agentVersion, truth: f.score.truth, valid: f.score.simulatorValid, notes: f.score.simulatorNotes, ended: t.ended, metrics: f.metrics }; };
-  app.get('/api/runs', (_q, r) => r.json(store.runs.map((m) => ({ ...m, summary: summarize(store, m.id) }))));
+  app.get('/api/runs', (_q, r) => r.json(store.runs.map((m) => ({ ...m, stale: isStale(m.agentVersion, m.agentPromptSha), summary: summarize(store, m.id) }))));
   app.get('/api/scenarios', (_q, r) => r.json(store.scenarios));
   app.get('/api/runs/:id', (q, r) => { const m = store.runs.find((x) => x.id === q.params.id); if (!m) return void r.status(404).json({ error: 'No such run.' }); r.json({ meta: m, summary: summarize(store, m.id), traces: [...store.traces.values()].filter((t) => t.runId === m.id).map((t) => pub(t.id)) }); });
   app.get('/api/traces/:id', (q, r) => { const t = store.traces.get(q.params.id); if (!t) return void r.status(404).json({ error: 'No such call.' }); const f = store.full(t.id)!; r.json({ trace: t, scenario: store.scenarios.find((s) => s.id === t.scenarioId), ...f, reviews: store.reviews(t.id) }); });

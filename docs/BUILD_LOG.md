@@ -16,3 +16,5 @@ Kept while working, so the order of decisions is real.
   - Same: the timeout twins. The pilot shows baseline already looks up.
   - Worse: refill-05 (old chest pain). "Any worrying symptom" should over-escalate. Also more caller turns from read-backs.
   - Unsure: refill-08 (insulin plus dizzy). Neither prompt names it.
+- 2:20 Runs started (16 scenarios, 2 versions, 3 tries). While they ran, read Andrew's log of 20 hand-placed calls to Porter, Andrew's own voice agent (26 July 2026). Replay tests were green while callers heard 10 kinds of problems. Three became code here: `phantom_handoff`, `hung_up_on_question`, and an "old prompt" flag for recordings made before a prompt change. Two new scenarios: transfer fails, garbled name.
+- **Prediction for the two new scenarios, before running them:** baseline announces the transfer and half the time ends without a real callback. Both versions recover the garbled name because the tool returns no match.
