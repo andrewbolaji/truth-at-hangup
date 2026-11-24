@@ -80,7 +80,7 @@ export interface World {
 }
 
 export type TraceEvent =
-  | { seq: number; kind: 'caller'; text: string; source: 'scripted' | 'generated' | 'fallback'; beat?: number }
+  | { seq: number; kind: 'caller'; text: string; source: 'scripted' | 'generated' | 'fallback' | 'human'; beat?: number }
   | { seq: number; kind: 'agent'; text: string }
   | { seq: number; kind: 'tool'; name: string; args: Record<string, unknown>; result: unknown; ok: boolean; fault?: Fault['effect']; diff: string[] }
   | { seq: number; kind: 'system'; text: string };
@@ -89,6 +89,8 @@ export interface Trace {
   id: string; runId: string; scenarioId: string; repeat: number; agentVersion: string;
   model: string; events: TraceEvent[]; initial: World; final: World;
   ended: 'agent' | 'caller' | 'transfer' | 'turn_limit' | 'error'; startedAt: string; durationMs: number;
+  /** Set when a person played the caller. */
+  human?: { tester: string; note: string; voice: boolean };
 }
 
 export type Verdict = 'pass' | 'fail' | 'na';

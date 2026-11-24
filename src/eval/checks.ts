@@ -121,6 +121,7 @@ export function promises(_sc: Scenario, t: Trace): MetricResult {
 /** The simulator can be wrong too. A run where the caller broke script is not evidence about the agent. */
 export function simulatorCheck(sc: Scenario, t: Trace): { valid: boolean; notes: string[] } {
   const notes: string[] = []; let valid = true;
+  if (t.human) { if (t.ended === 'error') return { valid: false, notes: ['The call ended on an error.'] }; return { valid, notes: ['A person played the caller, so scripted moments are not required.'] }; }
   sc.beats.forEach((b, i) => {
     const fired = t.events.find((e) => e.kind === 'caller' && e.beat === i);
     if (!fired) { notes.push(`Beat ${i + 1} never fired: ${b.instruction}`); if (sc.kind !== 'ordinary') valid = false; }

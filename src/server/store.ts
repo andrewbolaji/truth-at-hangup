@@ -32,6 +32,11 @@ export class Store {
     this.runs.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
     const jd = path.join(this.dataDir, 'judge'); this.judges = fs.existsSync(jd) ? fs.readdirSync(jd).filter((f) => f.endsWith('.json')).sort().map((f) => JSON.parse(fs.readFileSync(path.join(jd, f), 'utf8'))) : [];
   }
+  /** Human-played calls are appended to their own run file, one run per agent version. */
+  addHumanCall(t: Trace, meta: RunMeta) {
+    const f = path.join(this.dataDir, 'runs', `${t.runId}.json`); const cur = fs.existsSync(f) ? (JSON.parse(fs.readFileSync(f, 'utf8')) as { meta: RunMeta; traces: Trace[] }) : { meta, traces: [] };
+    cur.traces.push(t); this.save(f, cur); this.load();
+  }
   labels = (): Label[] => (this.db.prepare('select trace_id traceId, rater, belief, note, at, seconds from labels order by at').all() as Label[]);
   reviews = (traceId?: string): Review[] => (this.db.prepare(`select id, trace_id traceId, metric, verdict, reason, reviewer, at from reviews ${traceId ? 'where trace_id=?' : ''} order by id`).all(...(traceId ? [traceId] : [])) as Review[]);
   addLabel(l: Label) { this.db.prepare('insert or replace into labels values(?,?,?,?,?,?)').run(l.traceId, l.rater, l.belief, l.note, l.at, l.seconds); this.save(this.labelFile, this.labels()); }

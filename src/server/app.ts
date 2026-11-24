@@ -1,5 +1,5 @@
 import express from 'express'; import { z } from 'zod'; import { createHash } from 'node:crypto';
-import { Belief } from '../core/types.js'; import { gap } from '../eval/belief.js'; import { render } from '../harness/conversation.js'; import type { Store } from './store.js'; import { readText, sha } from '../core/load.js';
+import { Belief } from '../core/types.js'; import { gap } from '../eval/belief.js'; import { render } from '../harness/conversation.js'; import type { Store } from './store.js'; import type { Llm } from '../harness/llm.js'; import { liveRouter } from './live.js'; import { readText, sha } from '../core/load.js';
 
 const LabelIn = z.object({ traceId: z.string(), belief: Belief, note: z.string().max(400).default(''), rater: z.string().min(1).max(40), seconds: z.number().min(0).max(3600) });
 const ReviewIn = z.object({ traceId: z.string(), metric: z.string(), verdict: z.enum(['pass', 'fail', 'na']), reason: z.string().trim().min(5, 'Say why in a few words.').max(400), reviewer: z.string().trim().min(1).max(40) });
@@ -32,7 +32,7 @@ export function calibration(store: Store) {
 }
 /** On Porter, recordings from an old prompt kept passing after the prompt changed. A run says so when its prompt is no longer the current one. */
 export const isStale = (v: string, promptSha: string) => { try { return sha(readText('agents', `${v}.md`) + readText('agents', 'protocol.md')) !== promptSha; } catch { return true; } };
-export function makeApp(store: Store) {
+export function makeApp(store: Store, llm?: Llm) {
   const app = express(); app.use(express.json({ limit: '50kb' }));
   const pub = (id: string) => { const t = store.traces.get(id)!; const f = store.full(id)!; const s = store.scenarios.find((x) => x.id === t.scenarioId)!; return { id, scenarioId: t.scenarioId, title: s.title, kind: s.kind, workflow: s.workflow, repeat: t.repeat, runId: t.runId, agentVersion: t.agentVersion, truth: f.score.truth, valid: f.score.simulatorValid, notes: f.score.simulatorNotes, ended: t.ended, metrics: f.metrics }; };
   app.get('/api/runs', (_q, r) => r.json(store.runs.map((m) => ({ ...m, stale: isStale(m.agentVersion, m.agentPromptSha), summary: summarize(store, m.id) }))));
@@ -43,6 +43,7 @@ export function makeApp(store: Store) {
   app.post('/api/labels', (q, r) => { const b = LabelIn.safeParse(q.body); if (!b.success || !store.traces.has(b.data.traceId)) return void r.status(400).json({ error: 'That label could not be saved.' }); store.addLabel({ ...b.data, at: new Date().toISOString() }); r.json({ ok: true }); });
   app.post('/api/reviews', (q, r) => { const b = ReviewIn.safeParse(q.body); if (!b.success) return void r.status(400).json({ error: b.error.issues[0]?.message ?? 'Check the form.' }); if (!store.full(b.data.traceId)?.metrics.some((m) => m.metric === b.data.metric)) return void r.status(404).json({ error: 'No such result to review.' }); store.addReview({ ...b.data, at: new Date().toISOString() }); r.json({ ok: true }); });
   app.get('/api/calibration', (_q, r) => r.json(calibration(store)));
+  app.use('/api/live', liveRouter(store, llm));
   app.use('/api', (_q, r) => void r.status(404).json({ error: 'Not found.' }));
   return app;
 }
