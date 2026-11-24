@@ -20,6 +20,7 @@ describe('api', () => {
     expect((await P('/reviews', { traceId: 'r1:sched-01-plain-move:1', metric: 'outcome', verdict: 'pass', reason: 'planted for the test', reviewer: 'A' })).status).toBe(200);
     expect((await J(`/traces/${id}`)).metrics.find((m: { metric: string }) => m.metric === 'outcome')).toMatchObject({ verdict: 'pass', override: { reviewer: 'A' } });
   });
+  it('the label queue leaves out calls from the broken caller', async () => { store.runs[0]!.callerVersion = 'v1'; expect((await J('/queue?rater=A')).total).toBe(0); });
   it('the label queue is blind', async () => { const q = JSON.stringify(await J('/queue?rater=A')); expect(q).not.toMatch(/hand|NOT_DONE|"truth"|false_reassurance|v1/); });
   it('a label survives a lost database, because it is written to a file', async () => {
     await P('/labels', { traceId: 'r1:sched-01-plain-move:1', belief: 'DONE', note: '', rater: 'A', seconds: 5 });

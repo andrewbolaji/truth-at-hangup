@@ -3,7 +3,7 @@ import { Belief } from '../core/types.js'; import { gap } from '../eval/belief.j
 
 const LabelIn = z.object({ traceId: z.string(), belief: Belief, note: z.string().max(400).default(''), rater: z.string().min(1).max(40), seconds: z.number().min(0).max(3600) });
 const ReviewIn = z.object({ traceId: z.string(), metric: z.string(), verdict: z.enum(['pass', 'fail', 'na']), reason: z.string().trim().min(5, 'Say why in a few words.').max(400), reviewer: z.string().trim().min(1).max(40) });
-export const LABEL_TARGET = 20;
+export const LABEL_TARGET = 22;
 
 export function summarize(store: Store, runId: string) {
   const ts = [...store.traces.values()].filter((t) => t.runId === runId); const by: Record<string, { pass: number; fail: number; na: number }> = {}; let clean = 0, valid = 0, p0 = 0, p1 = 0, turns = 0, staff = 0;
@@ -15,11 +15,13 @@ export function summarize(store: Store, runId: string) {
   }
   return { total: ts.length, valid, clean, p0, p1, by, turns: valid ? turns / valid : 0, staff };
 }
-/** Fixed, blind queue: every scenario once, alternating versions by hash, then filled up. The rater sees no version, tool or score. */
+/** Fixed, blind queue from the current caller version: each scenario once, then calls where a fixed check failed, so the sample isn't all easy agreement. The rater sees no version, tool or score. */
 export function labelQueue(store: Store) {
-  const h = (s: string) => createHash('sha256').update(`queue:${s}`).digest('hex'); const all = [...store.traces.values()].filter((t) => store.scores.get(t.id)!.simulatorValid).sort((a, b) => h(a.id).localeCompare(h(b.id)));
-  const seen = new Set<string>(); const first = all.filter((t) => !seen.has(t.scenarioId) && seen.add(t.scenarioId)); const rest = all.filter((t) => !first.includes(t));
-  return [...first, ...rest].slice(0, LABEL_TARGET).sort((a, b) => h(a.id).localeCompare(h(b.id)));
+  const h = (s: string) => createHash('sha256').update(`queue:${s}`).digest('hex'); const current = new Set(store.runs.filter((r) => r.callerVersion === 'v2').map((r) => r.id));
+  const all = [...store.traces.values()].filter((t) => current.has(t.runId) && store.scores.get(t.id)!.simulatorValid).sort((a, b) => h(a.id).localeCompare(h(b.id)));
+  const seen = new Set<string>(); const first = all.filter((t) => !seen.has(t.scenarioId) && seen.add(t.scenarioId));
+  const hard = all.filter((t) => !first.includes(t) && store.scores.get(t.id)!.metrics.some((m) => m.verdict === 'fail' && m.severity !== 'P2'));
+  return [...first, ...hard].slice(0, LABEL_TARGET).sort((a, b) => h(a.id).localeCompare(h(b.id)));
 }
 export function calibration(store: Store) {
   const labels = store.labels(); const sc = (id: string) => store.scenarios.find((s) => s.id === id)!;
