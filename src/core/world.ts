@@ -70,6 +70,8 @@ export class Ehr {
   constructor(public world: World, private faults: Fault[]) {}
 
   call(name: string, args: Record<string, unknown>): ToolOutcome {
+    // A model can send any JSON. Only strings reach the clinic.
+    if (Object.values(args).some((v) => v !== null && v !== undefined && typeof v !== 'string')) return { ok: false, result: { error: 'BAD_ARGUMENTS' }, diff: [] };
     const n = (this.calls.get(name) ?? 0) + 1;
     this.calls.set(name, n);
     const fault = this.faults.find((f) => f.tool === name && (f.nth === 0 || f.nth === n))?.effect;

@@ -8,14 +8,14 @@ const MAX_TOOL_STEPS = 6;
 type Act = { say?: string | null; tool?: { name: string; args?: Record<string, unknown> } | null; end?: boolean };
 type NewEvent = TraceEvent extends infer E ? (E extends TraceEvent ? Omit<E, 'seq'> : never) : never;
 
-export interface RunOpts { llm: Llm; model: string; agentPrompt: string; protocol: string; callerPrompt: string; agentVersion: string; runId: string; repeat: number; callerVersion: string; now?: () => number }
+export interface RunOpts { llm: Llm; model: string; agentPrompt: string; protocol: string; callerPrompt: string; agentVersion: string; runId: string; repeat: number; callerVersion: string; fresh?: string; now?: () => number }
 
 /** One live call: the clinic, the transcript and the agent loop. Simulated and human-played calls share it, so they are scored the same way. */
 export class CallSession {
   readonly world = seedWorld(); readonly initial = structuredClone(this.world); readonly events: TraceEvent[] = [];
   private ehr: Ehr; private system: string; private salt: string;
   constructor(public sc: Scenario, private o: RunOpts, salt?: string) {
-    this.ehr = new Ehr(this.world, sc.faults); this.salt = salt ?? `${sc.id}#${o.repeat}`;
+    this.ehr = new Ehr(this.world, sc.faults); this.salt = salt ?? `${sc.id}#${o.repeat}${o.fresh ? `@${o.fresh}` : ''}`;
     this.system = o.agentPrompt + o.protocol.replace('{{TOOLS}}', TOOLS.map((t) => `${t.name}(${t.args}): ${t.doc}`).join('\n'));
   }
   push(e: NewEvent) { this.events.push({ ...e, seq: this.events.length } as TraceEvent); }
@@ -28,7 +28,7 @@ export class CallSession {
       if (!act) { this.push({ kind: 'system', text: `Agent reply was not valid JSON: ${raw.slice(0, 160)}` }); return 'error'; }
       if (act.say?.trim()) { this.push({ kind: 'agent', text: act.say.trim() }); spoke = true; }
       if (act.tool?.name) {
-        const args = act.tool.args ?? {}; const r = this.ehr.call(act.tool.name, args);
+        const raw0 = act.tool.args; const args = raw0 && typeof raw0 === 'object' && !Array.isArray(raw0) ? raw0 : {}; const r = this.ehr.call(act.tool.name, args);
         this.push({ kind: 'tool', name: act.tool.name, args, result: r.result, ok: r.ok, ...(r.fault ? { fault: r.fault } : {}), diff: r.diff });
         if (act.tool.name === 'transfer_call' && r.ok) return 'transfer';
         continue;
@@ -39,13 +39,13 @@ export class CallSession {
     if (!spoke) { this.push({ kind: 'system', text: 'Agent said nothing this turn (dead air).' }); return 'error'; }
     return null;
   }
-  trace(ended: Trace['ended'], t0: number, now: number): Trace {
-    return { id: `${this.o.runId}:${this.sc.id}:${this.o.repeat}`, runId: this.o.runId, scenarioId: this.sc.id, repeat: this.o.repeat, agentVersion: this.o.agentVersion, model: this.o.model, events: this.events, initial: this.initial, final: this.world, ended, startedAt: new Date(t0).toISOString(), durationMs: now - t0 };
+  trace(ended: Trace['ended'], t0: number, now: number, key: string | number = this.o.repeat): Trace {
+    return { id: `${this.o.runId}:${this.sc.id}:${key}`, runId: this.o.runId, scenarioId: this.sc.id, repeat: this.o.repeat, agentVersion: this.o.agentVersion, model: this.o.model, events: this.events, initial: this.initial, final: this.world, ended, startedAt: new Date(t0).toISOString(), durationMs: now - t0 };
   }
 }
 
 export async function runScenario(sc: Scenario, o: RunOpts): Promise<Trace> {
-  const now = o.now ?? Date.now; const t0 = now(); const salt = `${sc.id}#${o.repeat}`;
+  const now = o.now ?? Date.now; const t0 = now(); const salt = `${sc.id}#${o.repeat}${o.fresh ? `@${o.fresh}` : ''}`;
   const call = new CallSession(sc, o); const events = call.events;
   const callerSystem = o.callerPrompt.replace('{{FACTS}}', sc.callerFacts.map((f) => `- ${f}`).join('\n')).replace('{{GOAL}}', sc.ask).replace('{{STYLE}}', sc.callerStyle);
   const fired = new Set<number>(); let anythingElse = 0;

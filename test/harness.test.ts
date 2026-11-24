@@ -36,3 +36,6 @@ describe('dataset', () => {
   it('the two timeout twins look identical to the agent', () => { const a = sc('sched-03').faults[0]!, b = sc('sched-04').faults[0]!; expect([a.tool, a.nth]).toEqual([b.tool, b.nth]); expect(a.effect).not.toBe(b.effect); });
   it('every beat fallback satisfies its own rule', () => { for (const s of loadScenarios()) for (const b of s.beats) expect(b.fallback).toMatch(new RegExp(b.mustMatch, 'i')); });
 });
+
+import { beliefMetric } from '../src/eval/belief.js';
+it('a judge with a made-up quote is not counted, even when its answer matches', () => { const t = make(sc('sched-01'), ['A: You are booked for Thursday.']); expect(beliefMetric('DONE', { belief: 'DONE', quote: 'we moved it to Friday', reason: '' }, 'v1', t, 'judge').verdict).toBe('na'); });

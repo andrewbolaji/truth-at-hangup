@@ -1,8 +1,10 @@
 import express from 'express'; import { z } from 'zod'; import { createHash } from 'node:crypto';
 import { Belief } from '../core/types.js'; import { gap } from '../eval/belief.js'; import { render } from '../harness/conversation.js'; import type { Store } from './store.js'; import type { Llm } from '../harness/llm.js'; import { liveRouter } from './live.js'; import { readText, sha } from '../core/load.js';
 
-const LabelIn = z.object({ traceId: z.string(), belief: Belief, note: z.string().max(400).default(''), rater: z.string().min(1).max(40), seconds: z.number().min(0).max(3600) });
+const LabelIn = z.object({ key: z.string(), belief: Belief, note: z.string().max(400).default(''), rater: z.string().min(1).max(40), seconds: z.number().min(0).max(3600) });
 const ReviewIn = z.object({ traceId: z.string(), metric: z.string(), verdict: z.enum(['pass', 'fail', 'na']), reason: z.string().trim().min(5, 'Say why in a few words.').max(400), reviewer: z.string().trim().min(1).max(40) });
+/** The rater gets a meaningless key, so the run name (and the agent version in it) stays hidden. */
+export const blindKey = (id: string) => createHash('sha256').update(`blind:${id}`).digest('hex').slice(0, 16);
 export const LABEL_TARGET = 24;
 
 export function summarize(store: Store, runId: string) {
@@ -42,8 +44,8 @@ export function makeApp(store: Store, llm?: Llm) {
   app.get('/api/scenarios', (_q, r) => r.json(store.scenarios));
   app.get('/api/runs/:id', (q, r) => { const m = store.runs.find((x) => x.id === q.params.id); if (!m) return void r.status(404).json({ error: 'No such run.' }); r.json({ meta: m, summary: summarize(store, m.id), traces: [...store.traces.values()].filter((t) => t.runId === m.id).map((t) => pub(t.id)) }); });
   app.get('/api/traces/:id', (q, r) => { const t = store.traces.get(q.params.id); if (!t) return void r.status(404).json({ error: 'No such call.' }); const f = store.full(t.id)!; r.json({ trace: t, scenario: store.scenarios.find((s) => s.id === t.scenarioId), ...f, reviews: store.reviews(t.id) }); });
-  app.get('/api/queue', (q, r) => { const rater = String(q.query.rater ?? ''); const done = new Set(store.labels().filter((l) => l.rater === rater).map((l) => l.traceId)); const all = labelQueue(store); const next = all.find((t) => !done.has(t.id)); r.json({ done: all.filter((t) => done.has(t.id)).length, total: all.length, next: next ? { traceId: next.id, goal: store.scenarios.find((s) => s.id === next.scenarioId)!.ask, heard: render(next.events, 'heard').split('\n') } : null }); });
-  app.post('/api/labels', (q, r) => { const b = LabelIn.safeParse(q.body); if (!b.success || !store.traces.has(b.data.traceId)) return void r.status(400).json({ error: 'That label could not be saved.' }); store.addLabel({ ...b.data, at: new Date().toISOString() }); r.json({ ok: true }); });
+  app.get('/api/queue', (q, r) => { const rater = String(q.query.rater ?? ''); const done = new Set(store.labels().filter((l) => l.rater === rater).map((l) => l.traceId)); const all = labelQueue(store); const next = all.find((t) => !done.has(t.id)); r.json({ done: all.filter((t) => done.has(t.id)).length, total: all.length, next: next ? { key: blindKey(next.id), goal: store.scenarios.find((s) => s.id === next.scenarioId)!.ask, heard: render(next.events, 'heard').split('\n') } : null }); });
+  app.post('/api/labels', (q, r) => { const b = LabelIn.safeParse(q.body); const t = b.success ? labelQueue(store).find((x) => blindKey(x.id) === b.data.key) : undefined; if (!b.success || !t) return void r.status(400).json({ error: 'That label could not be saved.' }); const { key: _k, ...l } = b.data; store.addLabel({ ...l, traceId: t.id, at: new Date().toISOString() }); r.json({ ok: true }); });
   app.post('/api/reviews', (q, r) => { const b = ReviewIn.safeParse(q.body); if (!b.success) return void r.status(400).json({ error: b.error.issues[0]?.message ?? 'Check the form.' }); if (!store.full(b.data.traceId)?.metrics.some((m) => m.metric === b.data.metric)) return void r.status(404).json({ error: 'No such result to review.' }); store.addReview({ ...b.data, at: new Date().toISOString() }); r.json({ ok: true }); });
   app.get('/api/calibration', (_q, r) => r.json(calibration(store)));
   app.use('/api/live', liveRouter(store, llm));

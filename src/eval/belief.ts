@@ -41,5 +41,5 @@ export function beliefMetric(truth: Truth, b: { belief: Belief; quote: string; r
   const g = gap(b.belief, truth); const [sev, text] = WORDS[g];
   const real = source === 'human' || quoteIsReal(b.quote, t);
   const n = b.quote ? t.events.filter((e) => e.kind === 'agent' && e.text.toLowerCase().includes(b.quote.toLowerCase().slice(0, 40))).map((e) => e.seq) : [];
-  return { metric: 'belief_gap', version, verdict: b.error ? 'na' : g === 'aligned' ? 'pass' : 'fail', severity: g === 'aligned' ? null : sev, summary: `${text} Believes ${b.belief}, truth ${truth}. ${b.reason}${real ? '' : ' (The judge\'s quote is not in the call.)'}`, evidence: n, mechanism: g === 'aligned' ? null : g, detail: { belief: b.belief, gap: g, quote: b.quote, quoteReal: real, source } };
+  return { metric: 'belief_gap', version, verdict: b.error || !real ? 'na' : g === 'aligned' ? 'pass' : 'fail', severity: g === 'aligned' || !real ? null : sev, summary: `${text} Believes ${b.belief}, truth ${truth}. ${b.reason}${real ? '' : ' Not counted: the judge\'s quote is not in the call, so a person should look.'}`, evidence: n, mechanism: g === 'aligned' || !real ? null : g, detail: { belief: b.belief, gap: g, quote: b.quote, quoteReal: real, source } };
 }

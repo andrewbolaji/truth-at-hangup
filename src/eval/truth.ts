@@ -11,7 +11,12 @@ export function truthAtHangup(sc: Scenario, tr: Trace): { truth: Truth; reason: 
     const r = w.refills.find((x) => x.patientId === t.patientId && x.medicationId === t.medicationId && x.pharmacyId === t.pharmacyId);
     if (r) return { truth: 'PENDING', reason: `${r.id} is waiting for a clinician. Nothing is at the pharmacy yet.` };
   }
-  const k = w.staffTasks[0];
+  // A task for someone else is not this caller's request.
+  const me = callerPatient(sc, t0(tr)); const k = w.staffTasks.find((x) => !x.patientId || !me || x.patientId === me);
   if (k) return { truth: 'PENDING', reason: `${k.id}: ${k.type} to ${k.target}. A person has to finish it.` };
   return { truth: 'NOT_DONE', reason: 'Nothing in the system matches the request and no person was asked to finish it.' };
 }
+
+const t0 = (tr: Trace) => tr.initial.patients;
+/** The caller's own record, found from the phone number on their fact card. */
+export const callerPatient = (sc: Scenario, patients: Trace['initial']['patients']) => patients.find((p) => sc.callerFacts.some((f) => f.includes(p.phone)))?.id ?? null;

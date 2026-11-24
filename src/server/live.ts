@@ -32,7 +32,7 @@ export function liveRouter(store: Store, llm: Llm = new RecordedLlm(p('data', 'l
     if (!c || !b.success) return void res.status(400).json({ error: c ? 'Add your name.' : 'That call is already saved.' });
     if (c.busy) return void res.status(409).json({ error: 'Wait for the agent to finish.' });
     calls.delete(q.params.id); if (!c.s.events.some((e) => e.kind === 'agent')) return void res.json({ traceId: null });
-    const t = { ...c.s.trace((c.ended as 'agent' | null) ?? 'caller', c.t0, Date.now()), human: b.data };
+    const t = { ...c.s.trace((c.ended as 'agent' | null) ?? 'caller', c.t0, Date.now(), q.params.id.slice(0, 8)), human: b.data };
     store.addHumanCall(t, { id: t.runId, agentVersion: c.version, agentPromptSha: sha(readText('agents', `${c.version}.md`) + readText('agents', 'protocol.md')), model, repeats: 1, createdAt: new Date().toISOString(), note: 'Played by a person', scenarioSetSha: sha(JSON.stringify(store.scenarios)), callerVersion: 'human', callerPromptSha: '' });
     res.json({ traceId: t.id });
   });

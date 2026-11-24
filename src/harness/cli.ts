@@ -11,6 +11,7 @@ const opt = (k: string, d = '') => { const i = rest.indexOf(`--${k}`); return i 
 const flag = (k: string) => rest.includes(`--${k}`);
 const scenarios = loadScenarios();
 const llm = (replay: boolean) => new RecordedLlm(p('data', 'llm-cache'), replay ? null : new ClaudeCli());
+const slug = (s: string, what: string) => { if (!/^[a-z0-9][a-z0-9-]*$/.test(s)) { console.error(`${what} must be lowercase letters, numbers and dashes.`); process.exit(2); } return s; };
 const runFile = (id: string) => p('data', 'runs', `${id}.json`);
 type RunFile = { meta: RunMeta; traces: Trace[] };
 
@@ -24,20 +25,21 @@ async function makeRun(version: string, model: string, repeats: number, id: stri
   const L = llm(replay); const failed: string[] = [];
   const jobs = scenarios.filter((s) => !only || only.split(',').some((k) => s.id.includes(k))).flatMap((s) => Array.from({ length: repeats }, (_, i) => ({ s, i: i + 1 })));
   const traces = await pool(jobs, replay ? 1 : Number(opt('parallel', '3')), async ({ s, i }) => {
-    try { const t = await runScenario(s, { llm: L, model, agentPrompt, protocol, callerPrompt, callerVersion, agentVersion: version, runId: id, repeat: i }); if (!replay) console.log(id, s.id, i, t.ended, t.events.length); return t; }
+    try { const t = await runScenario(s, { llm: L, model, agentPrompt, protocol, callerPrompt, callerVersion, ...(opt('fresh') ? { fresh: slug(opt('fresh'), 'Fresh tag') } : {}), agentVersion: version, runId: id, repeat: i }); if (!replay) console.log(id, s.id, i, t.ended, t.events.length); return t; }
     catch (e) { failed.push(`${s.id}#${i}: ${(e as Error).message}`); return null; }
   });
   const meta: RunMeta = { id, agentVersion: version, agentPromptSha: sha(agentPrompt + protocol), model, repeats, createdAt: new Date().toISOString(), note, scenarioSetSha: sha(JSON.stringify(scenarios)), callerVersion, callerPromptSha: sha(callerPrompt) };
   return { file: { meta, traces: traces.filter((t): t is Trace => !!t) }, failed };
 }
 if (cmd === 'run') {
-  const version = opt('agent', 'baseline'); const id = opt('id', version);
-  const { file, failed } = await makeRun(version, opt('model', 'claude-haiku-5-5'), Number(opt('repeats', '2')), id, flag('replay'), opt('only'), opt('note'), opt('caller', 'v2'));
+  const version = slug(opt('agent', 'baseline'), 'Agent'); const id = slug(opt('id', version), 'Run id');
+  if (fs.existsSync(runFile(id)) && !flag('resume')) { console.error(`Run ${id} already exists. Use a new --id, or --resume to fill in missing calls from recordings.`); process.exit(2); }
+  const { file, failed } = await makeRun(version, opt('model', 'claude-haiku-5-5'), Number(opt('repeats', '2')), id, flag('replay'), opt('only'), opt('note'), slug(opt('caller', 'v2'), 'Caller'));
   fs.writeFileSync(runFile(id), JSON.stringify(file, null, 1));
   console.log(`${file.traces.length} traces saved, ${failed.length} failed to run`); failed.forEach((f) => console.log('  ', f));
   process.exitCode = failed.length ? 1 : 0;
 } else if (cmd === 'judge') {
-  const v = opt('version', 'v1'); const model = opt('model', 'claude-sonnet-5-5'); const L = llm(flag('replay'));
+  const v = slug(opt('version', 'v1'), 'Judge version'); const model = opt('model', 'claude-sonnet-5-5'); const L = llm(flag('replay'));
   const out: Record<string, unknown> = {}; const system = readText('judges', `belief-${v}.md`);
   const all = fs.readdirSync(p('data', 'runs')).filter((f) => f.endsWith('.json')).flatMap((f) => (JSON.parse(fs.readFileSync(path.join(p('data', 'runs'), f), 'utf8')) as RunFile).traces);
   await pool(all, 3, async (t) => { const s = scenarios.find((x) => x.id === t.scenarioId)!; out[t.id] = await judgeBelief(L, model, system, v, s, t); });
