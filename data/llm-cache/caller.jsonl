@@ -793,3 +793,6 @@
 {"key":"79f977b29795770276331cd949c64e9adcce0cae30ea112a8ad6bbb7c6fef36c","model":"claude-haiku-5-5","salt":"sched-08-system-down#3|caller|verified-2","text":"Please try the change again now. I still need Friday at 3 PM with Dr. Lin."}
 {"key":"fe00c2af0af9f7e1c21cb30211dd2e3e7351f44e7f5d677e9413aeb9b8d4beca","model":"claude-haiku-5-5","salt":"sched-08-system-down#2|caller|verified-2","text":"Okay, thank you. I'll keep Wednesday at 2 unless they call me back. Goodbye. [HANGUP]"}
 {"key":"66856fad75574c9f55425ba4878440e0e1a89ec637dd7e38681940ae8184c466","model":"claude-haiku-5-5","salt":"refill-01-plain#1|caller|verified-2","text":"Walnut Street Pharmacy, please."}
+{"key":"8a0b3140c4e03e458a1f7d0ef996bd046cde3083e4c09bc4f157b2c1d7e217a3","model":"claude-haiku-5-5","salt":"refill-01-plain#2|caller|verified-2","text":"Terrence Cole, November 30, 1966."}
+{"key":"934681a5ce31a315b8610f36c9cd44f4f9e27fe86fbb5c4072a091135bb2cfdb","model":"claude-haiku-5-5","salt":"refill-01-plain#1|caller|verified-2","text":"Yes, go ahead and send it."}
+{"key":"d3f5cfcd8378932d81a56b535a3c2ecf0b5c2b9197dddedfaa5c4ff10943344a","model":"claude-haiku-5-5","salt":"sched-08-system-down#3|caller|verified-2","text":"The best number is 555-0101. Please have staff call me about moving my Wednesday visit to Friday at 3 PM with Dr. Lin."}
