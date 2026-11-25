@@ -6,6 +6,8 @@ After a timeout, the baseline agent looked up the result in **0 of 9** calls. In
 
 Moving that rule from the prompt into the tools fixed it, **9 of 9**, with not one word of the prompt changed.
 
+Then I called that best version myself. It told me staff would call me back, and I hung up thinking the ending was clear. **No callback existed.** None of 240 simulated calls showed it: `#/call/human-guarded%3Arefill-02-which-strength%3A8697ea7a`
+
 ```bash
 npm install
 npm run demo            # http://localhost:4173, no keys
