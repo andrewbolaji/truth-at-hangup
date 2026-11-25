@@ -42,6 +42,7 @@ if (cmd === 'run') {
   const v = slug(opt('version', 'v1'), 'Judge version'); const model = opt('model', 'claude-sonnet-5-5'); const L = llm(flag('replay'));
   const out: Record<string, unknown> = {}; const system = readText('judges', `belief-${v}.md`);
   const all = fs.readdirSync(p('data', 'runs')).filter((f) => f.endsWith('.json')).map((f) => JSON.parse(fs.readFileSync(path.join(p('data', 'runs'), f), 'utf8')) as RunFile).filter((r) => r.meta.callerVersion !== 'v1').flatMap((r) => r.traces);
+  const queue = flag('queue') ? new Set(JSON.parse(readText('data', 'labels', 'queue.json')) as string[]) : null; if (queue) all.splice(0, all.length, ...all.filter((t) => queue.has(t.id)));
   await pool(all, 3, async (t) => { const s = scenarios.find((x) => x.id === t.scenarioId)!; out[t.id] = await judgeBelief(L, model, system, v, s, t); });
   fs.mkdirSync(p('data', 'judge'), { recursive: true });
   fs.writeFileSync(p('data', 'judge', `${v}.json`), JSON.stringify({ version: v, model, promptSha: sha(system), outputs: Object.fromEntries(Object.entries(out).sort()) }, null, 1));
