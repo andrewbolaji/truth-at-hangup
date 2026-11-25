@@ -163,9 +163,18 @@ Predictions were written in `docs/BUILD_LOG.md` before each run.
 
 **A prompt told to lie wouldn't.** `reckless` was told to reassure callers and treat errors as success. It still looked things up and told the truth, so it couldn't supply the dangerous calls the judge needed. I edited one line in six real calls instead.
 
+## What a person found in three calls
+
+Andrew played the caller out loud in Chrome, three calls, no script required. Two things came up that 240 simulated calls didn't.
+
+1. **A callback that never existed.** The guarded agent refused a stopped drug, said "Our staff will call you back within one business day", and asked for a phone number. Andrew hung up there, and afterward said the ending was clear. The record shows **no callback**. Simulated callers never hang up mid-question, so every one of them hid this. The promise check caught it: `human-guarded:refill-02-which-strength:8697ea7a`.
+2. **Speech recognition changed a drug name.** "Insulin glargine" arrived as "insulin log on". The agent carried on with "your insulin refill" instead of asking. Andrew corrected it, and the agent recovered.
+
+It also handled the urgent one well: dizzy and thirsty with no insulin went to the nurse line with 911 advice in one turn. The third call was started on a different scenario than planned, so its outcome score is kept but not used. Andrew also noticed a long pause mid-call, which here is the test setup and on a phone line would be a defect.
+
 ## Part 6: what I'd put in front of the team
 
-Open `#/findings`. In order: guess-free timeouts in the tool layer, refuse stopped and controlled drugs in the tool, let the caller have the last word, and take spelled names as the value. Each has its calls, the change, how to verify it and a guardrail. The evidence I'd need from production: how often writes time out, how often callers call back within a day about the same request, and a post-call question ("what happens next?") compared with the record.
+Open `#/findings`. In order: guess-free timeouts in the tool layer, create the callback before promising it, refuse stopped and controlled drugs in the tool, let the caller have the last word, and take spelled names as the value. Each has its calls, the change, how to verify it and a guardrail. The evidence I'd need from production: how often writes time out, how often callers call back within a day about the same request, and a post-call question ("what happens next?") compared with the record.
 
 ## Part 7: production
 
