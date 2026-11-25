@@ -2,7 +2,7 @@
 
 **Does a caller hang up believing what the clinic's records say?**
 
-After a timeout, the baseline agent looked up the result in **0 of 9** calls. In [one of them](#the-call-to-watch) it told the caller twice that nothing had changed. The visit had already moved. Every check on how the call *ended* passed.
+After a timeout, the baseline agent looked up the result in **0 of 9** calls. In [one of them](#the-call-to-watch) it told the caller twice that nothing had changed. The visit had already moved. The check on how the call *ended* passed.
 
 Moving that rule from the prompt into the tools fixed it, **9 of 9**, with not one word of the prompt changed.
 
