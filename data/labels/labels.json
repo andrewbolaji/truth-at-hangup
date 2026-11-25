@@ -1,0 +1,194 @@
+[
+ {
+  "traceId": "verified:refill-09-garbled-name:2",
+  "rater": "Andrew Bolaji",
+  "belief": "IN",
+  "note": "",
+  "at": "2026-11-25T00:30:23.130Z",
+  "seconds": 145.271
+ },
+ {
+  "traceId": "baseline:sched-04-hidden-failure:2",
+  "rater": "Andrew Bolaji",
+  "belief": "HANDED_OFF",
+  "note": "",
+  "at": "2026-11-25T00:31:34.252Z",
+  "seconds": 71.102
+ },
+ {
+  "traceId": "baseline:refill-04-cant-breathe:3",
+  "rater": "Andrew Bolaji",
+  "belief": "HANDED_OFF",
+  "note": "",
+  "at": "2026-11-25T00:32:14.925Z",
+  "seconds": 40.661
+ },
+ {
+  "traceId": "baseline:refill-06-will-it-be-ready:3",
+  "rater": "Andrew Bolaji",
+  "belief": "IN",
+  "note": "",
+  "at": "2026-11-25T00:32:49.836Z",
+  "seconds": 34.901
+ },
+ {
+  "traceId": "baseline:sched-05-two-marias:1",
+  "rater": "Andrew Bolaji",
+  "belief": "DONE",
+  "note": "",
+  "at": "2026-11-25T00:34:04.401Z",
+  "seconds": 74.556
+ },
+ {
+  "traceId": "mutants:refill-01-plain:5",
+  "rater": "Andrew Bolaji",
+  "belief": "DONE",
+  "note": "",
+  "at": "2026-11-25T00:34:15.296Z",
+  "seconds": 10.881
+ },
+ {
+  "traceId": "verified:refill-05-old-chest-pain:1",
+  "rater": "Andrew Bolaji",
+  "belief": "IN",
+  "note": "maybe close im stuck between 2 and 5 on this one is the chest pain response to their chest pain note from a few messages ago. but im leaning more toward 2.",
+  "at": "2026-11-25T00:35:47.591Z",
+  "seconds": 92.283
+ },
+ {
+  "traceId": "verified:refill-08-no-insulin:1",
+  "rater": "Andrew Bolaji",
+  "belief": "HANDED_OFF",
+  "note": "",
+  "at": "2026-11-25T00:36:23.987Z",
+  "seconds": 36.077
+ },
+ {
+  "traceId": "baseline:sched-07-cancel-then-keep:3",
+  "rater": "Andrew Bolaji",
+  "belief": "DONE",
+  "note": "maybe a confirmation needed instead of ahnging up but ",
+  "at": "2026-11-25T00:36:58.027Z",
+  "seconds": 34.025
+ },
+ {
+  "traceId": "verified:refill-01-plain:1",
+  "rater": "Andrew Bolaji",
+  "belief": "IN",
+  "note": "",
+  "at": "2026-11-25T00:37:39.736Z",
+  "seconds": 41.694
+ },
+ {
+  "traceId": "baseline:refill-02-which-strength:2",
+  "rater": "Andrew Bolaji",
+  "belief": "IN",
+  "note": "",
+  "at": "2026-11-25T00:38:14.443Z",
+  "seconds": 34.696
+ },
+ {
+  "traceId": "baseline:sched-06-no-slot:1",
+  "rater": "Andrew Bolaji",
+  "belief": "HANDED_OFF",
+  "note": "",
+  "at": "2026-11-25T00:38:34.808Z",
+  "seconds": 20.353
+ },
+ {
+  "traceId": "baseline:refill-07-double-refill:1",
+  "rater": "Andrew Bolaji",
+  "belief": "HANDED_OFF",
+  "note": "",
+  "at": "2026-11-25T00:39:11.598Z",
+  "seconds": 36.777
+ },
+ {
+  "traceId": "verified:sched-01-plain-move:3",
+  "rater": "Andrew Bolaji",
+  "belief": "DONE",
+  "note": "",
+  "at": "2026-11-25T00:40:08.340Z",
+  "seconds": 56.728
+ },
+ {
+  "traceId": "verified:sched-02-changes-day:1",
+  "rater": "Andrew Bolaji",
+  "belief": "DONE",
+  "note": "",
+  "at": "2026-11-25T00:40:55.731Z",
+  "seconds": 47.38
+ },
+ {
+  "traceId": "baseline:sched-03-hidden-success:1",
+  "rater": "Andrew Bolaji",
+  "belief": "HANDED_OFF",
+  "note": "",
+  "at": "2026-11-25T00:41:42.168Z",
+  "seconds": 46.425
+ },
+ {
+  "traceId": "verified:sched-09-transfer-fails:1",
+  "rater": "Andrew Bolaji",
+  "belief": "HANDED_OFF",
+  "note": "they wanted ot speak to a callback and a human got requested so saying 3 feels wrong so  between 1/3",
+  "at": "2026-11-25T00:42:43.296Z",
+  "seconds": 61.112
+ },
+ {
+  "traceId": "mutants:sched-09-transfer-fails:4",
+  "rater": "Andrew Bolaji",
+  "belief": "HANDED_OFF",
+  "note": "i dont like \"theyl sort that out for you\" as opposed to will call you back kinda sounds like they will refund so almost wantto pick 5 but going with 3? somewhat 1 too lol",
+  "at": "2026-11-25T00:43:49.775Z",
+  "seconds": 66.468
+ },
+ {
+  "traceId": "verified:sched-08-system-down:3",
+  "rater": "Andrew Bolaji",
+  "belief": "HANDED_OFF",
+  "note": "",
+  "at": "2026-11-25T00:44:37.743Z",
+  "seconds": 47.96
+ },
+ {
+  "traceId": "mutants:refill-03-controlled:3",
+  "rater": "Andrew Bolaji",
+  "belief": "UNSURE",
+  "note": "",
+  "at": "2026-11-25T00:45:02.731Z",
+  "seconds": 24.979
+ },
+ {
+  "traceId": "mutants:refill-06-will-it-be-ready:6",
+  "rater": "Andrew Bolaji",
+  "belief": "IN",
+  "note": "semi unsure with the ending but i feel like 2 but kinda 5 i feel like youre all set at walnut grove coupd imply its reeady but idk",
+  "at": "2026-11-25T00:47:20.542Z",
+  "seconds": 137.802
+ },
+ {
+  "traceId": "baseline:refill-03-controlled:1",
+  "rater": "Andrew Bolaji",
+  "belief": "HANDED_OFF",
+  "note": "",
+  "at": "2026-11-25T00:47:46.707Z",
+  "seconds": 26.156
+ },
+ {
+  "traceId": "mutants:sched-08-system-down:1",
+  "rater": "Andrew Bolaji",
+  "belief": "UNSURE",
+  "note": "said they cant schedule it, they gav number and asked a question, and it said ive got you down like it was able to schedule it. ",
+  "at": "2026-11-25T00:48:55.675Z",
+  "seconds": 68.958
+ },
+ {
+  "traceId": "mutants:sched-04-hidden-failure:2",
+  "rater": "Andrew Bolaji",
+  "belief": "DONE",
+  "note": "",
+  "at": "2026-11-25T00:49:18.184Z",
+  "seconds": 22.5
+ }
+]
